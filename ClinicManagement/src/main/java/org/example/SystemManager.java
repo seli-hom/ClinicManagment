@@ -11,11 +11,19 @@ public class SystemManager {
 
     // Doctor management methods
     public void addDoctor(Doctor doctor) {
-
+        doctors.add(doctor);
     }
 
-    public void removeDoctor(int id) {
-
+    public void removeDoctor(String id) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getDoctorId().equals(id)) {
+                doctors.remove(id);
+                System.out.println("Doctor with id: " + id + " has been successfully removed.");
+            }
+            else {
+                System.out.println("Doctor with id: " + id + " does not exist.");
+            }
+        }
     }
 
     public void modifyDoctor(int id, Doctor modified) {
@@ -24,11 +32,19 @@ public class SystemManager {
 
     // Patient management methods
     public void addPatient(Patient patient) {
-
+        patients.add(patient);
     }
 
-    public void removePatient(int id) {
-
+    public void removePatient(String id) {
+        for (Patient patient : patients) {
+            if (patient.getPatientId().equals(id)) {
+                patients.remove(id);
+                System.out.println("Patient with id: " + id + " has been successfully removed.");
+            }
+            else {
+                System.out.println("Patient with id: " + id + " does not exist.");
+            }
+        }
     }
 
     public void modifyPatient(int id, Patient modified) {
@@ -36,12 +52,25 @@ public class SystemManager {
     }
 
     // Appointment management methods
-    public void bookAppointment(Patient patient, Doctor doctor, LocalDate date, LocalTime localTime) {
-
+    public void bookAppointment(String id, Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
+        // Create new Appointment object
+        Appointment appointment = new Appointment(id, patient, doctor, date, time);
+        // Add the new appointment to appointments list
+        appointments.add(appointment);
+        // Add the patient to the doctor's patient list
+        doctor.getPatients().add(patient);
     }
 
-    public void cancelAppointment() {
-
+    public void cancelAppointment(String id) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentId().equals(id)) {
+                appointments.remove(appointment);
+                System.out.println("Appointment with id: " + id + " has been successfully removed.");
+            }
+            else {
+                System.out.println("Appointment with id: " + " does not exist.");
+            }
+        }
     }
 
     public void modifyAppointment() {

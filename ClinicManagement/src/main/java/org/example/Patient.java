@@ -19,4 +19,60 @@ public class Patient {
         this.contact = contact;
         this.record = record;
     }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public static int getCount() {
+        return count;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public Record getRecord() {
+        return record;
+    }
+
+    public static void setCount(int count) {
+        Patient.count = count;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public void setRecord(Record record) {
+        this.record = record;
+    }
 }

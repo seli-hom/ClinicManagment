@@ -19,4 +19,60 @@ public class Doctor {
         this.contact = contact;
         this.patients = patients;
     }
+
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public static int getCount() {
+        return count;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public static void setCount(int count) {
+        Doctor.count = count;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
 }
