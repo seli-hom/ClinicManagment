@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 public class Record {
+    private static int count = 1;
+    private String recordId;
     private Date birthDate;
     private Sex sex;
     private Doctor familyDoctor;
@@ -13,6 +15,7 @@ public class Record {
     private List<String> prescriptions;
 
     public Record(Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight, List<String> prescriptions) {
+        this.recordId = "R%03d" + count++;
         this.birthDate = birthDate;
         this.sex = sex;
         this.familyDoctor = familyDoctor;
