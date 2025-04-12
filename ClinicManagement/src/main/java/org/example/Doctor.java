@@ -11,7 +11,7 @@ public class Doctor {
     private String contact;
     private List<Patient> patients;
 
-    public Doctor(String doctorId, String firstName, String lastName, String speciality, String contact, List<Patient> patients) {
+    public Doctor(String firstName, String lastName, String speciality, String contact, List<Patient> patients) {
         this.doctorId = "D%03d" + count++;
         this.firstName = firstName;
         this.lastName = lastName;

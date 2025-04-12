@@ -13,7 +13,7 @@ public class Appointment {
     private LocalDate date;
     private LocalTime time;
 
-    public Appointment(String appointmentId, Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
+    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
         this.appointmentId = "A%03d" + count++;
         this.patient = patient;
         this.doctor = doctor;

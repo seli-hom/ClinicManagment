@@ -52,9 +52,9 @@ public class SystemManager {
     }
 
     // Appointment management methods
-    public void bookAppointment(String id, Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
+    public void bookAppointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
         // Create new Appointment object
-        Appointment appointment = new Appointment(id, patient, doctor, date, time);
+        Appointment appointment = new Appointment(patient, doctor, date, time);
         // Add the new appointment to appointments list
         appointments.add(appointment);
         // Add the patient to the doctor's patient list

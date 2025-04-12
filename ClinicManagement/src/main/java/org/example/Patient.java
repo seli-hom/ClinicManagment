@@ -11,7 +11,7 @@ public class Patient {
     private String contact;
     private Record record;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, Record record) {
+    public Patient(String firstName, String lastName, String address, String contact, Record record) {
         this.patientId = "P%03d" + count++;
         this.firstName = firstName;
         this.lastName = lastName;
