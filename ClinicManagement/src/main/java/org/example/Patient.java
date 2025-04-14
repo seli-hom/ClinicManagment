@@ -9,15 +9,27 @@ public class Patient {
     private String lastName;
     private String address;
     private String contact;
-    private Record record;
+    private Date birthDate;
+    private Sex sex;
+    private Doctor familyDoctor;
+    private BloodType type;
+    private double height;
+    private double weight;
+    private List<String> prescriptions;
 
-    public Patient(String firstName, String lastName, String address, String contact, Record record) {
-        this.patientId = "P%03d" + count++;
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight, List<String> prescriptions) {
+        this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.contact = contact;
-        this.record = record;
+        this.birthDate = birthDate;
+        this.sex = sex;
+        this.familyDoctor = familyDoctor;
+        this.type = type;
+        this.height = height;
+        this.weight = weight;
+        this.prescriptions = prescriptions;
     }
 
     public String getPatientId() {
@@ -44,13 +56,38 @@ public class Patient {
         return contact;
     }
 
-    public Record getRecord() {
-        return record;
+
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public static void setCount(int count) {
-        Patient.count = count;
+    public Sex getSex() {
+        return sex;
     }
+
+    public Doctor getFamilyDoctor() {
+        return familyDoctor;
+    }
+
+    public BloodType getType() {
+        return type;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public List<String> getPrescriptions() {
+        return prescriptions;
+    }
+
+//    public static void setCount(int count) {
+//        Patient.count = count;
+//    }
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
@@ -72,7 +109,32 @@ public class Patient {
         this.contact = contact;
     }
 
-    public void setRecord(Record record) {
-        this.record = record;
+
+//    public void setBirthDate(Date birthDate) {
+//        this.birthDate = birthDate;
+//    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public void setFamilyDoctor(Doctor familyDoctor) {
+        this.familyDoctor = familyDoctor;
+    }
+
+    public void setType(BloodType type) {
+        this.type = type;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public void setPrescriptions(List<String> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 }
