@@ -1,5 +1,8 @@
 package org.example;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -73,7 +76,7 @@ public class SystemManager {
         }
     }
 
-    public void modifyAppointment() {
+    public void modifyAppointment(int id, Appointment modified) {
 
     }
 }
