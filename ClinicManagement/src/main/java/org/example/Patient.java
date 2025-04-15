@@ -15,7 +15,7 @@ public class Patient {
     private BloodType type;
     private double height;
     private double weight;
-//    private List<String> prescriptions;
+    private List<String> prescriptions;
 
     public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight, List<String> prescriptions) {
         this.patientId = "P%03F" + count ++;
