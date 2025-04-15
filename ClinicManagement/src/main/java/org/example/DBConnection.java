@@ -199,10 +199,10 @@ public class DBConnection {
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
-                System.out.println("An existing student was updated successfully.");
+                System.out.println("Patient's information was updated successfully.");
             }
             else {
-                System.out.println("No student with the provided ID exists");
+                System.out.println("No patient with the provided ID exists");
             }
         }
         catch (SQLException e) {
@@ -222,10 +222,10 @@ public class DBConnection {
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
-                System.out.println("An existing student was updated successfully.");
+                System.out.println("Contact for doctor was updated successfully.");
             }
             else {
-                System.out.println("No student with the provided ID exists");
+                System.out.println("No doctor with the provided ID exists");
             }
         }
         catch (SQLException e) {
@@ -246,10 +246,10 @@ public class DBConnection {
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
-                System.out.println("An existing student was updated successfully.");
+                System.out.println("The appointment was rescheduled successfully.");
             }
             else {
-                System.out.println("No student with the provided ID exists");
+                System.out.println("There is no appointment for the provided patient and doctor");
             }
         }
         catch (SQLException e) {
@@ -258,21 +258,21 @@ public class DBConnection {
     }
 
 
-    //===================Delete Student===================
-    public static void deleteStudent(int id) {
-        String sql = "DELETE FROM Students WHERE id = ?";
+    //===================Delete Patient===================
+    public static void deleteStudent(int patientId) {
+        String sql = "DELETE FROM patients WHERE patientId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(3, id);
+            pstmt.setInt(1, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsDeleted > 0) {
-                System.out.println("The student with id: " + id + " was deleted succesfully");
+                System.out.println("Patient with id: " + id + " was deleted succesfully");
             }
             else {
-                System.out.println("No student with the provided ID exists");
+                System.out.println("No patient with the provided ID exists");
             }
         }
         catch (SQLException e) {
@@ -280,5 +280,25 @@ public class DBConnection {
         }
     }
 
+    //===============Cancel Appointment
+    public static void deleteStudent(int appointmentId) {
+        String sql = "DELETE FROM appointments WHERE appointmentId = ?";
 
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsDeleted > 0) {
+                System.out.println("Appointment with id: " + id + " was cancelled succesfully");
+            }
+            else {
+                System.out.println("No appointment with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

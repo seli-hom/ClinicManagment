@@ -3,8 +3,10 @@ package org.example;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 public class SystemManager {
@@ -57,7 +59,7 @@ public class SystemManager {
     }
 
     // Appointment management methods
-    public void bookAppointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
+    public void bookAppointment(Patient patient, Doctor doctor, Date date, Time time) {
         // Create new Appointment object
         Appointment appointment = new Appointment(patient, doctor, date, time);
         // Add the new appointment to appointments list
