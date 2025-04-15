@@ -46,7 +46,7 @@ public class DBConnection {
         }
         return connection;
     }
-    public static void createNewDoctorsTable() {
+    public  void createNewDoctorsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Doctors (
                     id TEXT PRIMARY KEY,
@@ -68,7 +68,7 @@ public class DBConnection {
         }
     }
 
-    public static void createNewPatientsTable() {
+    public  void createNewPatientsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Patients (
                     id CHAR(4) PRIMARY KEY,
@@ -97,7 +97,7 @@ public class DBConnection {
     }
 
 
-    public static void createNewAppointmentsTable() {
+    public  void createNewAppointmentsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Appointments (
                     id TEXT PRIMARY KEY,
@@ -121,7 +121,7 @@ public class DBConnection {
 
 
     //==========Insert new record to table===================
-    public static void insertPatientRecord(String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, double height, double weight){
+    public  void insertPatientRecord(String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, double height, double weight){
         String sql = "INSERT INTO patients (fname, lname, address, contact, dob, sex, doctorId, bloodType, height, weight) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
@@ -146,7 +146,7 @@ public class DBConnection {
         }
     }
 
-    public static void insertDoctorRecord(String fname,String lname, String specialty, String contact){
+    public  void insertDoctorRecord(String fname,String lname, String specialty, String contact){
         String sql = "INSERT INTO doctors (fname, lname, specialty, contact) VALUES(?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
@@ -165,7 +165,7 @@ public class DBConnection {
         }
     }
 
-    public static void insertAppointmentRecord(String appointment, String patientId , String doctorId, Date date, Time time){
+    public  void insertAppointmentRecord(String appointment, String patientId , String doctorId, Date date, Time time){
         String sql = "INSERT INTO patients (appointment, patient, doctor, date, time) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
@@ -187,7 +187,7 @@ public class DBConnection {
     }
     //===================Update Pateient===================
 // update an existing student
-    public static void updatePatient(int patientid, String newAdress, String newContact) {
+    public  void updatePatient(int patientid, String newAdress, String newContact) {
         String sql = "UPDATE patients SET adress = ?, contact = ? WHERE patientId = ?";
 
         try {
@@ -211,7 +211,7 @@ public class DBConnection {
     }
 
     //===========Update Doctors contact
-    public static void updateDoctor(int doctorId, String newContact) {
+    public  void updateDoctor(int doctorId, String newContact) {
         String sql = "UPDATE doctors SET  contact = ? WHERE doctorId = ?";
 
         try {
@@ -233,7 +233,7 @@ public class DBConnection {
         }
     }
     //===============Reschedule Appointment
-    public static void updateSchedule(int doctorId, int patientId, Date newDate, Time newTime) {
+    public  void updateSchedule(int doctorId, int patientId, Date newDate, Time newTime) {
         String sql = "UPDATE appointements SET  date = ?, time = ? WHERE doctorId = ? AND patientId = ?";
 
         try {
@@ -259,7 +259,7 @@ public class DBConnection {
 
 
     //===================Delete Patient===================
-    public static void deleteStudent(int patientId) {
+    public  void dischargePatient(int patientId) {
         String sql = "DELETE FROM patients WHERE patientId = ?";
 
         try {
@@ -269,7 +269,7 @@ public class DBConnection {
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsDeleted > 0) {
-                System.out.println("Patient with id: " + id + " was deleted succesfully");
+                System.out.println("Patient with id: " + id + " was discharged succesfully");
             }
             else {
                 System.out.println("No patient with the provided ID exists");
@@ -281,7 +281,7 @@ public class DBConnection {
     }
 
     //===============Cancel Appointment
-    public static void deleteStudent(int appointmentId) {
+    public  void cancelAppointment(int appointmentId) {
         String sql = "DELETE FROM appointments WHERE appointmentId = ?";
 
         try {

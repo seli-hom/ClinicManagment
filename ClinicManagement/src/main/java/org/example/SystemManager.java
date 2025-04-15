@@ -15,10 +15,34 @@ public class SystemManager {
     private List<Appointment> appointments;
 
     // Doctor management methods
+
+    /**
+     *
+     * @param doctor
+     */
     public void addDoctor(Doctor doctor) {
         doctors.add(doctor);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Doctor findDoctor(String id) {
+        for (Doctor doctor : doctors) {
+            if (doctor.getDoctorId().equals(id)) {
+                return doctor;
+            }
+        }
+        System.out.println("Doctor with id: " + id + " was not found.");
+        return null;
+    }
+
+    /**
+     *
+     * @param id
+     */
     public void removeDoctor(String id) {
         for (Doctor doctor : doctors) {
             if (doctor.getDoctorId().equals(id)) {
@@ -31,17 +55,46 @@ public class SystemManager {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param modified
+     */
     public void modifyDoctor(int id, Doctor modified) {
 
     }
 
     // Patient management methods
+
+    /**
+     *
+     * @param patient
+     */
     public void addPatient(Patient patient) {
 
         patients.add(patient);
 //        DBconnection.getInstance();
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Patient findPatient(String id) {
+        for (Patient patient : patients) {
+            if (patient.getPatientId().equals(id)) {
+                return patient;
+            }
+        }
+        System.out.println("Patient with id: " + id + " was not found.");
+        return null;
+    }
+
+    /**
+     *
+     * @param id
+     */
     public void removePatient(String id) {
         for (Patient patient : patients) {
             if (patient.getPatientId().equals(id)) {
@@ -54,11 +107,24 @@ public class SystemManager {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param modified
+     */
     public void modifyPatient(int id, Patient modified) {
 
     }
 
     // Appointment management methods
+
+    /**
+     *
+     * @param patient
+     * @param doctor
+     * @param date
+     * @param time
+     */
     public void bookAppointment(Patient patient, Doctor doctor, Date date, Time time) {
         // Create new Appointment object
         Appointment appointment = new Appointment(patient, doctor, date, time);
@@ -68,7 +134,26 @@ public class SystemManager {
         doctor.getPatients().add(patient);
     }
 
-    public void cancelAppointment(String id) {
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Appointment findAppointment(String id) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentId().equals(id)) {
+                return appointment;
+            }
+        }
+        System.out.println("Appointment with id: " + id + " was not found.");
+        return null;
+    }
+
+    /**
+     *
+     * @param appointmentId
+     */
+    public void cancelAppointment(String appointmentId) {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentId().equals(id)) {
                 appointments.remove(appointment);
@@ -78,9 +163,25 @@ public class SystemManager {
                 System.out.println("Appointment with id: " + " does not exist.");
             }
         }
+
+
     }
 
-    public void modifyAppointment(int id, Appointment modified) {
+    /**
+     *
+     * @param patientId
+     * @param doctorId
+     * @param newDate
+     * @param newTime
+     */
+    public void rescheduleAppointment(int patientId, int doctorId, java.sql.Date newDate, Time newTime) {
+
+
+
+        DBConnection database = DBConnection.getInstance();
+        database.connect();
+        database.updateSchedule(doctorId,patientId,newDate,newTime);
 
     }
 }
+
