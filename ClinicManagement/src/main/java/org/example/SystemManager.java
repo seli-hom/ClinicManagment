@@ -35,7 +35,9 @@ public class SystemManager {
 
     // Patient management methods
     public void addPatient(Patient patient) {
+
         patients.add(patient);
+        DBconnection.getInstance()
     }
 
     public void removePatient(String id) {
