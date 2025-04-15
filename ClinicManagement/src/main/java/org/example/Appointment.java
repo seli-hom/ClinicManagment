@@ -10,10 +10,10 @@ public class Appointment {
     private String appointmentId;
     private Patient patient;
     private Doctor doctor;
-    private LocalDate date;
-    private LocalTime time;
+    private Date date;
+    private Time time;
 
-    public Appointment(Patient patient, Doctor doctor, LocalDate date, LocalTime time) {
+    public Appointment(Patient patient, Doctor doctor, Date date, Time time) {
         this.appointmentId = "A%03d" + count++;
         this.patient = patient;
         this.doctor = doctor;
@@ -37,11 +37,11 @@ public class Appointment {
         return doctor;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public LocalTime getTime() {
+    public Time getTime() {
         return time;
     }
 
@@ -61,11 +61,11 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 }

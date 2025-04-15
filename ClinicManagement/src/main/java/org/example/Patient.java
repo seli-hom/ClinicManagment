@@ -17,7 +17,7 @@ public class Patient {
     private double weight;
 //    private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight, List<String> prescriptions) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight) {
         this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,7 +29,7 @@ public class Patient {
         this.type = type;
         this.height = height;
         this.weight = weight;
-        this.prescriptions = prescriptions;
+//        this.prescriptions = prescriptions;
     }
 
     public String getPatientId() {
@@ -81,9 +81,9 @@ public class Patient {
         return weight;
     }
 
-    public List<String> getPrescriptions() {
-        return prescriptions;
-    }
+//    public List<String> getPrescriptions() {
+//        return prescriptions;
+//    }
 
 //    public static void setCount(int count) {
 //        Patient.count = count;
@@ -134,7 +134,7 @@ public class Patient {
         this.weight = weight;
     }
 
-    public void setPrescriptions(List<String> prescriptions) {
-        this.prescriptions = prescriptions;
-    }
+//    public void setPrescriptions(List<String> prescriptions) {
+//        this.prescriptions = prescriptions;
+//    }
 }

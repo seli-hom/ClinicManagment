@@ -1,9 +1,16 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+//import javax.swing.*;
+import javax.swing.plaf.nimbus.State;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DBConnection {
 
@@ -17,7 +24,7 @@ public class DBConnection {
     //inseide method, we will create a condition tha trestricts us from creating more than one object
 
     public static DBConnection getInstance(){
-        //if objected is not created create new object
+// Singleton Pattern so that there will not be another creation of the database
         if (dObject == null){
             dObject = new DBConnection();
         }
@@ -39,35 +46,6 @@ public class DBConnection {
         }
         return connection;
     }
-
-    public static void createNewPatientsTable() {
-        String sql = """
-                CREATE TABLE IF NOT EXISTS Patients (
-                    id TEXT PRIMARY KEY,
-                    first_name TEXT NOT NULL,
-                    last_name TEXT NOT NULL,
-                    address TEXT,
-                    contact TEXT NOT NULL
-                    birthdate DATETIME NOT NULL,
-                    sex VARCHAR(10) NOT NULL,
-                    familyDoctor VARCHAR(50) FOREIGN KEY REFERENCES Doctors(id),
-                    bloodType VARCHAR(10) NOT NULL,
-                    height DOUBLE PRECISION NOT NULL,
-                    weight DOUBLE PRECISION NOT NULL,
-                );
-                """;
-
-        try {
-            Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);  // execute the create table statement
-            System.out.println("Table created successfully.");
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
     public static void createNewDoctorsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Doctors (
@@ -90,12 +68,41 @@ public class DBConnection {
         }
     }
 
+    public static void createNewPatientsTable() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS Patients (
+                    id CHAR(4) PRIMARY KEY,
+                    first_name VARCHAR(50) NOT NULL,
+                    last_name TEXT NOT NULL,
+                    address TEXT,
+                    contact TEXT NOT NULL
+                    dob DATETIME NOT NULL,
+                    sex VARCHAR(10) NOT NULL,
+                    familyDoctor VARCHAR(50) FOREIGN KEY REFERENCES Doctors(id),
+                    bloodType VARCHAR(10) NOT NULL,
+                    height DOUBLE PRECISION NOT NULL,
+                    weight DOUBLE PRECISION NOT NULL
+                );
+                """;
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);  // execute the create table statement
+            System.out.println("Table created successfully.");
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+
     public static void createNewAppointmentsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Appointments (
                     id TEXT PRIMARY KEY,
-                    patient_id FOREIGN KEY,
-                    doctor_id FOREIGN KEY,
+                    patient_id FOREIGN KEY REFERENCES patients(id),
+                    doctor_id FOREIGN KEY REFERENCES doctors(id),
                     date DATE NOT NULL,
                     time TIME NOT NULL
                 );
@@ -114,23 +121,23 @@ public class DBConnection {
 
 
     //==========Insert new record to table===================
-    public static void insertRecord(String fname,String lname, String address, String contact, Date birthDate, Sex sex, Doctor doctor, Bloodtype blood, double height, double weight){
-        String sql = "INSERT INTO patients (fname, lname, address, contact, birthDate, sex, doctor, blood, height, weight) VALUES(?,?,?,?,?,?,?,?,?,?"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public static void insertPatientRecord(String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, double height, double weight){
+        String sql = "INSERT INTO patients (fname, lname, address, contact, dob, sex, doctorId, bloodType, height, weight) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, fname); //set student name
-            pstmt.setInt(2, lname);
-            pstmt.setInt(3, address);
-            pstmt.setInt(4, contact);
-            pstmt.setInt(5, birthDate);
-            pstmt.setInt(6, sex);
-            pstmt.setInt(7, doctor);
-            pstmt.setInt(8, blood);
-            pstmt.setInt(9, height);
-            pstmt.setInt(10, weight);
+            pstmt.setString(2, lname);
+            pstmt.setString(3, address);
+            pstmt.setString(4, contact);
+            pstmt.setDate(5, dob);
+            pstmt.setString(6, sex);
+            pstmt.setString(7, doctorId);
+            pstmt.setString(8, bloodType);
+            pstmt.setDouble(9, height);
+            pstmt.setDouble(10, weight);
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
         }
@@ -138,17 +145,57 @@ public class DBConnection {
             System.out.println(e.getMessage());
         }
     }
-    //===================Update Student===================
+
+    public static void insertDoctorRecord(String fname,String lname, String specialty, String contact){
+        String sql = "INSERT INTO doctors (fname, lname, specialty, contact) VALUES(?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        // ? are parameter ,markers they will be safely filled later
+        //this helps prevent SQL injection attacks and make code cleaner
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, fname); //set student name
+            pstmt.setString(2, lname);
+            pstmt.setString(3, specialty);
+            pstmt.setString(4, contact);;
+            pstmt.execute();//insert data into tble
+            System.out.println("Data inserted successfully");
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void insertAppointmentRecord(String appointment, String patientId , String doctorId, Date date, Time time){
+        String sql = "INSERT INTO patients (appointment, patient, doctor, date, time) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        // ? are parameter ,markers they will be safely filled later
+        //this helps prevent SQL injection attacks and make code cleaner
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, appointment); //set student name
+            pstmt.setString(2, patientId);
+            pstmt.setString(3, doctorId);
+            pstmt.setDate(4, date);
+            pstmt.setTime(5, time);
+
+            pstmt.execute();//insert data into tble
+            System.out.println("Data inserted successfully");
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    //===================Update Pateient===================
 // update an existing student
-    public static void updateStudent(int id, String newName, int newAge) {
-        String sql = "UPDATE Students SET name = ?, age = ? WHERE id = ?";
+    public static void updatePatient(int patientid, String newAdress, String newContact) {
+        String sql = "UPDATE patients SET adress = ?, contact = ? WHERE patientId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newName); // set student name
-            pstmt.setInt(2, newAge); // set student age
-            pstmt.setInt(3, id);
+            pstmt.setString(1, newAdress); // set student name
+            pstmt.setString(2, newContact); // set student age
+            pstmt.setInt(3, patientid);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -162,6 +209,54 @@ public class DBConnection {
             System.err.println(e.getMessage());
         }
     }
+
+    //===========Update Doctors contact
+    public static void updateDoctor(int doctorId, String newContact) {
+        String sql = "UPDATE doctors SET  contact = ? WHERE doctorId = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newContact); // set doctor contact
+            pstmt.setInt(2, doctorId);
+            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsUpdated > 0) {
+                System.out.println("An existing student was updated successfully.");
+            }
+            else {
+                System.out.println("No student with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    //===============Reschedule Appointment
+    public static void updateSchedule(int doctorId, int patientId, Date newDate, Time newTime) {
+        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE doctorId = ? AND patientId = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setDate(1, newDate); // set doctor contact
+            pstmt.setTime(2, newTime); // set doctor contact
+            pstmt.setInt(3, doctorId);
+            pstmt.setInt(4, patientId);
+            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsUpdated > 0) {
+                System.out.println("An existing student was updated successfully.");
+            }
+            else {
+                System.out.println("No student with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 
     //===================Delete Student===================
     public static void deleteStudent(int id) {

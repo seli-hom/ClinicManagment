@@ -13,5 +13,21 @@
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <!--         //SQL Lite rider -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.49.1.0</version>
+            <!--  use the latest version  -->
+        </dependency>
+        <!--    storing or transferring JSON files -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+            <!--  use the latest version  -->
+        </dependency>
+    </dependencies>
 
 </project>
