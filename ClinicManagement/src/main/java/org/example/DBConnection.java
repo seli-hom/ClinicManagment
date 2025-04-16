@@ -259,7 +259,7 @@ public class DBConnection {
 
 
     //===================Delete Patient===================
-    public  void dischargePatient(int patientId) {
+    public  void dischargePatient(int id) {
         String sql = "DELETE FROM patients WHERE patientId = ?";
 
         try {
@@ -281,7 +281,7 @@ public class DBConnection {
     }
 
     //===============Cancel Appointment
-    public  void cancelAppointment(int appointmentId) {
+    public  void cancelAppointment(int id) {
         String sql = "DELETE FROM appointments WHERE appointmentId = ?";
 
         try {

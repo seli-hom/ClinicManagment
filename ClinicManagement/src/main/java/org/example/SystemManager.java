@@ -151,9 +151,9 @@ public class SystemManager {
 
     /**
      *
-     * @param appointmentId
+     * @param id
      */
-    public void cancelAppointment(String appointmentId) {
+    public void cancelAppointment(String id) {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentId().equals(id)) {
                 appointments.remove(appointment);
@@ -163,8 +163,6 @@ public class SystemManager {
                 System.out.println("Appointment with id: " + " does not exist.");
             }
         }
-
-
     }
 
     /**
@@ -175,9 +173,6 @@ public class SystemManager {
      * @param newTime
      */
     public void rescheduleAppointment(int patientId, int doctorId, java.sql.Date newDate, Time newTime) {
-
-
-
         DBConnection database = DBConnection.getInstance();
         database.connect();
         database.updateSchedule(doctorId,patientId,newDate,newTime);
