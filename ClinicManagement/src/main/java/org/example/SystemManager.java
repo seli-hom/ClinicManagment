@@ -20,8 +20,32 @@ public class SystemManager {
      *
      * @param doctor
      */
-    public void addDoctor(Doctor doctor) {
+    public void assignDoctor(String patientId, String doctorId) {
+      Doctor doctor = findDoctorByID(doctorId);
+      Patient patient = findPatientByID(patientId);
+
+      patient.setFamilyDoctor(doctor);
+
+    }
+    public void registerDoctor(Doctor doctor){
         doctors.add(doctor);
+    }
+    public Doctor findDoctorByID(String docId){
+        for (Doctor doc : doctors){
+            if (doc.getDoctorId == docId){
+                return doc;
+            }
+            throw new NoArgsException("No doctor with provided id was found in the system");
+        }
+    }
+
+    public Doctor findPatientByID(String patientID){
+        for (Patient pat : patients){
+            if (pat.getPatientID == patientID){
+                return pat;
+            }
+            throw new NoArgsException("No patient with provided id is registered in the system");
+        }
     }
 
     /**
@@ -70,7 +94,7 @@ public class SystemManager {
      *
      * @param patient
      */
-    public void addPatient(Patient patient) {
+    public void registerPatient(Patient patient) {
 
         patients.add(patient);
 //        DBconnection.getInstance();
