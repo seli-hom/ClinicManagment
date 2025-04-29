@@ -181,7 +181,7 @@ public class SystemManager {
         for (Appointment appointment : appointments) {
             if (appointment.getAppointmentId().equals(id)) {
                 appointments.remove(appointment);
-                System.out.println("Appointment with id: " + id + " has been successfully removed.");
+                System.out.println("Appointment with id: " + appointmentId + " has been successfully removed.");
             }
             else {
                 System.out.println("Appointment with id: " + " does not exist.");
