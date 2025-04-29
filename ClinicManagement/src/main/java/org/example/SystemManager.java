@@ -1,13 +1,9 @@
 package org.example;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -48,7 +44,7 @@ public class SystemManager {
         doctors.add(doctor);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        database.insertDoctorRecord(doctor.getFirstName(), doctor.getLastName(), doctor.getSpeciality(), doctor.getContact());
+        database.insertDoctorRecord(doctor.getDoctorId(), doctor.getFirstName(), doctor.getLastName(), doctor.getSpeciality(), doctor.getContact());
         System.out.println("Doctor inserted successfully!");
     }
 
@@ -101,10 +97,10 @@ public class SystemManager {
            pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
         };
         doctors.remove(doctor);
-        DBConnection databse = DBConnection.getInstance();
-        databse.connect();
-        databse.deleteDoctor(id);
-        System.out.println("Doctor with id: " + id + " has been successfully removed.");
+//        DBConnection databse = DBConnection.getInstance();
+//        databse.connect();
+//        databse.deleteDoctor(id);
+//        System.out.println("Doctor with id: " + id + " has been successfully removed.");
     }
 
     /**
@@ -136,8 +132,8 @@ public class SystemManager {
         patients.add(p);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        database.insertPatientRecord(p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
-                p.getSex().toString(),p.getFamilyDoctor().toString(),p.getType().toString(),p.getHeight(),p.getWeight());
+        database.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
+                p.getSex().toString(),p.getFamilyDoctor().getDoctorId(),p.getType().toString(), p.isDischarged());
         System.out.println("Patient registered successfully");
     }
 
@@ -151,6 +147,7 @@ public class SystemManager {
             if (patient.getPatientId().equals(id)) {
                 return patient;
             }
+
         }
         System.out.println("Patient with id: " + id + " was not found.");
         return null;
@@ -169,9 +166,9 @@ public class SystemManager {
             patients.remove(patient);
             System.out.println("Patient with id: " + id + " has been successfully removed.");
 
-            DBConnection database = DBConnection.getInstance();
-            database.connect();
-            database.dischargePatient(id);
+//            DBConnection database = DBConnection.getInstance();
+//            database.connect();
+//            database.update(id);
         }
         else {
             throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
@@ -215,16 +212,13 @@ public class SystemManager {
         Patient patient = findPatient(patientID);
         Doctor doctor = findDoctor(doctorID);
         if (patient != null && doctor != null) {
-            Appointment appointment = new Appointment(patient, doctor, date, time);
+            Appointment apt = new Appointment(patient, doctor, date, time);
             // Add the new appointment to appointments list
-            appointments.add(appointment);
-//            // Add the patient to the doctor's patient list
-//            doctor.getPatients().add(patient); (i dont think we should add this here cause the patient might not be
-//            followed by the same doctor after a singular appointment it is handled in assignDoctor instead)
+            appointments.add(apt);
 
             DBConnection database = DBConnection.getInstance();
             database.connect();
-            database.insertAppointmentRecord(patientID,doctorID,date,time);
+            database.insertAppointmentRecord(apt.getAppointmentId(), apt.getPatient().getPatientId(),apt.getDoctor().getDoctorId(),apt.getDate(),apt.getTime());
         }
         else{
             throw new NoSuchElementException("Please make sure that you have input the correct IDs for both the patient and the doctor");
@@ -251,12 +245,26 @@ public class SystemManager {
     }
 
     /**
-     * Removes appointment from appointment list,then updates the information on tables through the DB connection class.
-     * @param patientID patient whose appointment it was
-     * @param doctorID doctor who was scheduled for the appointment with the patient
+     * Returns appointment matching aptID (helper method for cancelling appointments
+     * @param aptID
+     * @return
      */
-    public void cancelAppointment(String patientID, String doctorID) {
-       Appointment appointment = findAppointment(patientID, doctorID);
+    public Appointment findAppointmentByID(String aptID) {
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentId().equals(aptID)) {
+                return appointment;
+            }
+        }
+        System.out.println("Appointment was not found.");
+        return null;
+    }
+
+    /**
+     * Removes appointment from appointment list,then updates the information on tables through the DB connection class.
+     * @param aptID
+     */
+    public void cancelAppointment(String aptID) {
+       Appointment appointment = findAppointmentByID(aptID);
        if (appointment != null) {
            appointments.remove(appointment);
        }
@@ -272,15 +280,14 @@ public class SystemManager {
     /**
      * Changes the date and/or time of the appointment found through the findAppintment method call,
      * then updates the information on tables through the DB connection class.
-     * @param patientId
-     * @param doctorId
+     * @param aptID
      * @param newDate
      * @param newTime
      */
-    public void rescheduleAppointment(String patientId, String  doctorId, java.sql.Date newDate, Time newTime) {
-        Appointment appointment = findAppointment(patientId, doctorId);
+    public void rescheduleAppointment(String aptID , Date newDate, Time newTime) {
+        Appointment appointment = findAppointmentByID(aptID);
         if (appointment == null) {
-            System.out.println("Appointment with id: " + " does not exist.");
+            System.out.println("Appointment with id: " +aptID + " does not exist.");
             throw new NoSuchElementException("Appointment does not exist.");
         }
 
@@ -289,7 +296,7 @@ public class SystemManager {
         DBConnection database = DBConnection.getInstance();
         database.connect();
 
-        database.updateSchedule(doctorId,patientId,newDate,newTime);
+        database.updateSchedule(aptID,newDate,newTime);
 
     }
 }

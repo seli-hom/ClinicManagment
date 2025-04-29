@@ -3,7 +3,7 @@ package org.example;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
+import java.sql.Date;
 
 public class Appointment {
     private static int count = 1;

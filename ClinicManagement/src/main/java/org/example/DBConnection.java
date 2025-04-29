@@ -76,12 +76,11 @@ public class DBConnection {
                     last_name TEXT NOT NULL,
                     address TEXT,
                     contact TEXT NOT NULL
-                    dob DATETIME NOT NULL,
+                    dob DATE NOT NULL,
                     sex VARCHAR(10) NOT NULL,
                     familyDoctor VARCHAR(50) FOREIGN KEY REFERENCES Doctors(id),
                     bloodType VARCHAR(10) NOT NULL,
-                    height DOUBLE PRECISION NOT NULL,
-                    weight DOUBLE PRECISION NOT NULL
+                    patient_discharged BOOLEAN NOT NULL
                 );
                 """;
 
@@ -121,23 +120,24 @@ public class DBConnection {
 
 
     //==========Insert new record to table===================
-    public  void insertPatientRecord(String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, double height, double weight){
-        String sql = "INSERT INTO patients (fname, lname, address, contact, dob, sex, doctorId, bloodType, height, weight) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public  void insertPatientRecord(String id,String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, boolean discharged){
+        String sql = "INSERT INTO patients (id,first_name, last_name, address, contact, dob, sex, doctorId, bloodType, discharged) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, fname); //set student name
-            pstmt.setString(2, lname);
-            pstmt.setString(3, address);
-            pstmt.setString(4, contact);
-            pstmt.setDate(5, dob);
-            pstmt.setString(6, sex);
-            pstmt.setString(7, doctorId);
-            pstmt.setString(8, bloodType);
-            pstmt.setDouble(9, height);
-            pstmt.setDouble(10, weight);
+            pstmt.setString(1, id);
+            pstmt.setString(2, fname); //set student name
+            pstmt.setString(3, lname);
+            pstmt.setString(4, address);
+            pstmt.setString(5, contact);
+            pstmt.setDate(6, dob);
+            pstmt.setString(7, sex);
+            pstmt.setString(8, doctorId);
+            pstmt.setString(9, bloodType);
+            pstmt.setBoolean(10, discharged);
+
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
         }
@@ -146,17 +146,18 @@ public class DBConnection {
         }
     }
 
-    public  void insertDoctorRecord(String fname,String lname, String specialty, String contact){
-        String sql = "INSERT INTO doctors (fname, lname, specialty, contact) VALUES(?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public  void insertDoctorRecord(String id,String fname,String lname, String specialty, String contact){
+        String sql = "INSERT INTO doctors (id, fname, lname, specialty, contact) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, fname); //set student name
-            pstmt.setString(2, lname);
-            pstmt.setString(3, specialty);
-            pstmt.setString(4, contact);;
+            pstmt.setString(1, id);
+            pstmt.setString(2, fname);
+            pstmt.setString(3, lname);
+            pstmt.setString(4, specialty);
+            pstmt.setString(5, contact);;
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
         }
@@ -165,17 +166,18 @@ public class DBConnection {
         }
     }
 
-    public  void insertAppointmentRecord( String patientId , String doctorId, Date date, Time time){
-        String sql = "INSERT INTO patients ( patient, doctor, date, time) VALUES(,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public  void insertAppointmentRecord( String id, String patientId , String doctorId, Date date, Time time){
+        String sql = "INSERT INTO patients ( id, patient_id, doctor_id, date, time) VALUES(?, ?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, patientId);
-            pstmt.setString(2, doctorId);
-            pstmt.setDate(3,date);
-            pstmt.setTime(4, time);
+            pstmt.setString(1, id);
+            pstmt.setString(2, patientId);
+            pstmt.setString(3, doctorId);
+            pstmt.setDate(4,date);
+            pstmt.setTime(5, time);
 
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
@@ -232,16 +234,15 @@ public class DBConnection {
         }
     }
     //===============Reschedule Appointment
-    public  void updateSchedule(String doctorId, String patientId, Date newDate, Time newTime) {
-        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE doctorId = ? AND patientId = ?";
+    public  void updateSchedule(String aptID, Date newDate, Time newTime) {
+        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE aptId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setDate(1, newDate); // set doctor contact
             pstmt.setTime(2, newTime); // set doctor contact
-            pstmt.setString(3, doctorId);
-            pstmt.setString(4, patientId);
+            pstmt.setString(3, aptID);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -281,7 +282,7 @@ public class DBConnection {
 
     //================Delete Doctor========================== //i dont remember why we didnt want to delete doctore but i put it back
     public  void deleteDoctor(String id) {
-        String sql = "DELETE FROM doctors WHERE doctorId = ?";
+        String sql = "DELETE FROM doctors WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -303,7 +304,7 @@ public class DBConnection {
 
     //===============Cancel Appointment
     public  void cancelAppointment(String id) {
-        String sql = "DELETE FROM appointments WHERE appointmentId = ?";
+        String sql = "DELETE FROM appointments WHERE id = ?";
 
         try {
             Connection conn = connect();
@@ -322,4 +323,27 @@ public class DBConnection {
             System.err.println(e.getMessage());
         }
     }
+
+    //=============Find patient =============
+//    public void findPatients(String table, String id) {
+//        String tableName = patients;
+//        String sql = "SELECT * FROM " + tableName +" WHERE id = ?";
+//
+//        try{
+//            Connection conn = connect();
+//            PreparedStatement pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1,id);
+//            int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
+//
+//            if (rowsDeleted > 0) {
+//                System.out.println("Appointment with id: " + id + " was cancelled succesfully");
+//            }
+//            else {
+//                System.out.println("No patient with the provided ID exists");
+//            }
+//        }
+//        catch (SQLException e) {
+//            System.err.println(e.getMessage());
+//        }
+//    }
 }

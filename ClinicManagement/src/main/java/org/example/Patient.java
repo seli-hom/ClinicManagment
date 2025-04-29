@@ -14,11 +14,11 @@ public class Patient {
     private Sex sex;
     private Doctor familyDoctor;
     private BloodType type;
-    private double height;
-    private double weight;
+    private boolean discharged;
+
     private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, Sex sex, BloodType type, double height, double weight) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, Sex sex, BloodType type) {
         this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,17 +28,13 @@ public class Patient {
         this.sex = sex;
         this.familyDoctor = null; //at creation patient does not have a doctor in the clinic
         this.type = type;
-        this.height = height;
-        this.weight = weight;
+        this.discharged = false;
+
 //        this.prescriptions = prescriptions;
     }
 
     public String getPatientId() {
         return patientId;
-    }
-
-    public static int getCount() {
-        return count;
     }
 
     public String getFirstName() {
@@ -74,21 +70,8 @@ public class Patient {
         return type;
     }
 
-    public double getHeight() {
-        return height;
-    }
+    public boolean isDischarged() { return discharged; }
 
-    public double getWeight() {
-        return weight;
-    }
-
-//    public List<String> getPrescriptions() {
-//        return prescriptions;
-//    }
-
-//    public static void setCount(int count) {
-//        Patient.count = count;
-//    }
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
@@ -127,13 +110,8 @@ public class Patient {
         this.type = type;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
+    public void setDischarged(boolean discharged) {this.discharged = discharged;}
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
 
 //    public void setPrescriptions(List<String> prescriptions) {
 //        this.prescriptions = prescriptions;
