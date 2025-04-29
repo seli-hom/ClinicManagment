@@ -17,15 +17,20 @@ public class SystemManager {
     // Doctor management methods
 
     /**
-     *
-     * @param doctor
+     * Assigns a family doctor to a registered patient
+     * @param patientId patient who will be assigned a doctor
+     * @param doctorId doctor to be assigned to th epatient
      */
     public void assignDoctor(String patientId, String doctorId) {
       Doctor doctor = findDoctorByID(doctorId);
       Patient patient = findPatientByID(patientId);
 
-      patient.setFamilyDoctor(doctor);
-
+      if (patient.getFamilyDoctor == null) {
+          patient.setFamilyDoctor(doctor);
+      }
+      else{
+          throw new IllegalArgumentException("Doctor already assigned!");
+      }
     }
     public void registerDoctor(Doctor doctor){
         doctors.add(doctor);
@@ -49,9 +54,9 @@ public class SystemManager {
     }
 
     /**
-     *
-     * @param id
-     * @return
+     * Finds the doctor and their information through their id
+     * @param id of doctor you wish to find
+     * @return Doctor object, if not found a message will display stating that the doctor is not in the system.
      */
     public Doctor findDoctor(String id) {
         for (Doctor doctor : doctors) {
@@ -64,19 +69,19 @@ public class SystemManager {
     }
 
     /**
-     *
+     * Removes doctor with the found id from the list of doctors in the clinics management system
      * @param id
      */
     public void removeDoctor(String id) {
-        for (Doctor doctor : doctors) {
-            if (doctor.getDoctorId().equals(id)) {
-                doctors.remove(id);
+
+        Doctor doctor = findDoctorByID(id);
+            if (doctor != null) {
+                doctors.remove(doctor);
                 System.out.println("Doctor with id: " + id + " has been successfully removed.");
             }
             else {
                 System.out.println("Doctor with id: " + id + " does not exist.");
             }
-        }
     }
 
     /**
