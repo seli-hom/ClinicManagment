@@ -32,6 +32,8 @@ public class ClinicManagementGUI {
         frame.setVisible(true);
     }
 
+
+
 //    public void addPatient() {
 //        addPatientButton.addActionListener(new ActionListener() {
 //            JTextField nameField = new JTextField(15);
