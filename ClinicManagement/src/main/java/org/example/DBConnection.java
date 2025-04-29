@@ -165,18 +165,17 @@ public class DBConnection {
         }
     }
 
-    public  void insertAppointmentRecord(String appointment, String patientId , String doctorId, Date date, Time time){
-        String sql = "INSERT INTO patients (appointment, patient, doctor, date, time) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public  void insertAppointmentRecord( String patientId , String doctorId, Date date, Time time){
+        String sql = "INSERT INTO patients ( patient, doctor, date, time) VALUES(,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, appointment); //set student name
-            pstmt.setString(2, patientId);
-            pstmt.setString(3, doctorId);
-            pstmt.setDate(4, date);
-            pstmt.setTime(5, time);
+            pstmt.setString(1, patientId);
+            pstmt.setString(2, doctorId);
+            pstmt.setDate(3,date);
+            pstmt.setTime(4, time);
 
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
@@ -273,6 +272,28 @@ public class DBConnection {
             }
             else {
                 System.out.println("No patient with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    //================Delete Doctor========================== //i dont remember why we didnt want to delete doctore but i put it back
+    public  void deleteDoctor(String id) {
+        String sql = "DELETE FROM doctors WHERE doctorId = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsDeleted > 0) {
+                System.out.println("Doctor with id: " + id + " was discharged succesfully");
+            }
+            else {
+                System.out.println("No doctor with the provided ID exists");
             }
         }
         catch (SQLException e) {

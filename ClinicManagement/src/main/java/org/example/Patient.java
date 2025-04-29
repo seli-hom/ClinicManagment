@@ -1,7 +1,7 @@
 package org.example;
 
-import java.util.Date;
 import java.util.List;
+import java.sql.*;
 
 public class Patient {
     private static int count = 1;
@@ -10,7 +10,7 @@ public class Patient {
     private String lastName;
     private String address;
     private String contact;
-    private Date birthDate;
+    private java.sql.Date birthDate;
     private Sex sex;
     private Doctor familyDoctor;
     private BloodType type;
@@ -18,7 +18,7 @@ public class Patient {
     private double weight;
     private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, BloodType type, double height, double weight) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, Sex sex, BloodType type, double height, double weight) {
         this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;

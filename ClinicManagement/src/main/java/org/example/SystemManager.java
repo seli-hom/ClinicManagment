@@ -36,14 +36,20 @@ public class SystemManager {
       else{
           throw new IllegalArgumentException("Doctor already assigned!");
       }
+      //i dont think we have to do anything in database because we did not create the foreign keys but do let me know
     }
 
     /**
      * Registers new doctor to the list of doctors in the system
+     *  then updates the information on tables through the DB connection class,
      * @param doctor Doctor
      */
     public void registerDoctor(Doctor doctor){
         doctors.add(doctor);
+        DBConnection database = DBConnection.getInstance();
+        database.connect();
+        database.insertDoctorRecord(doctor.getFirstName(), doctor.getLastName(), doctor.getSpeciality(), doctor.getContact());
+        System.out.println("Doctor inserted successfully!");
     }
 
     /**
@@ -82,44 +88,57 @@ public class SystemManager {
 
     /**
      * Removes doctor with the found id from the list of doctors in the clinics management system
+     *  then updates the information on tables through the DB connection class
      * @param id
      */
     public void removeDoctor(String id) {
 
         Doctor doctor = findDoctor(id);
-            if (doctor != null) {
-                for (Patient pat : doctor.getPatients()) {
-                    pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
-                };
-                doctors.remove(doctor);
-                System.out.println("Doctor with id: " + id + " has been successfully removed.");
-            }
-            else {
-                System.out.println("Doctor with id: " + id + " does not exist.");
-            }
+        if (doctor == null) {
+            System.out.println("Doctor with id: " + id + " does not exist.");
+        }
+        for (Patient pat : doctor.getPatients()) {
+           pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
+        };
+        doctors.remove(doctor);
+        DBConnection databse = DBConnection.getInstance();
+        databse.connect();
+        databse.deleteDoctor(id);
+        System.out.println("Doctor with id: " + id + " has been successfully removed.");
     }
 
     /**
      * Modifies the contact information of the doctor with the given id
+     * then updates the information on tables through the DB connection class
      * @param id
      * @param modifiedContact
      */
     public void modifyDoctor(String id, String modifiedContact) {
         Doctor modifiedDoctor = findDoctor(id);
-        if (modifiedDoctor != null) {
+        if (modifiedDoctor == null) {
             throw new NoSuchElementException("Doctor with id: " + id + " was not found.");
         }
         modifiedDoctor.setContact(modifiedContact);
+        DBConnection database = DBConnection.getInstance();
+        database.connect();
+        database.updateDoctor(id, modifiedContact);
+        System.out.println("Doctor info has been successfully updated.");
     }
 
-    // Patient management methods
+    //======================================== Patient management methods ======================================================
 
     /**
      * Registers new patients to the clinics management system
-     * @param patient
+     * then updates the information on tables through the DB connection class
+     * @param p
      */
-    public void registerPatient(Patient patient) {
-        patients.add(patient);
+    public void registerPatient(Patient p) {
+        patients.add(p);
+        DBConnection database = DBConnection.getInstance();
+        database.connect();
+        database.insertPatientRecord(p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
+                p.getSex().toString(),p.getFamilyDoctor().toString(),p.getType().toString(),p.getHeight(),p.getWeight());
+        System.out.println("Patient registered successfully");
     }
 
     /**
@@ -138,7 +157,9 @@ public class SystemManager {
     }
 
     /**
-     * Removes patient from list of patients in the management system, if no patient matches the id given an exception will be thrown
+     * Removes patient from list of patients in the management system
+     * then updates the information on tables through the DB connection class,
+     * if no patient matches the id given an exception will be thrown
      * @param id
      */
     public void dischargePatient(String id) {
@@ -147,6 +168,10 @@ public class SystemManager {
             patient.getFamilyDoctor().getPatients().remove(patient); // make sure the patient is no longer in the list of the doctors patients
             patients.remove(patient);
             System.out.println("Patient with id: " + id + " has been successfully removed.");
+
+            DBConnection database = DBConnection.getInstance();
+            database.connect();
+            database.dischargePatient(id);
         }
         else {
             throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
@@ -154,31 +179,38 @@ public class SystemManager {
     }
 
     /**
-     * Modifies the contact information of the patient, if no patient with matching id is found an exception will be thrown
+     * Modifies the contact information of the patient
+     * then updates the information on tables through the DB connection class,
+     * if no patient with matching id is found an exception will be thrown
      * @param id id of patient one wishes to mdify the information of
      * @param newAdress new patients address
      * @param newContact new contact information of patient
      */
     public void updatePatientInfo(String id, String newAdress, String newContact) {
         Patient modifiedPatient = findPatient(id);
-        if (modifiedPatient != null) {
+        if (modifiedPatient == null) {
             throw new NoSuchElementException("Patient with id: " + id + " was not found.");
         }
         modifiedPatient.setContact(newContact);
         modifiedPatient.setAddress(newAdress);
         System.out.println("Patient's contact info has been successfully updated.");
+
+        DBConnection database = DBConnection.getInstance();
+        database.connect();
+        database.updatePatient(id, newAdress, newContact);
     }
 
-    // Appointment management methods
+    //================================================== Appointment management methods =========================================
 
     /**
-     * Create an appointment and add it to the appointment list
+     * Create an appointment and add it to the appointment list,
+     * then updates the information on tables through the DB connection class.
      * @param patientID
      * @param doctorID
      * @param date Date that the user wishes to book the appointment on
      * @param time Time that the user wishes to book the appointment on
      */
-    public void bookAppointment(String patientID, String doctorID, Date date, Time time) {
+    public void bookAppointment(String patientID, String doctorID, java.sql.Date date, Time time) {
         // Create new Appointment object
         Patient patient = findPatient(patientID);
         Doctor doctor = findDoctor(doctorID);
@@ -189,10 +221,15 @@ public class SystemManager {
 //            // Add the patient to the doctor's patient list
 //            doctor.getPatients().add(patient); (i dont think we should add this here cause the patient might not be
 //            followed by the same doctor after a singular appointment it is handled in assignDoctor instead)
+
+            DBConnection database = DBConnection.getInstance();
+            database.connect();
+            database.insertAppointmentRecord(patientID,doctorID,date,time);
         }
         else{
             throw new NoSuchElementException("Please make sure that you have input the correct IDs for both the patient and the doctor");
         }
+
     }
 
     /**
@@ -214,7 +251,7 @@ public class SystemManager {
     }
 
     /**
-     * Removes appointment from appointment list
+     * Removes appointment from appointment list,then updates the information on tables through the DB connection class.
      * @param patientID patient whose appointment it was
      * @param doctorID doctor who was scheduled for the appointment with the patient
      */
@@ -228,13 +265,13 @@ public class SystemManager {
        }
        DBConnection database = DBConnection.getInstance();
        database.connect();
-
        database.cancelAppointment(appointment.getAppointmentId());
     }
 
 
     /**
-     * Changes the date and/or time of the appointment found through the findAppintment method call
+     * Changes the date and/or time of the appointment found through the findAppintment method call,
+     * then updates the information on tables through the DB connection class.
      * @param patientId
      * @param doctorId
      * @param newDate
@@ -242,19 +279,17 @@ public class SystemManager {
      */
     public void rescheduleAppointment(String patientId, String  doctorId, java.sql.Date newDate, Time newTime) {
         Appointment appointment = findAppointment(patientId, doctorId);
-        if (appointment != null) {
-            appointment.setDate(newDate);
-            appointment.setTime(newTime);
-        }
-        else {
+        if (appointment == null) {
             System.out.println("Appointment with id: " + " does not exist.");
             throw new NoSuchElementException("Appointment does not exist.");
         }
+
+        appointment.setDate(newDate);
+        appointment.setTime(newTime);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        int dID = Integer.parseInt(doctorId);
-        int pID = Integer.parseInt(patientId);
-        database.updateSchedule(dID,pID,newDate,newTime);
+
+        database.updateSchedule(doctorId,patientId,newDate,newTime);
 
     }
 }
