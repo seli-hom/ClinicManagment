@@ -224,8 +224,12 @@ public class SystemManager {
            appointments.remove(appointment);
        }
        else {
-           System.out.println("Appointment with id: " + " does not exist.");
+           throw new NoSuchElementException("Appointment with id: " + " does not exist.");
        }
+       DBConnection database = DBConnection.getInstance();
+       database.connect();
+
+       database.cancelAppointment(appointment.getAppointmentId());
     }
 
 

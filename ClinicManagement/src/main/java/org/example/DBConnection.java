@@ -49,7 +49,7 @@ public class DBConnection {
     public  void createNewDoctorsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Doctors (
-                    id TEXT PRIMARY KEY,
+                    id VARCHAR(5) PRIMARY KEY,
                     first_name TEXT NOT NULL,
                     last_name TEXT NOT NULL,
                     specialty TEXT,
@@ -71,7 +71,7 @@ public class DBConnection {
     public  void createNewPatientsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Patients (
-                    id CHAR(4) PRIMARY KEY,
+                    id VARCHAR(5) PRIMARY KEY,
                     first_name VARCHAR(50) NOT NULL,
                     last_name TEXT NOT NULL,
                     address TEXT,
@@ -100,7 +100,7 @@ public class DBConnection {
     public  void createNewAppointmentsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Appointments (
-                    id TEXT PRIMARY KEY,
+                    id VARCHAR(5) PRIMARY KEY,
                     patient_id FOREIGN KEY REFERENCES patients(id),
                     doctor_id FOREIGN KEY REFERENCES doctors(id),
                     date DATE NOT NULL,
@@ -187,7 +187,7 @@ public class DBConnection {
     }
     //===================Update Pateient===================
 // update an existing student
-    public  void updatePatient(int patientid, String newAdress, String newContact) {
+    public  void updatePatient(String patientid, String newAdress, String newContact) {
         String sql = "UPDATE patients SET adress = ?, contact = ? WHERE patientId = ?";
 
         try {
@@ -195,7 +195,7 @@ public class DBConnection {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newAdress); // set student name
             pstmt.setString(2, newContact); // set student age
-            pstmt.setInt(3, patientid);
+            pstmt.setString(3, patientid);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -211,14 +211,14 @@ public class DBConnection {
     }
 
     //===========Update Doctors contact
-    public  void updateDoctor(int doctorId, String newContact) {
+    public  void updateDoctor(String doctorId, String newContact) {
         String sql = "UPDATE doctors SET  contact = ? WHERE doctorId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newContact); // set doctor contact
-            pstmt.setInt(2, doctorId);
+            pstmt.setString(2, doctorId);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -233,7 +233,7 @@ public class DBConnection {
         }
     }
     //===============Reschedule Appointment
-    public  void updateSchedule(int doctorId, int patientId, Date newDate, Time newTime) {
+    public  void updateSchedule(String doctorId, String patientId, Date newDate, Time newTime) {
         String sql = "UPDATE appointements SET  date = ?, time = ? WHERE doctorId = ? AND patientId = ?";
 
         try {
@@ -241,8 +241,8 @@ public class DBConnection {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setDate(1, newDate); // set doctor contact
             pstmt.setTime(2, newTime); // set doctor contact
-            pstmt.setInt(3, doctorId);
-            pstmt.setInt(4, patientId);
+            pstmt.setString(3, doctorId);
+            pstmt.setString(4, patientId);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -259,13 +259,13 @@ public class DBConnection {
 
 
     //===================Delete Patient===================
-    public  void dischargePatient(int id) {
+    public  void dischargePatient(String id) {
         String sql = "DELETE FROM patients WHERE patientId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsDeleted > 0) {
@@ -281,13 +281,13 @@ public class DBConnection {
     }
 
     //===============Cancel Appointment
-    public  void cancelAppointment(int id) {
+    public  void cancelAppointment(String id) {
         String sql = "DELETE FROM appointments WHERE appointmentId = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
+            pstmt.setString(1, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsDeleted > 0) {
