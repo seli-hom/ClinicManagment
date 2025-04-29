@@ -121,7 +121,7 @@ public class DBConnection {
 
     //==========Insert new record to table===================
     public  void insertPatientRecord(String id,String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, boolean discharged){
-        String sql = "INSERT INTO patients (id,first_name, last_name, address, contact, dob, sex, doctorId, bloodType, discharged) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        String sql = "INSERT INTO patients (id,first_name, last_name, address, contact, dob, sex, familyDoctor, bloodType, patient_discharged) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
@@ -147,7 +147,7 @@ public class DBConnection {
     }
 
     public  void insertDoctorRecord(String id,String fname,String lname, String specialty, String contact){
-        String sql = "INSERT INTO doctors (id, fname, lname, specialty, contact) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        String sql = "INSERT INTO doctors (id, first_name, last_name, specialty, contact) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
@@ -189,7 +189,7 @@ public class DBConnection {
     //===================Update Pateient===================
 // update an existing student
     public  void updatePatient(String patientid, String newAdress, String newContact) {
-        String sql = "UPDATE patients SET adress = ?, contact = ? WHERE patientId = ?";
+        String sql = "UPDATE patients SET address = ?, contact = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -213,7 +213,7 @@ public class DBConnection {
 
     //===========Update Doctors contact
     public  void updateDoctor(String doctorId, String newContact) {
-        String sql = "UPDATE doctors SET  contact = ? WHERE doctorId = ?";
+        String sql = "UPDATE doctors SET  contact = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -235,7 +235,7 @@ public class DBConnection {
     }
     //===============Reschedule Appointment
     public  void updateSchedule(String aptID, Date newDate, Time newTime) {
-        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE aptId = ?";
+        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -260,7 +260,7 @@ public class DBConnection {
 
     //===================Delete Patient===================
     public  void dischargePatient(String id) {
-        String sql = "DELETE FROM patients WHERE patientId = ?";
+        String sql = "DELETE FROM patients WHERE Id = ?";
 
         try {
             Connection conn = connect();
