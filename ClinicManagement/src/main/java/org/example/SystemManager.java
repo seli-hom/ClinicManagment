@@ -25,11 +25,14 @@ public class SystemManager {
      */
     public void assignDoctor(String patientId, String doctorId) {
       Doctor doctor = findDoctor(doctorId);
-      Patient patient = findPatientByID(patientId);
+      Patient patient = findPatient(patientId);
 
-      if (patient.getFamilyDoctor() == null) {
-          patient.setFamilyDoctor(doctor);
-      }
+        if (doctor != null || patient != null) {
+            if (patient.getFamilyDoctor() == null) { //make sure that the patient doesn't already have a family doctor
+                patient.setFamilyDoctor(doctor);
+                doctor.getPatients().add(patient);
+            }
+        }
       else{
           throw new IllegalArgumentException("Doctor already assigned!");
       }
@@ -85,6 +88,9 @@ public class SystemManager {
 
         Doctor doctor = findDoctor(id);
             if (doctor != null) {
+                for (Patient pat : doctor.getPatients()) {
+                    pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
+                };
                 doctors.remove(doctor);
                 System.out.println("Doctor with id: " + id + " has been successfully removed.");
             }
@@ -136,14 +142,14 @@ public class SystemManager {
      * @param id
      */
     public void dischargePatient(String id) {
-        for (Patient patient : patients) {
-            if (patient.getPatientId().equals(id)) {
-                patients.remove(id);
-                System.out.println("Patient with id: " + id + " has been successfully removed.");
-            }
-            else {
-                throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
-            }
+        Patient patient = findPatient(id);
+        if (patient != null) {
+            patient.getFamilyDoctor().getPatients().remove(patient); // make sure the patient is no longer in the list of the doctors patients
+            patients.remove(patient);
+            System.out.println("Patient with id: " + id + " has been successfully removed.");
+        }
+        else {
+            throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
         }
     }
 
@@ -166,63 +172,85 @@ public class SystemManager {
     // Appointment management methods
 
     /**
-     *
-     * @param patient
-     * @param doctor
-     * @param date
-     * @param time
+     * Create an appointment and add it to the appointment list
+     * @param patientID
+     * @param doctorID
+     * @param date Date that the user wishes to book the appointment on
+     * @param time Time that the user wishes to book the appointment on
      */
-    public void bookAppointment(Patient patient, Doctor doctor, Date date, Time time) {
+    public void bookAppointment(String patientID, String doctorID, Date date, Time time) {
         // Create new Appointment object
-        Appointment appointment = new Appointment(patient, doctor, date, time);
-        // Add the new appointment to appointments list
-        appointments.add(appointment);
-        // Add the patient to the doctor's patient list
-        doctor.getPatients().add(patient);
+        Patient patient = findPatient(patientID);
+        Doctor doctor = findDoctor(doctorID);
+        if (patient != null && doctor != null) {
+            Appointment appointment = new Appointment(patient, doctor, date, time);
+            // Add the new appointment to appointments list
+            appointments.add(appointment);
+//            // Add the patient to the doctor's patient list
+//            doctor.getPatients().add(patient); (i dont think we should add this here cause the patient might not be
+//            followed by the same doctor after a singular appointment it is handled in assignDoctor instead)
+        }
+        else{
+            throw new NoSuchElementException("Please make sure that you have input the correct IDs for both the patient and the doctor");
+        }
     }
 
     /**
-     *
-     * @param id
+     * Finds the appointment based on th id of the doctor and the patien making sure that the patient and doctor
+     * match that of the appointment through the findDoctor and findPate=ient methods
+     * @param patientID
+     * @param doctorID
      * @return
      */
-    public Appointment findAppointment(String id) {
+    public Appointment findAppointment(String patientID, String doctorID) {
         for (Appointment appointment : appointments) {
-            if (appointment.getAppointmentId().equals(id)) {
+            if (appointment.getPatient().equals(findPatient(patientID)) &&
+                    appointment.getDoctor().equals(findDoctor(doctorID))){
                 return appointment;
             }
         }
-        System.out.println("Appointment with id: " + id + " was not found.");
+        System.out.println("Appointment for " + findPatient(patientID).toString() + " was not found.");
         return null;
     }
 
     /**
-     *
-     * @param id
+     * Removes appointment from appointment list
+     * @param patientID patient whose appointment it was
+     * @param doctorID doctor who was scheduled for the appointment with the patient
      */
-    public void cancelAppointment(String id) {
-        for (Appointment appointment : appointments) {
-            if (appointment.getAppointmentId().equals(id)) {
-                appointments.remove(appointment);
-                System.out.println("Appointment with id: " + appointmentId + " has been successfully removed.");
-            }
-            else {
-                System.out.println("Appointment with id: " + " does not exist.");
-            }
-        }
+    public void cancelAppointment(String patientID, String doctorID) {
+       Appointment appointment = findAppointment(patientID, doctorID);
+       if (appointment != null) {
+           appointments.remove(appointment);
+       }
+       else {
+           System.out.println("Appointment with id: " + " does not exist.");
+       }
     }
 
+
     /**
-     *
+     * Changes the date and/or time of the appointment found through the findAppintment method call
      * @param patientId
      * @param doctorId
      * @param newDate
      * @param newTime
      */
-    public void rescheduleAppointment(int patientId, int doctorId, java.sql.Date newDate, Time newTime) {
+    public void rescheduleAppointment(String patientId, String  doctorId, java.sql.Date newDate, Time newTime) {
+        Appointment appointment = findAppointment(patientId, doctorId);
+        if (appointment != null) {
+            appointment.setDate(newDate);
+            appointment.setTime(newTime);
+        }
+        else {
+            System.out.println("Appointment with id: " + " does not exist.");
+            throw new NoSuchElementException("Appointment does not exist.");
+        }
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        database.updateSchedule(doctorId,patientId,newDate,newTime);
+        int dID = Integer.parseInt(doctorId);
+        int pID = Integer.parseInt(patientId);
+        database.updateSchedule(dID,pID,newDate,newTime);
 
     }
 }

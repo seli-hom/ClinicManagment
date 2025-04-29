@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
@@ -11,13 +12,13 @@ public class Doctor {
     private String contact;
     private List<Patient> patients;
 
-    public Doctor(String firstName, String lastName, String speciality, String contact, List<Patient> patients) {
+    public Doctor(String firstName, String lastName, String speciality, String contact) {
         this.doctorId = "D%03d" + count++;
         this.firstName = firstName;
         this.lastName = lastName;
         this.speciality = speciality;
         this.contact = contact;
-        this.patients = patients;
+        this.patients = new ArrayList<>(); //at creation doctor does not have any patients
     }
 
     public String getDoctorId() {

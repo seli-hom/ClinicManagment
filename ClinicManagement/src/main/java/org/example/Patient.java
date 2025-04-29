@@ -18,7 +18,7 @@ public class Patient {
     private double weight;
     private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, Doctor familyDoctor, BloodType type, double height, double weight) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date birthDate, Sex sex, BloodType type, double height, double weight) {
         this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,7 +26,7 @@ public class Patient {
         this.contact = contact;
         this.birthDate = birthDate;
         this.sex = sex;
-        this.familyDoctor = familyDoctor;
+        this.familyDoctor = null; //at creation patient does not have a doctor in the clinic
         this.type = type;
         this.height = height;
         this.weight = weight;
