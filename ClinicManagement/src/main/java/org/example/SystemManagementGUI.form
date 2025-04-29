@@ -159,7 +159,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="d9772" class="javax.swing.JTable">
+                      <component id="d9772" class="javax.swing.JTable" binding="doctorDisplayTable">
                         <constraints>
                           <grid row="4" column="0" row-span="1" col-span="6" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="50"/>
@@ -279,7 +279,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="85092" class="javax.swing.JTable">
+                      <component id="85092" class="javax.swing.JTable" binding="appointmentDisplayTable">
                         <constraints>
                           <grid row="4" column="0" row-span="1" col-span="6" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="50"/>
@@ -423,7 +423,7 @@
                       <text value="Search"/>
                     </properties>
                   </component>
-                  <component id="2356d" class="javax.swing.JTable" binding="table1" default-binding="true">
+                  <component id="2356d" class="javax.swing.JTable" binding="recordDisplayTable">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="50"/>

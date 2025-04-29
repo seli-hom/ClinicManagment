@@ -37,7 +37,7 @@ public class SystemManagementGUI {
     private JTextField timeTextField;
     private JButton recordSearchButton;
     private JLabel patientNameOrIdLabel;
-    private JTable table1;
+    private JTable recordDisplayTable;
     private JButton addPatientButton;
     private JButton dischargePatientButton;
     private JButton modifyPatientButton;
@@ -46,6 +46,8 @@ public class SystemManagementGUI {
     private JButton bookAppointmentButton;
     private JButton rescheduleAppointmentButton;
     private JButton cancelAppointmentButton;
+    private JTable doctorDisplayTable;
+    private JTable appointmentDisplayTable;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Clinic Management System");
