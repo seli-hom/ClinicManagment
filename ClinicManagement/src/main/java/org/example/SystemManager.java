@@ -6,8 +6,10 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class SystemManager {
     private List<Doctor> doctors;
@@ -22,35 +24,42 @@ public class SystemManager {
      * @param doctorId doctor to be assigned to th epatient
      */
     public void assignDoctor(String patientId, String doctorId) {
-      Doctor doctor = findDoctorByID(doctorId);
+      Doctor doctor = findDoctor(doctorId);
       Patient patient = findPatientByID(patientId);
 
-      if (patient.getFamilyDoctor == null) {
+      if (patient.getFamilyDoctor() == null) {
           patient.setFamilyDoctor(doctor);
       }
       else{
           throw new IllegalArgumentException("Doctor already assigned!");
       }
     }
+
+    /**
+     * Registers new doctor to the list of doctors in the system
+     * @param doctor Doctor
+     */
     public void registerDoctor(Doctor doctor){
         doctors.add(doctor);
     }
-    public Doctor findDoctorByID(String docId){
-        for (Doctor doc : doctors){
-            if (doc.getDoctorId == docId){
-                return doc;
-            }
-            throw new NoArgsException("No doctor with provided id was found in the system");
-        }
-    }
 
-    public Doctor findPatientByID(String patientID){
-        for (Patient pat : patients){
-            if (pat.getPatientID == patientID){
-                return pat;
+    /**
+     * Finds Doctors that practice the specialty desired (e.g. Ophtamologist returns list of doctors that have specialized in the ophtamology field)
+     * @param specialty field of specialization of the doctors we wish to find
+     * @return List with doctors that have specialized in said specialty field
+     */
+    public List<Doctor> findDoctorsBySpecialty(String specialty){
+
+        List<Doctor> specialtyDoctors = new ArrayList<Doctor>();
+        for (Doctor doc : doctors){
+            if (doc.getSpeciality().equalsIgnoreCase(specialty)){
+                 specialtyDoctors.add(doc);
             }
-            throw new NoArgsException("No patient with provided id is registered in the system");
         }
+        if (specialtyDoctors.isEmpty()){
+            throw new IllegalArgumentException("No Doctor found in " + specialty + " field");
+        }
+        return specialtyDoctors;
     }
 
     /**
@@ -74,7 +83,7 @@ public class SystemManager {
      */
     public void removeDoctor(String id) {
 
-        Doctor doctor = findDoctorByID(id);
+        Doctor doctor = findDoctor(id);
             if (doctor != null) {
                 doctors.remove(doctor);
                 System.out.println("Doctor with id: " + id + " has been successfully removed.");
@@ -85,28 +94,30 @@ public class SystemManager {
     }
 
     /**
-     *
+     * Modifies the contact information of the doctor with the given id
      * @param id
-     * @param modified
+     * @param modifiedContact
      */
-    public void modifyDoctor(int id, Doctor modified) {
-
+    public void modifyDoctor(String id, String modifiedContact) {
+        Doctor modifiedDoctor = findDoctor(id);
+        if (modifiedDoctor != null) {
+            throw new NoSuchElementException("Doctor with id: " + id + " was not found.");
+        }
+        modifiedDoctor.setContact(modifiedContact);
     }
 
     // Patient management methods
 
     /**
-     *
+     * Registers new patients to the clinics management system
      * @param patient
      */
     public void registerPatient(Patient patient) {
-
         patients.add(patient);
-//        DBconnection.getInstance();
     }
 
     /**
-     *
+     * Returns patient with matching id, if no patient matches the id given null object will be returned
      * @param id
      * @return
      */
@@ -121,28 +132,35 @@ public class SystemManager {
     }
 
     /**
-     *
+     * Removes patient from list of patients in the management system, if no patient matches the id given an exception will be thrown
      * @param id
      */
-    public void removePatient(String id) {
+    public void dischargePatient(String id) {
         for (Patient patient : patients) {
             if (patient.getPatientId().equals(id)) {
                 patients.remove(id);
                 System.out.println("Patient with id: " + id + " has been successfully removed.");
             }
             else {
-                System.out.println("Patient with id: " + id + " does not exist.");
+                throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
             }
         }
     }
 
     /**
-     *
-     * @param id
-     * @param modified
+     * Modifies the contact information of the patient, if no patient with matching id is found an exception will be thrown
+     * @param id id of patient one wishes to mdify the information of
+     * @param newAdress new patients address
+     * @param newContact new contact information of patient
      */
-    public void modifyPatient(int id, Patient modified) {
-
+    public void updatePatientInfo(String id, String newAdress, String newContact) {
+        Patient modifiedPatient = findPatient(id);
+        if (modifiedPatient != null) {
+            throw new NoSuchElementException("Patient with id: " + id + " was not found.");
+        }
+        modifiedPatient.setContact(newContact);
+        modifiedPatient.setAddress(newAdress);
+        System.out.println("Patient's contact info has been successfully updated.");
     }
 
     // Appointment management methods
