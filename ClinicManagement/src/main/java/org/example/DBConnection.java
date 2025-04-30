@@ -115,8 +115,8 @@ public class DBConnection {
                     doctor_id VARCHAR(5),
                     date DATE NOT NULL,
                     time TIME NOT NULL,
-                    FOREIGN KEY REFERENCES Patients(id),
-                    FOREIGN KEY REFERENCES Doctors(id)
+                    FOREIGN KEY(patient_id) REFERENCES Patients(id),
+                    FOREIGN KEY(doctor_id) REFERENCES Doctors(id)
                 );
                 """;
 
@@ -520,13 +520,16 @@ public class DBConnection {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                appointmentList.add(new Appointment(
+                Appointment appointment = new Appointment(
                         rs.getString("patient_id"),
                         rs.getString("doctor_id"),
                         rs.getDate("date"),
                         rs.getTime("time")
-                ));
+                );
 
+                appointmentList.add(appointment);
+
+                appointmentCache.put(appointment.getAppointmentId(), appointment);
             }
         }
         catch (SQLException e) {
@@ -536,6 +539,11 @@ public class DBConnection {
         return appointmentList;
     }
 
+    /**
+     * Get a patient by their id
+     * @param id the input patient id
+     * @return the patient object
+     */
     public Patient getPatientById(String id) {
         // Check if patient is already in the cache
         Patient patient = patientCache.get(id);
@@ -579,4 +587,93 @@ public class DBConnection {
         return patient;
     }
 
+    /**
+     * Get a patient by their id
+     * @param id the input patient id
+     * @return the patient object
+     */
+    public Doctor getDoctorById(String id) {
+        // Check if doctor is already in the cache
+        Doctor doctor = doctorCache.get(id);
+
+        if (doctor != null) {
+            return doctor; // Return the doctor from cache if it is already there
+        }
+
+        // If doctor is not in the cache, get it from the database
+        String sql = "SELECT * FROM Doctors WHERE doctor_id = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                new Doctor(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("specialty"),
+                        rs.getString("contact")
+                );
+
+                // Add the doctor to the cache
+                doctorCache.put(id, doctor);
+            }
+            else {
+                // If doctor is not found
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return doctor;
+    }
+
+    /**
+     * Get a patient by their id
+     * @param id the input patient id
+     * @return the patient object
+     */
+    public Appointment getAppointmentById(String id) {
+        // Check if appointment is already in the cache
+        Appointment appointment = appointmentCache.get(id);
+
+        if (appointment != null) {
+            return appointment; // Return the appointment from cache if it is already there
+        }
+
+        // If appointment is not in the cache, get it from the database
+        String sql = "SELECT * FROM Appointments WHERE appointment_id = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                new Appointment(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getDate("date"),
+                        rs.getTime("time")
+                );
+
+                // Add the appointment to the cache
+                appointmentCache.put(id, appointment);
+            }
+            else {
+                // If appointment is not found
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return appointment;
+    }
 }

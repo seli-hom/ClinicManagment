@@ -8,15 +8,15 @@ import java.sql.Date;
 public class Appointment {
     private static int count = 1;
     private String appointmentId;
-    private Patient patient;
-    private Doctor doctor;
+    private String patientId;
+    private String doctorId;
     private Date date;
     private Time time;
 
-    public Appointment(Patient patient, Doctor doctor, Date date, Time time) {
+    public Appointment(String patientId, String doctorId, Date date, Time time) {
         this.appointmentId = String.format("A%03d" + count++);
-        this.patient = patient;
-        this.doctor = doctor;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
         this.date = date;
         this.time = time;
     }
@@ -25,12 +25,12 @@ public class Appointment {
         return appointmentId;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public String getPatientId() {
+        return patientId;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public String getDoctorId() {
+        return doctorId;
     }
 
     public Date getDate() {
