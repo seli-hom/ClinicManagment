@@ -15,7 +15,7 @@ public class ClinicController {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         }
 
