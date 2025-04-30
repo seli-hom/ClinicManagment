@@ -352,7 +352,7 @@ public class DBConnection {
        List<Patient> patientList = new ArrayList<>();
        String sql = "SELECT * FROM patients";
 
-       
+
 
 
     }

@@ -11,14 +11,14 @@ public class Patient {
     private String address;
     private String contact;
     private java.sql.Date birthDate;
-    private Sex sex;
+    private String sex;
     private Doctor familyDoctor;
-    private BloodType type;
+    private String type;
     private boolean discharged;
 
     private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, Sex sex, BloodType type) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, String sex, String  type) {
         this.patientId = "P%03F" + count ++;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,7 +58,7 @@ public class Patient {
         return birthDate;
     }
 
-    public Sex getSex() {
+    public String getSex() {
         return sex;
     }
 
@@ -66,7 +66,7 @@ public class Patient {
         return familyDoctor;
     }
 
-    public BloodType getType() {
+    public String getType() {
         return type;
     }
 
@@ -98,7 +98,7 @@ public class Patient {
 //        this.birthDate = birthDate;
 //    }
 
-    public void setSex(Sex sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -106,7 +106,7 @@ public class Patient {
         this.familyDoctor = familyDoctor;
     }
 
-    public void setType(BloodType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

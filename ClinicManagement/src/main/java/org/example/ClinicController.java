@@ -1,8 +1,10 @@
 package org.example;
 
+import org.jdesktop.swingx.JXDatePicker;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+
+import java.sql.Date;
 
 public class ClinicController {
     private ClinicManagementGUI view;
@@ -15,13 +17,28 @@ public class ClinicController {
         class AddPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String name = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterName"));
-                float price = Float.parseFloat(JOptionPane.showInputDialog(Messages.getMessage("dialog.enterPrice")));
-                String category = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterCategory"));
-                int quantity = Integer.parseInt(JOptionPane.showInputDialog(Messages.getMessage("dialog.enterQuantity")));
+                String fname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
+                String lname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
+                String address = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
+                String contact = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
+                Date dob = JComboBox();
+                JComboBox<String> sex = new JComboBox<>();
+                sex.addItem("Male");
+                sex.addItem("Female");
+                sex.addItem("Other");
+                JComboBox<String> bloodType = new JComboBox<>();
+                bloodType.addItem("O+");
+                bloodType.addItem("A+");
+                bloodType.addItem("B+");
+                bloodType.addItem("AB+");
+                bloodType.addItem("O-");
+                bloodType.addItem("A-");
+                bloodType.addItem("B-");
+                bloodType.addItem("AB-");
 
-//                DBConnection.getInstance(name, price, category, quantity);
-                refreshTable();
+                Patient pToadd = new Patient(fname,lname,address,contact,dob,sex.getSelectedItem(),bloodType.getSelectedItem());
+
+                model.registerPatient(pToadd);
             }
         }
 
