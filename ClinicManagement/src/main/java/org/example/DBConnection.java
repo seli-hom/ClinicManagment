@@ -346,4 +346,14 @@ public class DBConnection {
 //            System.err.println(e.getMessage());
 //        }
 //    }
+
+    //==========================View Patients table==============================
+    public void viewAllPatients() {
+       List<Patient> patientList = new ArrayList<>();
+       String sql = "SELECT * FROM patients";
+
+       
+
+
+    }
 }
