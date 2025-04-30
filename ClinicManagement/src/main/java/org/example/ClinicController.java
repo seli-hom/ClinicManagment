@@ -14,6 +14,10 @@ public class ClinicController {
         this.view = view;
         this.model = model;
 
+        private void refreshTable() {
+            model.pa
+        }
+
         class AddPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {

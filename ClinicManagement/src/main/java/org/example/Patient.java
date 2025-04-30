@@ -33,6 +33,25 @@ public class Patient {
 //        this.prescriptions = prescriptions;
     }
 
+    public Patient(String id, String firstName, String lastName, String address, String contact, Date dob, String sex, String  doctor, String bloodType, Boolean discharged) {
+        String sexString = getSex().toString();
+        String doctorName = getFamilyDoctor().getLastName();
+        String bloodString = getType().toString();
+
+
+        this.patientId = "P%03F" + count ++;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.contact = contact;
+        this.birthDate = birthDate;
+        this.sex = sex;
+        this.familyDoctor = doctor; //at creation patient does not have a doctor in the clinic
+        this.type = type;
+        this.discharged = discharged;
+
+    }
+
     public String getPatientId() {
         return patientId;
     }
