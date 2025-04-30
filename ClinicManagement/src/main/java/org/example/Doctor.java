@@ -18,7 +18,7 @@ public class Doctor {
         this.lastName = lastName;
         this.speciality = speciality;
         this.contact = contact;
-//        this.patients = new ArrayList<>(); //at creation doctor does not have any patients
+//        this.patients = new ArrayList<>(); // at creation doctor does not have any patients
     }
 
     public String getDoctorId() {

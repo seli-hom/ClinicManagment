@@ -28,6 +28,12 @@
             <version>2.10.1</version>
             <!--  use the latest version  -->
         </dependency>
+
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
 
 </project>
