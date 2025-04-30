@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,10 +13,15 @@ public class ClinicController {
         this.model = model;
 
         class AddPatientListener implements ActionListener {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                String name = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterName"));
+                float price = Float.parseFloat(JOptionPane.showInputDialog(Messages.getMessage("dialog.enterPrice")));
+                String category = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterCategory"));
+                int quantity = Integer.parseInt(JOptionPane.showInputDialog(Messages.getMessage("dialog.enterQuantity")));
+
+//                DBConnection.getInstance(name, price, category, quantity);
+                refreshTable();
             }
         }
 
