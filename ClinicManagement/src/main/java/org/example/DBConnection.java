@@ -348,11 +348,37 @@ public class DBConnection {
 //    }
 
     //==========================View Patients table==============================
-    public void viewAllPatients() {
+    public List<Patient> viewAllPatients() {
        List<Patient> patientList = new ArrayList<>();
        String sql = "SELECT * FROM patients";
 
-       
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                patientList.add(new Patient(
+                        rs.getString("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("address"),
+                        rs.getString("contact"),
+                        rs.getDate("dob"),
+                        rs.getString("sex"),
+//                        rs.getString("familyDoctor") = null,
+                        rs.getString("bloodType")
+//                        rs.getBoolean("discharged")
+                ));
+
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return patientList;
 
 
     }
