@@ -10,23 +10,19 @@ public class Doctor {
     private String lastName;
     private String speciality;
     private String contact;
-    private List<Patient> patients;
+//    private List<Patient> patients;
 
     public Doctor(String firstName, String lastName, String speciality, String contact) {
-        this.doctorId = "D%03d" + count++;
+        this.doctorId = String.format("D%03d" + count++);
         this.firstName = firstName;
         this.lastName = lastName;
         this.speciality = speciality;
         this.contact = contact;
-        this.patients = new ArrayList<>(); //at creation doctor does not have any patients
+//        this.patients = new ArrayList<>(); //at creation doctor does not have any patients
     }
 
     public String getDoctorId() {
         return doctorId;
-    }
-
-    public static int getCount() {
-        return count;
     }
 
     public String getFirstName() {
@@ -45,35 +41,15 @@ public class Doctor {
         return contact;
     }
 
-    public List<Patient> getPatients() {
-        return patients;
-    }
-
-    public static void setCount(int count) {
-        Doctor.count = count;
-    }
-
-    public void setDoctorId(String doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
+//    public List<Patient> getPatients() {
+//        return patients;
+//    }
 
     public void setContact(String contact) {
         this.contact = contact;
     }
 
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
-    }
+//    public void setPatients(List<Patient> patients) {
+//        this.patients = patients;
+//    }
 }

@@ -10,46 +10,25 @@ public class Patient {
     private String lastName;
     private String address;
     private String contact;
-    private java.sql.Date birthDate;
+    private java.sql.Date dob;
     private String sex;
-    private Doctor familyDoctor;
-    private String type;
+    private String familyDoctor;
+    private String bloodType;
     private boolean discharged;
 
     private List<String> prescriptions;
 
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, java.sql.Date birthDate, String sex, String  type) {
-        this.patientId = "P%03F" + count ++;
+    public Patient(String firstName, String lastName, String address, String contact, java.sql.Date dob, String sex, String bloodType) {
+        this.patientId = String.format("P%03F" + count++);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.contact = contact;
-        this.birthDate = birthDate;
+        this.dob = dob;
         this.sex = sex;
         this.familyDoctor = null; //at creation patient does not have a doctor in the clinic
-        this.type = type;
+        this.bloodType = bloodType;
         this.discharged = false;
-
-//        this.prescriptions = prescriptions;
-    }
-
-    public Patient(String id, String firstName, String lastName, String address, String contact, Date dob, String sex, String  doctor, String bloodType, Boolean discharged) {
-        String sexString = getSex().toString();
-        String doctorName = getFamilyDoctor().getLastName();
-        String bloodString = getType().toString();
-
-
-        this.patientId = "P%03F" + count ++;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.contact = contact;
-        this.birthDate = birthDate;
-        this.sex = sex;
-        this.familyDoctor = doctor; //at creation patient does not have a doctor in the clinic
-        this.type = type;
-        this.discharged = discharged;
-
     }
 
     public String getPatientId() {
@@ -72,37 +51,23 @@ public class Patient {
         return contact;
     }
 
-
     public Date getBirthDate() {
-        return birthDate;
+        return dob;
     }
 
     public String getSex() {
         return sex;
     }
 
-    public Doctor getFamilyDoctor() {
+    public String getFamilyDoctor() {
         return familyDoctor;
     }
 
-    public String getType() {
-        return type;
+    public String getBloodType() {
+        return bloodType;
     }
 
     public boolean isDischarged() { return discharged; }
-
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public void setAddress(String address) {
         this.address = address;
@@ -112,27 +77,13 @@ public class Patient {
         this.contact = contact;
     }
 
-
-//    public void setBirthDate(Date birthDate) {
-//        this.birthDate = birthDate;
-//    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public void setFamilyDoctor(Doctor familyDoctor) {
+    public void setFamilyDoctor(String familyDoctor) {
         this.familyDoctor = familyDoctor;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void BloodType(String bloodType) {
+        this.bloodType = bloodType;
     }
 
     public void setDischarged(boolean discharged) {this.discharged = discharged;}
-
-
-//    public void setPrescriptions(List<String> prescriptions) {
-//        this.prescriptions = prescriptions;
-//    }
 }

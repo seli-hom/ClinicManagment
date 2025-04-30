@@ -9,22 +9,23 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DBConnection {
-
     private static DBConnection dObject;
+    private DBConnection(){}
+    private Map<String, Patient> patientCache = new HashMap<>();
+    private Map<String, Doctor> doctorCache = new HashMap<>();
+    private Map<String, Appointment> appointmentCache = new HashMap<>();
 
-    private DBConnection(){
-
-    }
-
-    //creat epublic static method that allows us to create and access object we created
-    //inseide method, we will create a condition tha trestricts us from creating more than one object
+    // create public static method that allows us to create and access object we created
+    // inside method, we will create a condition that restricts us from creating more than one object
 
     public static DBConnection getInstance(){
-// Singleton Pattern so that there will not be another creation of the database
+    // Singleton Pattern so that there will not be another creation of the database
         if (dObject == null){
             dObject = new DBConnection();
         }
@@ -46,6 +47,10 @@ public class DBConnection {
         }
         return connection;
     }
+
+    /**
+     * Create a Doctors table if one does not already exist
+     */
     public  void createNewDoctorsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Doctors (
@@ -68,6 +73,9 @@ public class DBConnection {
         }
     }
 
+    /**
+     * Create a Patients table if one does not already exist
+     */
     public  void createNewPatientsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Patients (
@@ -75,11 +83,12 @@ public class DBConnection {
                     first_name VARCHAR(50) NOT NULL,
                     last_name TEXT NOT NULL,
                     address TEXT,
-                    contact TEXT NOT NULL
+                    contact TEXT NOT NULL,
                     dob DATE NOT NULL,
                     sex VARCHAR(10) NOT NULL,
-                    familyDoctor VARCHAR(50) FOREIGN KEY REFERENCES Doctors(id),
-                    bloodType VARCHAR(10) NOT NULL,
+                    family_doctor VARCHAR(50),
+                    FOREIGN KEY(family_doctor) REFERENCES Doctors(id),
+                    blood_type VARCHAR(10) NOT NULL,
                     patient_discharged BOOLEAN NOT NULL
                 );
                 """;
@@ -95,15 +104,19 @@ public class DBConnection {
         }
     }
 
-
+    /**
+     * Create an Appointments table if one does not already exist
+     */
     public  void createNewAppointmentsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Appointments (
                     id VARCHAR(5) PRIMARY KEY,
-                    patient_id FOREIGN KEY REFERENCES patients(id),
-                    doctor_id FOREIGN KEY REFERENCES doctors(id),
+                    patient_id VARCHAR(5),
+                    doctor_id VARCHAR(5),
                     date DATE NOT NULL,
-                    time TIME NOT NULL
+                    time TIME NOT NULL,
+                    FOREIGN KEY REFERENCES Patients(id),
+                    FOREIGN KEY REFERENCES Doctors(id)
                 );
                 """;
 
@@ -118,18 +131,29 @@ public class DBConnection {
         }
     }
 
-
-    //==========Insert new record to table===================
-    public  void insertPatientRecord(String id,String fname,String lname, String address, String contact, Date dob, String sex, String doctorId, String bloodType, boolean discharged){
-        String sql = "INSERT INTO patients (id,first_name, last_name, address, contact, dob, sex, familyDoctor, bloodType, patient_discharged) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    /**
+     * Insert the following fields into the Patients table
+     * @param id the input id that will be retrieved when a Patient object is created
+     * @param fName the input first name
+     * @param lName the input last name
+     * @param address the input address
+     * @param contact the input contact information
+     * @param dob the input date of birth
+     * @param sex the input sex
+     * @param doctorId the input family doctor's id
+     * @param bloodType the input blood type
+     * @param discharged true if patient has been discharged, false otherwise
+     */
+    public  void insertPatientRecord(String id,String fName,String lName, String address, String contact, Date dob, String sex, String doctorId, String bloodType, boolean discharged){
+        String sql = "INSERT INTO Patients (id,first_name, last_name, address, contact, dob, sex, family_doctor, blood_type, patient_discharged) VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
-            pstmt.setString(2, fname); //set student name
-            pstmt.setString(3, lname);
+            pstmt.setString(2, fName); //set student name
+            pstmt.setString(3, lName);
             pstmt.setString(4, address);
             pstmt.setString(5, contact);
             pstmt.setDate(6, dob);
@@ -146,8 +170,16 @@ public class DBConnection {
         }
     }
 
+    /**
+     * Insert the following fields into the Doctors table
+     * @param id the input id that will be retrieved when a Doctor object is created
+     * @param fname the input first name
+     * @param lname the input last name
+     * @param specialty the input specialty
+     * @param contact the input contact information
+     */
     public  void insertDoctorRecord(String id,String fname,String lname, String specialty, String contact){
-        String sql = "INSERT INTO doctors (id, first_name, last_name, specialty, contact) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        String sql = "INSERT INTO Doctors (id, first_name, last_name, specialty, contact) VALUES(?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
@@ -166,8 +198,16 @@ public class DBConnection {
         }
     }
 
+    /**
+     * Insert the following fields into the Appointments table
+     * @param id the input id that will be retrieved when an Appointment object is created
+     * @param patientId the input patient's id
+     * @param doctorId the input doctor's id
+     * @param date the input date of the appointment
+     * @param time the input time of the appointment
+     */
     public  void insertAppointmentRecord( String id, String patientId , String doctorId, Date date, Time time){
-        String sql = "INSERT INTO patients ( id, patient_id, doctor_id, date, time) VALUES(?, ?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+        String sql = "INSERT INTO Appointments (id, patient_id, doctor_id, date, time) VALUES(?, ?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
@@ -186,21 +226,24 @@ public class DBConnection {
             System.out.println(e.getMessage());
         }
     }
-    //===================Update Pateient===================
-// update an existing student
-    public  void updatePatient(String patientid, String newAdress, String newContact) {
-        String sql = "UPDATE patients SET address = ?, contact = ? WHERE Id = ?";
+
+    /**
+     * Update a patient's address
+     * @param patientId the input patient id
+     * @param newAdress the new input address
+     */
+    public  void updatePatientAddress(String patientId, String newAdress) {
+        String sql = "UPDATE Patients SET address = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newAdress); // set student name
-            pstmt.setString(2, newContact); // set student age
-            pstmt.setString(3, patientid);
+            pstmt.setString(2, patientId);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
-                System.out.println("Patient's information was updated successfully.");
+                System.out.println("Patient's address was updated successfully.");
             }
             else {
                 System.out.println("No patient with the provided ID exists");
@@ -211,9 +254,41 @@ public class DBConnection {
         }
     }
 
-    //===========Update Doctors contact
-    public  void updateDoctor(String doctorId, String newContact) {
-        String sql = "UPDATE doctors SET  contact = ? WHERE Id = ?";
+    /**
+     * Update a patient's contact information
+     * @param patientId the input patient id
+     * @param newContact the new input contact information
+     */
+    public  void updatePatientContact(String patientId, String newContact) {
+        String sql = "UPDATE Patients SET contact = ? WHERE Id = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newContact); // set student age
+            pstmt.setString(2, patientId);
+            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsUpdated > 0) {
+                System.out.println("Patient's contact was updated successfully.");
+            }
+            else {
+                System.out.println("No patient with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+
+    /**
+     * Update a doctor's contact information
+     * @param doctorId the input doctor id
+     * @param newContact the new input contact information
+     */
+    public  void updateDoctorContact(String doctorId, String newContact) {
+        String sql = "UPDATE Doctors SET  contact = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -233,9 +308,15 @@ public class DBConnection {
             System.err.println(e.getMessage());
         }
     }
-    //===============Reschedule Appointment
+
+    /**
+     * Update the date and time of an appointment
+     * @param aptID the input appointment id
+     * @param newDate the new input date
+     * @param newTime the new input time
+     */
     public  void updateSchedule(String aptID, Date newDate, Time newTime) {
-        String sql = "UPDATE appointements SET  date = ?, time = ? WHERE Id = ?";
+        String sql = "UPDATE Appointments SET  date = ?, time = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -257,19 +338,22 @@ public class DBConnection {
         }
     }
 
-
-    //===================Delete Patient===================
+    /**
+     * Change a patient's status to discharged = true
+     * @param id the input patient id
+     */
     public  void dischargePatient(String id) {
-        String sql = "DELETE FROM patients WHERE Id = ?";
+        String sql = "UPDATE Patients SET patient_discharged = ? WHERE Id = ?";
 
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
+            pstmt.setBoolean(1, true);
+            pstmt.setString(2, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsDeleted > 0) {
-                System.out.println("Patient with id: " + id + " was discharged succesfully");
+                System.out.println("Patient was discharged succesfully");
             }
             else {
                 System.out.println("No patient with the provided ID exists");
@@ -280,9 +364,12 @@ public class DBConnection {
         }
     }
 
-    //================Delete Doctor========================== //i dont remember why we didnt want to delete doctore but i put it back
+    /**
+     * Delete a Doctor from the database
+     * @param id the input doctor id
+     */
     public  void deleteDoctor(String id) {
-        String sql = "DELETE FROM doctors WHERE Id = ?";
+        String sql = "DELETE FROM Doctors WHERE Id = ?";
 
         try {
             Connection conn = connect();
@@ -302,9 +389,12 @@ public class DBConnection {
         }
     }
 
-    //===============Cancel Appointment
+    /**
+     * Cancel an appointment
+     * @param id the input appointment id
+     */
     public  void cancelAppointment(String id) {
-        String sql = "DELETE FROM appointments WHERE id = ?";
+        String sql = "DELETE FROM Appointments WHERE id = ?";
 
         try {
             Connection conn = connect();
@@ -347,11 +437,13 @@ public class DBConnection {
 //        }
 //    }
 
-    //==========================View Patients table==============================
-    public List<Patient> viewAllPatients() {
+    /**
+     * View all patients in the database
+     * @return an array list of all the patients
+     */
+    public List<Patient> getAllPatients() {
        List<Patient> patientList = new ArrayList<>();
-       String sql = "SELECT * FROM patients";
-
+       String sql = "SELECT * FROM Patients";
 
         try {
             Connection conn = connect();
@@ -359,17 +451,80 @@ public class DBConnection {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-                patientList.add(new Patient(
-                        rs.getString("id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("address"),
-                        rs.getString("contact"),
-                        rs.getDate("dob"),
-                        rs.getString("sex"),
-//                        rs.getString("familyDoctor") = null,
-                        rs.getString("bloodType")
-//                        rs.getBoolean("discharged")
+                Patient patient = new Patient(
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("address"),
+                    rs.getString("contact"),
+                    rs.getDate("dob"),
+                    rs.getString("sex"),
+                    rs.getString("blood_type")
+                );
+
+                patientList.add(patient);
+
+                // Add the patient to the HashMap cache
+                patientCache.put(patient.getPatientId(), patient);
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return patientList;
+    }
+
+    /**
+     * View all doctors in the database
+     * @return an array list of all the doctors
+     */
+    public List<Doctor> getAllDoctors() {
+        List<Doctor> doctorList = new ArrayList<>();
+        String sql = "SELECT * FROM Doctors";
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Doctor doctor = new Doctor(
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("specialty"),
+                    rs.getString("contact")
+                );
+
+                doctorList.add(doctor);
+                doctorCache.put(doctor.getDoctorId(), doctor);
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return doctorList;
+    }
+
+    /**
+     * View all doctors in the database
+     * @return an array list of all the doctors
+     */
+    public List<Appointment> getAllAppointments() {
+        List<Appointment> appointmentList = new ArrayList<>();
+        String sql = "SELECT * FROM Appointments";
+
+        try {
+            Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                appointmentList.add(new Appointment(
+                        rs.getString("patient_id"),
+                        rs.getString("doctor_id"),
+                        rs.getDate("date"),
+                        rs.getTime("time")
                 ));
 
             }
@@ -378,8 +533,50 @@ public class DBConnection {
             System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
         }
 
-        return patientList;
-
-
+        return appointmentList;
     }
+
+    public Patient getPatientById(String id) {
+        // Check if patient is already in the cache
+        Patient patient = patientCache.get(id);
+
+        if (patient != null) {
+            return patient; // Return the patient from cache if it is already there
+        }
+
+        // If patient is not in the cache, get it from the database
+        String sql = "SELECT * FROM Patients WHERE patient_id = ?";
+
+        try {
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                new Patient(
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("address"),
+                    rs.getString("contact"),
+                    rs.getDate("dob"),
+                    rs.getString("sex"),
+                    rs.getString("blood_type")
+                );
+
+                // Add the patient to the cache
+                patientCache.put(id, patient);
+            }
+            else {
+                // If patient is not found
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+        }
+
+        return patient;
+    }
+
 }

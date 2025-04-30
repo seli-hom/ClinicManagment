@@ -14,7 +14,7 @@ public class Appointment {
     private Time time;
 
     public Appointment(Patient patient, Doctor doctor, Date date, Time time) {
-        this.appointmentId = "A%03d" + count++;
+        this.appointmentId = String.format("A%03d" + count++);
         this.patient = patient;
         this.doctor = doctor;
         this.date = date;
@@ -23,10 +23,6 @@ public class Appointment {
 
     public String getAppointmentId() {
         return appointmentId;
-    }
-
-    public static int getCount() {
-        return count;
     }
 
     public Patient getPatient() {
@@ -43,22 +39,6 @@ public class Appointment {
 
     public Time getTime() {
         return time;
-    }
-
-    public static void setCount(int count) {
-        Appointment.count = count;
-    }
-
-    public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     public void setDate(Date date) {

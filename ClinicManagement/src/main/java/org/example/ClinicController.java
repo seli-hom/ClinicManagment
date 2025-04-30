@@ -15,7 +15,7 @@ public class ClinicController {
         this.model = model;
 
         private void refreshTable() {
-            model.pa
+
         }
 
         class AddPatientListener implements ActionListener {
@@ -40,9 +40,9 @@ public class ClinicController {
                 bloodType.addItem("B-");
                 bloodType.addItem("AB-");
 
-                Patient pToadd = new Patient(fname,lname,address,contact,dob,sex.getSelectedItem(),bloodType.getSelectedItem());
+                Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem(), Doctor, bloodType.getSelectedItem());
 
-                model.registerPatient(pToadd);
+                model.registerPatient(newPatient);
             }
         }
 
