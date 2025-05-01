@@ -55,7 +55,7 @@ public class PatientDAO {
      * @param patientId the input patient id
      * @param newAdress the new input address
      */
-    public  void updatePatient(String patientId, String newAdress, String newContact) {
+    public  void updatePatient1(String patientId, String newAdress, String newContact) {
         String sql = "UPDATE Patients SET address = ?, contact = ? WHERE id = ?";
 
         try {
@@ -84,7 +84,7 @@ public class PatientDAO {
      * @param columnName
      * @param newData
      */
-    public  void updatePatient1(String patientId, String columnName, String newData) {
+    public  void updatePatient(String patientId, String columnName, String newData) {
         String sql = "UPDATE Patients SET ? = ? WHERE id = ?";
 
         try {

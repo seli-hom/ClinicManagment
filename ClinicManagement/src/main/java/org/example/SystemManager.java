@@ -33,7 +33,7 @@ public class SystemManager {
             throw new IllegalArgumentException("Patient already as a family doctor assigned.");
         }
         patient.setFamilyDoctor(doctorId);
-        patientDAO.updatePatient(patient);
+        patientDAO.updatePatient(patientId, "family_doctor", doctorId);
     }
 
     /**
@@ -132,7 +132,7 @@ public class SystemManager {
         DBConnection database = DBConnection.getInstance();
         database.connect();
         patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
-                p.getSex().toString(),p.getFamilyDoctor().getDoctorId(),p.getBloodType(), p.isDischarged());
+                p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType(), p.isDischarged());
         System.out.println("Patient registered successfully");
     }
 
@@ -161,9 +161,9 @@ public class SystemManager {
     public void dischargePatient(String id) {
         Patient patient = findPatient(id);
         if (patient != null) {
-            patient.getFamilyDoctor().getPatients().remove(patient); // make sure the patient is no longer in the list of the doctors patients
-            patients.remove(patient);
-            System.out.println("Patient with id: " + id + " has been successfully removed.");
+            patient.setDischarged(true);
+//            patients.remove(patient);
+            System.out.println("Patient with id: " + id + " has been successfully discharged.");
 
 //            DBConnection database = DBConnection.getInstance();
 //            database.connect();
