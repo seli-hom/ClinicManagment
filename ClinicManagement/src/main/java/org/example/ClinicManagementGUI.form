@@ -85,7 +85,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="2a8cb" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="2a8cb" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -93,7 +93,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="26d24" class="javax.swing.JButton" default-binding="true">
+                      <component id="26d24" class="javax.swing.JButton" binding="addDoctorButton">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -101,7 +101,7 @@
                           <text value="Add Doctor"/>
                         </properties>
                       </component>
-                      <component id="234f1" class="javax.swing.JButton" default-binding="true">
+                      <component id="234f1" class="javax.swing.JButton" binding="modifyDoctorButton">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -109,12 +109,20 @@
                           <text value="Modify Doctor"/>
                         </properties>
                       </component>
-                      <component id="272c5" class="javax.swing.JButton" default-binding="true">
+                      <component id="272c5" class="javax.swing.JButton" binding="findDoctorButton">
+                        <constraints>
+                          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <text value="Find Doctor"/>
+                        </properties>
+                      </component>
+                      <component id="412df" class="javax.swing.JButton" binding="findDoctorBySpecialtyButton">
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Find Doctor"/>
+                          <text value="Find doctors in the field"/>
                         </properties>
                       </component>
                     </children>
