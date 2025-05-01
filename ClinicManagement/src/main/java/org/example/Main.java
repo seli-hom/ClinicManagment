@@ -23,15 +23,20 @@ public class Main {
             SystemManager model = new SystemManager();
             ClinicManagementGUI view = new ClinicManagementGUI();
 
+
             // Initialize controller
             new ClinicController(view, model);
 
             // Set up and show GUI
             JFrame frame = new JFrame("Clinic Management System");
-//            frame.setContentPane(view);
+            frame.setContentPane(view.getContentPane()); // ✅ make sure it includes your layout
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
+            frame.setSize(900, 600); // ✅ reasonable default size
+            frame.setLocationRelativeTo(null); // ✅ center on screen
             frame.setVisible(true);
+            frame.setContentPane(view.getContentPane()); // ← this is correct
+
+
 
             // Initialize database tables
             DBConnection db = DBConnection.getInstance();
