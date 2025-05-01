@@ -11,15 +11,18 @@ public class ClinicManagementGUI extends JFrame {
     private JButton addPatientButton;
     private JButton modifyPatientButton;
     private JButton findPatientButton;
+    private JButton viewPatientsButton;
     private JButton bookAppointmentButton;
     private JButton rescheduleAppointmentButton;
     private JButton cancelAppointmentButton;
     private JButton findAppointmentButton;
+    private JButton viewAppointmentsButton;
     private JButton findPatientRecordButton;
     private JButton addDoctorButton;
     private JButton modifyDoctorButton;
     private JButton findDoctorButton;
     private JButton findDoctorBySpecialtyButton;
+    private JButton viewDoctorsButton;
     private JTable patientTable;
     private JTable doctorTable;
     private JTable appointmentTable;
@@ -55,15 +58,18 @@ public class ClinicManagementGUI extends JFrame {
         addPatientButton = new JButton("Add Patient");
         modifyPatientButton = new JButton("Modify Patient");
         findPatientButton = new JButton("Find Patient");
+        viewPatientsButton = new JButton("View All Patients");
         bookAppointmentButton = new JButton("Book Appointment");
         rescheduleAppointmentButton = new JButton("Reschedule Appointment");
         cancelAppointmentButton = new JButton("Cancel Appointment");
         findAppointmentButton = new JButton("Find Appointment");
+        viewAppointmentsButton = new JButton("View All Appointments");
         findPatientRecordButton = new JButton("Find Record");
         addDoctorButton = new JButton("Add Doctor");
         modifyDoctorButton = new JButton("Modify Doctor");
         findDoctorButton = new JButton("Find Doctor");
         findDoctorBySpecialtyButton = new JButton("Find by Specialty");
+        viewDoctorsButton = new JButton("View All Doctors");
 
         patientTable = new JTable();
         doctorTable = new JTable();
@@ -75,6 +81,7 @@ public class ClinicManagementGUI extends JFrame {
         patientTab.add(addPatientButton);
         patientTab.add(modifyPatientButton);
         patientTab.add(findPatientButton);
+        patientTab.add(viewPatientsButton);
         patientTab.add(new JScrollPane(patientTable));
 
         // Set layout and add components to doctorTab
@@ -83,6 +90,7 @@ public class ClinicManagementGUI extends JFrame {
         doctorTab.add(modifyDoctorButton);
         doctorTab.add(findDoctorButton);
         doctorTab.add(findDoctorBySpecialtyButton);
+        doctorTab.add(viewDoctorsButton);
         doctorTab.add(new JScrollPane(doctorTable));
 
         // Set layout and add components to appointmentTab
@@ -91,6 +99,7 @@ public class ClinicManagementGUI extends JFrame {
         appointmentTab.add(rescheduleAppointmentButton);
         appointmentTab.add(cancelAppointmentButton);
         appointmentTab.add(findAppointmentButton);
+        appointmentTab.add(viewAppointmentsButton);
         appointmentTab.add(new JScrollPane(appointmentTable));
 
         // Set layout and add components to recordTab
@@ -188,15 +197,18 @@ public class ClinicManagementGUI extends JFrame {
     public JButton getAddPatientButton() { return addPatientButton; }
     public JButton getModifyPatientButton() { return modifyPatientButton; }
     public JButton getFindPatientButton() { return findPatientButton; }
+    public JButton getViewPatientsButton() { return viewPatientsButton; }
     public JButton getBookAppointmentButton() { return bookAppointmentButton; }
     public JButton getRescheduleAppointmentButton() { return rescheduleAppointmentButton; }
     public JButton getCancelAppointmentButton() { return cancelAppointmentButton; }
     public JButton getFindAppointmentButton() { return findAppointmentButton; }
+    public JButton getViewAppointmentsButton() { return viewAppointmentsButton; }
     public JButton getFindPatientRecordButton() { return findPatientRecordButton; }
     public JButton getAddDoctorButton() { return addDoctorButton; }
     public JButton getModifyDoctorButton() { return modifyDoctorButton; }
     public JButton getFindDoctorButton() { return findDoctorButton; }
     public JButton getFindDoctorBySpecialtyButton() { return findDoctorBySpecialtyButton; }
+    public JButton getViewDoctorsButton() { return viewDoctorsButton; }
     public JTable getPatientTable() { return patientTable; }
     public JTable getDoctorTable() { return doctorTable; }
     public JTable getAppointmentTable() { return appointmentTable; }
