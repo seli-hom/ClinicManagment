@@ -101,6 +101,33 @@ public class DBConnection {
         }
     }
 
+    /**
+     * Create an Appointments table if one does not already exist
+     */
+    public  void createNewAppointmentsTable() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS Appointments (
+                    id VARCHAR(5) PRIMARY KEY,
+                    patient_id VARCHAR(5),
+                    doctor_id VARCHAR(5),
+                    date DATE NOT NULL,
+                    time TIME NOT NULL,
+                    FOREIGN KEY(patient_id) REFERENCES Patients(id),
+                    FOREIGN KEY(doctor_id) REFERENCES Doctors(id)
+                );
+                """;
+
+        try {
+            Connection conn = DBConnection.connect();
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);  // execute the create table statement
+            System.out.println("Table created successfully.");
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
 
 
     //=============Find patient =============
