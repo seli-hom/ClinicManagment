@@ -51,7 +51,7 @@ public class Patient {
         return contact;
     }
 
-    public Date getBirthDate() {
+    public Date getDob() {
         return dob;
     }
 

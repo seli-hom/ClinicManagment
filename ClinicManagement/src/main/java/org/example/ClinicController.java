@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 
 import java.sql.Date;
+import java.util.List;
 
 public class ClinicController {
     private ClinicManagementGUI view;
@@ -13,10 +14,6 @@ public class ClinicController {
         this.view = view;
         this.model = model;
 
-        private void refreshTable() {
-
-        }
-
         class AddPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -24,7 +21,7 @@ public class ClinicController {
                 String lname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
                 String address = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
                 String contact = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
-                Date dob = JComboBox();
+//                Date dob = JComboBox();
                 JComboBox<String> sex = new JComboBox<>();
                 sex.addItem("Male");
                 sex.addItem("Female");
@@ -39,9 +36,9 @@ public class ClinicController {
                 bloodType.addItem("B-");
                 bloodType.addItem("AB-");
 
-                Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem().toString(), bloodType.getSelectedItem().toString());
+//                Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem().toString(), bloodType.getSelectedItem().toString());
 
-                model.registerPatient(newPatient);
+//                model.registerPatient(newPatient);
             }
         }
 

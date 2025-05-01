@@ -2,6 +2,7 @@ package org.example;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.sql.Date;
 
@@ -10,6 +11,7 @@ public class Appointment {
     private String appointmentId;
     private String patientId;
     private String doctorId;
+    private LocalDateTime dateTime;
     private Date date;
     private Time time;
 
@@ -17,6 +19,7 @@ public class Appointment {
         this.appointmentId = String.format("A%03d" + count++);
         this.patientId = patientId;
         this.doctorId = doctorId;
+
         this.date = date;
         this.time = time;
     }

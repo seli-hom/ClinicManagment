@@ -3,7 +3,12 @@ package org.example;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class ClinicManagementGUI {
@@ -27,6 +32,10 @@ public class ClinicManagementGUI {
     private JPanel recordTab;
 
     private SystemManager systemManager = new SystemManager();
+
+    private DoctorDAO doctorDAO = new DoctorDAO();
+    private PatientDAO patientDAO = new PatientDAO();
+    private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Clinic Management System");
@@ -66,7 +75,7 @@ public class ClinicManagementGUI {
                 int selectedRow = patientTable.getSelectedRow();
                 if (selectedRow >= 0) {
                     int patientId = (int) patientTable.getValueAt(selectedRow, 0);
-                    Patient patient = PatientDAO.getPatientById(patientId);
+                    Patient patient = patientDAO.getPatientById(patientId);
 
                     String newName = JOptionPane.showInputDialog("Enter new name:", patient.getName());
                     int newAge = Integer.parseInt(JOptionPane.showInputDialog("Enter new age:", patient.getAge()));
@@ -87,12 +96,13 @@ public class ClinicManagementGUI {
         findPatientButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Find patient by name
-                String searchName = JOptionPane.showInputDialog("Enter patient name:");
-                ArrayList<Patient> patients = PatientDAO.findPatientByName(searchName);
-                if (patients.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No patient found.");
+                // Find patient by id
+                String searchId = JOptionPane.showInputDialog("Enter patient id:");
+                if (patientDAO.getPatientCache().equals(searchId)) {
+                    patientTable.add(patientDAO.getPatientCache())
+                    updatePatientTable();
                 } else {
+                    JOptionPane.showMessageDialog(null, "No patient found.");
                     updatePatientTable(patients);
                 }
             }
@@ -125,6 +135,21 @@ public class ClinicManagementGUI {
         rescheduleAppointmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String inputDate = JOptionPane.showInputDialog("Enter the new date of the appointment (yyyy-MM-dd):");
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+                String time = JOptionPane.showInputDialog("Enter the new time of the appointment (HH:mm):");
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+                try {
+                    Date date = Date.parse(inputDate, dateFormatter.toString());
+                    System.out.println("Parsed date: " + inputDate);
+
+
+                }
+                if (date != null && time != null) {
+                    appointmentDAO.updateSchedule(date, time);
+                }
+
                 // Reschedule appointment
                 int selectedRow = appointmentTable.getSelectedRow();
                 if (selectedRow >= 0) {
@@ -144,17 +169,13 @@ public class ClinicManagementGUI {
         cancelAppointmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cancel appointment
-                int selectedRow = appointmentTable.getSelectedRow();
-                if (selectedRow >= 0) {
-                    int appointmentId = (int) appointmentTable.getValueAt(selectedRow, 0);
-
-                    if (AppointmentDAO.cancelAppointment(appointmentId)) {
-                        JOptionPane.showMessageDialog(null, "Appointment canceled.");
-                        updateAppointmentTable();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Failed to cancel appointment.");
-                    }
+                String id = JOptionPane.showInputDialog("Enter the id of the appointment to cancel:");
+                if (id != null) {
+                    appointmentDAO.cancelAppointment(id);
+                    JOptionPane.showMessageDialog(null, "Appointment canceled.");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Please fill out id field");
                 }
             }
         });
@@ -162,12 +183,13 @@ public class ClinicManagementGUI {
         findAppointmentButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Find appointments for a patient
-                int selectedRow = patientTable.getSelectedRow();
-                if (selectedRow >= 0) {
-                    int patientId = (int) patientTable.getValueAt(selectedRow, 0);
-                    ArrayList<Appointment> appointments = AppointmentDAO.getAppointmentsByPatientId(patientId);
-                    updateAppointmentTable(appointments);
+                String id = JOptionPane.showInputDialog("Enter the id of the appointment to find:");
+                if (id != null) {
+                    appointmentDAO.getAppointmentById(id);
+                    JOptionPane.showMessageDialog(null, "Appointment found");
+                    updatePatientTable();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please fill out id field");
                 }
             }
         });
@@ -181,11 +203,11 @@ public class ClinicManagementGUI {
     }
 
     private void updatePatientTable() {
-        ArrayList<Patient> patients = PatientDAO.getAllPatients();
+        List<Patient> patients = patientDAO.getAllPatients();
         DefaultTableModel model = (DefaultTableModel) patientTable.getModel();
         model.setRowCount(0);
         for (Patient patient : patients) {
-            model.addRow(new Object[]{patient.getId(), patient.getName(), patient.getAge()});
+            model.addRow(new Object[]{patient.getPatientId(), patient.getFirstName(), patient.getLastName(), patient.getAddress(), patient.getContact(), patient.getDob(), patient.getSex(), patient.getBloodType()});
         }
     }
 
@@ -193,7 +215,7 @@ public class ClinicManagementGUI {
         DefaultTableModel model = (DefaultTableModel) patientTable.getModel();
         model.setRowCount(0);
         for (Patient patient : patients) {
-            model.addRow(new Object[]{patient.getId(), patient.getName(), patient.getAge()});
+            model.addRow(new Object[]{patient.getPatientId(), patient.getFirstName(), patient.getLastName(), patient.getAddress(), patient.getContact(), patient.getDob(), patient.getSex(), patient.getBloodType()});
         }
     }
 
@@ -205,11 +227,11 @@ public class ClinicManagementGUI {
     }
 
     private void updateDoctorTable() {
-        ArrayList<Doctor> doctors = DoctorDAO.getAllDoctors();
+        List<Doctor> doctors = doctorDAO.getAllDoctors();
         DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
         model.setRowCount(0);
         for (Doctor doctor : doctors) {
-            model.addRow(new Object[]{doctor.getId(), doctor.getName(), doctor.getSpecialty()});
+            model.addRow(new Object[]{doctor.getDoctorId(), doctor.getFirstName(), doctor.getLastName(), doctor.getContact(), doctor.getSpeciality()});
         }
     }
 
@@ -221,11 +243,11 @@ public class ClinicManagementGUI {
     }
 
     private void updateAppointmentTable() {
-        ArrayList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+        List<Appointment> appointments = appointmentDAO.getAllAppointments();
         DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
         model.setRowCount(0);
         for (Appointment appointment : appointments) {
-            model.addRow(new Object[]{appointment.getId(), appointment.getPatientId(), appointment.getDoctorId(), appointment.getDateTime()});
+            model.addRow(new Object[]{appointment.getAppointmentId(), appointment.getPatientId(), appointment.getDoctorId(), appointment.getDate(), appointment.getTime()});
         }
     }
 
@@ -237,8 +259,6 @@ public class ClinicManagementGUI {
     }
 
     private void updateRecordTable() {
-        // Populate the record table (this part can be adjusted based on your logic)
-        // Example to simulate records
         DefaultTableModel model = (DefaultTableModel) recordTable.getModel();
         model.setRowCount(0);
     }

@@ -218,4 +218,7 @@ public class PatientDAO {
         return patient;
     }
 
+    public Map<String, Patient> getPatientCache() {
+        return patientCache;
+    }
 }

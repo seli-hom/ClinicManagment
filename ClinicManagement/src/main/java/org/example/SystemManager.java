@@ -131,7 +131,7 @@ public class SystemManager {
         patients.add(p);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
+        patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getDob(),
                 p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType(), p.isDischarged());
         System.out.println("Patient registered successfully");
     }
