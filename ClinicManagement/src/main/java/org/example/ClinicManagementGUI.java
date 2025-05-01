@@ -159,4 +159,56 @@ public class ClinicManagementGUI extends JFrame {
     public JButton getFindDoctorBySpecialtyButton() {
         return findDoctorBySpecialtyButton;
     }
+
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
+    }
+
+    public JPanel getClinicManagementPanel() {
+        return clinicManagementPanel;
+    }
+
+    public JTable getPatientTable() {
+        return patientTable;
+    }
+
+    public JTable getDoctorTable() {
+        return doctorTable;
+    }
+
+    public JTable getAppointmentTable() {
+        return appointmentTable;
+    }
+
+    public JTable getRecordTable() {
+        return recordTable;
+    }
+
+    public JPanel getPatientTab() {
+        return patientTab;
+    }
+
+    public JPanel getDoctorTab() {
+        return doctorTab;
+    }
+
+    public JPanel getAppointmentTab() {
+        return appointmentTab;
+    }
+
+    public JPanel getRecordTab() {
+        return recordTab;
+    }
+
+    public DoctorDAO getDoctorDAO() {
+        return doctorDAO;
+    }
+
+    public PatientDAO getPatientDAO() {
+        return patientDAO;
+    }
+
+    public AppointmentDAO getAppointmentDAO() {
+        return appointmentDAO;
+    }
 }
