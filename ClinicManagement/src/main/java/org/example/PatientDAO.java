@@ -29,7 +29,7 @@ public class PatientDAO {
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, fName); //set student name
@@ -59,7 +59,7 @@ public class PatientDAO {
         String sql = "UPDATE Patients SET address = ?, contact = ? WHERE id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newAdress); // set student name
             pstmt.setString(2, newContact);
@@ -88,7 +88,7 @@ public class PatientDAO {
         String sql = "UPDATE Patients SET ? = ? WHERE id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, columnName); // set student name
             pstmt.setString(2, newData);
@@ -115,7 +115,7 @@ public class PatientDAO {
         String sql = "UPDATE Patients SET patient_discharged = ? WHERE Id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setBoolean(1, true);
             pstmt.setString(2, id);
@@ -142,7 +142,7 @@ public class PatientDAO {
         String sql = "SELECT * FROM Patients";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -164,7 +164,7 @@ public class PatientDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf(e.getMessage());
         }
 
         return patientList;
@@ -187,7 +187,7 @@ public class PatientDAO {
         String sql = "SELECT * FROM Patients WHERE patient_id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -212,7 +212,7 @@ public class PatientDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf( e.getMessage());
         }
 
         return patient;

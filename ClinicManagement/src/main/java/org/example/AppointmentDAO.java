@@ -24,7 +24,7 @@ public class AppointmentDAO {
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, patientId);
@@ -50,7 +50,7 @@ public class AppointmentDAO {
         String sql = "UPDATE Appointments SET  date = ?, time = ? WHERE Id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setDate(1, newDate); // set doctor contact
             pstmt.setTime(2, newTime); // set doctor contact
@@ -77,7 +77,7 @@ public class AppointmentDAO {
         String sql = "DELETE FROM Appointments WHERE id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
@@ -103,7 +103,7 @@ public class AppointmentDAO {
         String sql = "SELECT * FROM Appointments";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -121,7 +121,7 @@ public class AppointmentDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf( e.getMessage());
         }
 
         return appointmentList;
@@ -144,7 +144,7 @@ public class AppointmentDAO {
         String sql = "SELECT * FROM Appointments WHERE appointment_id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -166,7 +166,7 @@ public class AppointmentDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf( e.getMessage());
         }
 
         return appointment;

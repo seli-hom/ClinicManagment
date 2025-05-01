@@ -17,17 +17,17 @@ public class ClinicController {
         this.view = view;
         this.model = model;
         DBConnection database = DBConnection.getInstance();
-        database.connect();
+        database.getInstance().getConnection();
         database.createNewDoctorsTable();
         database.createNewPatientsTable();
         database.createNewAppointmentsTable();
 
         class AddDoctorListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                String firstName = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
-                String lastName = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
-                String speciality = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
-                String contact = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
+                String firstName = JOptionPane.showInputDialog("Messages.getMessage(");
+                String lastName = JOptionPane.showInputDialog("Messages.getMessage(");
+                String speciality = JOptionPane.showInputDialog("Messages.getMessage(");
+                String contact = JOptionPane.showInputDialog("Messages.getMessage(");
 
                 Doctor doctor = new Doctor(firstName, lastName, speciality, contact);
                 try {
@@ -44,8 +44,8 @@ public class ClinicController {
 
         class ModifyDoctorContactListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                String doctorID = JOptionPane.showInputDialog(Messages.getMessage("DoctorID"));
-                String newContact = JOptionPane.showInputDialog(Messages.getMessage("newContact"));
+                String doctorID = JOptionPane.showInputDialog("jajd");
+                String newContact = JOptionPane.showInputDialog("lala");
 
                 try {
                     model.modifyDoctor(doctorID, newContact);
@@ -61,7 +61,7 @@ public class ClinicController {
 
         class FindDoctorListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                String doctorID = JOptionPane.showInputDialog(Messages.getMessage("DoctorID"));
+                String doctorID = JOptionPane.showInputDialog("DoctorID");
 
                 try{
                     model.findDoctor(doctorID);
@@ -76,7 +76,7 @@ public class ClinicController {
 
         class FindDoctorBySpecialityListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                String speciality = JOptionPane.showInputDialog(Messages.getMessage("Speciality"));
+                String speciality = JOptionPane.showInputDialog("Speciality");
 
                 try{
                     model.findDoctorsBySpecialty(speciality);
@@ -92,10 +92,10 @@ public class ClinicController {
         class AddPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
-                String lname = JOptionPane.showInputDialog(Messages.getMessage("enter last name"));
-                String address = JOptionPane.showInputDialog(Messages.getMessage("enter adress"));
-                String contact = JOptionPane.showInputDialog(Messages.getMessage("enter contact information"));
+                String fname = JOptionPane.showInputDialog("enter first name");
+                String lname = JOptionPane.showInputDialog("enter last name");
+                String address = JOptionPane.showInputDialog("enter adress");
+                String contact = JOptionPane.showInputDialog("enter contact information");
                 JSpinner dateForDob = new JSpinner(new SpinnerDateModel());
                 JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateForDob, "dd/MM/yyyy");
                 dateForDob.setEditor(dateEditor);
@@ -147,9 +147,9 @@ public class ClinicController {
         class ModifyPatientListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String id = JOptionPane.showInputDialog(Messages.getMessage("enter id"));
-            String newAdress = JOptionPane.showInputDialog(Messages.getMessage("enter new address"));
-            String newContact = JOptionPane.showInputDialog(Messages.getMessage("enter new contact"));
+            String id = JOptionPane.showInputDialog("enter id");
+            String newAdress = JOptionPane.showInputDialog("enter new address");
+            String newContact = JOptionPane.showInputDialog("enter new contact");
 
             try {
                 model.updatePatientInfo(id, newAdress, newContact);
@@ -184,7 +184,7 @@ public class ClinicController {
     }
         this.view.getModifyPatientButton().addActionListener(new ModifyPatientListener());
 
-//        findPatientButton.addActionListener(new ActionListener() {
+    //        findPatientButton.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
 //                // Find patient by id
@@ -201,7 +201,7 @@ public class ClinicController {
         class FindPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String id = JOptionPane.showInputDialog(Messages.getMessage("enter id"));
+                String id = JOptionPane.showInputDialog("enter id");
 
                 try {
                     model.findPatient(id);
@@ -240,8 +240,8 @@ public class ClinicController {
         class BookAppointmentListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String patientid = JOptionPane.showInputDialog(Messages.getMessage("enter patient id"));
-                String doctorid = JOptionPane.showInputDialog(Messages.getMessage("enter doctor id"));
+                String patientid = JOptionPane.showInputDialog("enter patient id");
+                String doctorid = JOptionPane.showInputDialog("enter doctor id");
                 JSpinner datForApt = new JSpinner(new SpinnerDateModel());
                 JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(datForApt, "dd/MM/yyyy");
                 datForApt.setEditor(dateEditor);
@@ -302,7 +302,7 @@ public class ClinicController {
         class RescheduleAppointmentListener implements ActionListener {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String aptId = JOptionPane.showInputDialog(Messages.getMessage("enter apt id"));
+                    String aptId = JOptionPane.showInputDialog("enter apt id");
                     JSpinner datForApt = new JSpinner(new SpinnerDateModel());
                     JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(datForApt, "dd/MM/yyyy");
                     datForApt.setEditor(dateEditor);

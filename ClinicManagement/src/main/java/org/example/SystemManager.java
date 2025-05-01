@@ -16,6 +16,16 @@ public class SystemManager {
     private PatientDAO patientDAO = new PatientDAO();
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
+    public SystemManager() {
+        this.doctors = new ArrayList<>();
+        this.patients = new ArrayList<>();
+        this.appointments = new ArrayList<>();
+
+        this.doctors = doctorDAO.getAllDoctors();
+        this.patients = patientDAO.getAllPatients();
+        this.appointments = appointmentDAO.getAllAppointments();
+
+    }
     /**
      * Assigns a family doctor to a registered patient
      * @param patientId patient who will be assigned a doctor
@@ -116,7 +126,7 @@ public class SystemManager {
 
         modifiedDoctor.setContact(modifiedContact);
         DBConnection database = DBConnection.getInstance();
-        database.connect();
+        database.getInstance().getConnection();
 
         doctorDAO.updateDoctor(id, modifiedContact);
         System.out.println("Doctor info has been successfully updated.");
@@ -132,7 +142,7 @@ public class SystemManager {
     public void registerPatient(Patient p) {
         patients.add(p);
         DBConnection database = DBConnection.getInstance();
-        database.connect();
+        database.getInstance().getConnection();
         patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getDob(),
                 p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType(), p.isDischarged());
         System.out.println("Patient registered successfully");

@@ -35,24 +35,48 @@ public class ClinicManagementGUI extends JFrame {
     private JPanel appointmentTab;
     private JPanel recordTab;
 
-    private SystemManager systemManager = new SystemManager();
+//    private SystemManager systemManager = new SystemManager();
 
     private DoctorDAO doctorDAO = new DoctorDAO();
     private PatientDAO patientDAO = new PatientDAO();
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
-    public static void main(String[] args) {
+
+public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        //initialize database
+        DBConnection.getInstance().initializeDatabase();
+
+        // Initialize model and view
+        SystemManager model = new SystemManager();
+        ClinicManagementGUI view = new ClinicManagementGUI();
+
+        // Initialize controller
+        new ClinicController(view, model);
+
+        // Set up and show GUI
         JFrame frame = new JFrame("Clinic Management System");
-        frame.setContentPane(new ClinicManagementGUI().clinicManagementPanel);
+        frame.setContentPane(view.clinicManagementPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-    }
+
+        // Initialize database tables
+        DBConnection db = DBConnection.getInstance();
+        db.getConnection();
+        db.createNewDoctorsTable();
+        db.createNewPatientsTable();
+        db.createNewAppointmentsTable();
+    });
+}
 
     public ClinicManagementGUI() {
         setUpPatientTable();
         setUpDoctorTable();
         setUpAppointmentTable();
+
+        SystemManager model = new SystemManager();
+        ClinicController controller = new ClinicController(this, model);
     }
 
     private void setUpPatientTable() {

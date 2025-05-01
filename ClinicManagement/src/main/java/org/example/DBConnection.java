@@ -16,7 +16,15 @@ import java.util.Map;
 
 public class DBConnection {
     private static DBConnection dObject;
-    private DBConnection(){}
+    private Connection connection ;
+    private DBConnection(){
+        try {
+            String DB_Path = "jdbc:sqlite:src/main/resources/databasedate.db";
+            this.connection = DriverManager.getConnection(DB_Path);
+        } catch (SQLException e) {
+            System.err.println("Database connection failed: " + e.getMessage());
+        }
+    }
 
     // create public static method that allows us to create and access object we created
     // inside method, we will create a condition that restricts us from creating more than one object
@@ -24,27 +32,35 @@ public class DBConnection {
     public static DBConnection getInstance(){
     // Singleton Pattern so that there will not be another creation of the database
         if (dObject == null){
-            dObject = new DBConnection();
+            synchronized (DBConnection.class){
+                if (dObject == null){
+                    dObject = new DBConnection();
+                }
+            }
         }
         //return singleton object
         return dObject;
     }
 
-    public static Connection connect() {
-        String Base_Path = "jdbc:sqlite:src/main/resources/database";
-        String DB_Path = Base_Path + "data.db";
-
-
-        Connection connection;
-        try {
-            connection = DriverManager.getConnection(DB_Path);
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public  Connection getConnection() {
+//        String DB_Path = "jdbc:sqlite:src/main/resources/databasedata.db";
+////        String DB_Path = Base_Path + "data.db";
+//
+//
+//        Connection connection;
+//        try {
+//            connection = DriverManager.getConnection(DB_Path);
+//        }
+//        catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
         return connection;
     }
-
+    public void initializeDatabase() {
+        createNewAppointmentsTable();
+        createNewPatientsTable();
+        createNewDoctorsTable();
+    }
     /**
      * Create a Doctors table if one does not already exist
      */
@@ -59,15 +75,16 @@ public class DBConnection {
                 );
                 """;
 
-        try {
-            Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);  // execute the create table statement
-            System.out.println("Table created successfully.");
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+//        try {
+//            Connection conn = connect();
+//            Statement stmt = conn.createStatement();
+//            stmt.execute(sql);  // execute the create table statement
+//            System.out.println("Table created successfully.");
+//        }
+//        catch (SQLException e) {
+//            System.err.println(e.getMessage());
+//        }
+        executeSQL(sql);
     }
 
     /**
@@ -84,21 +101,22 @@ public class DBConnection {
                     dob DATE NOT NULL,
                     sex VARCHAR(10) NOT NULL,
                     family_doctor VARCHAR(50),
-                    FOREIGN KEY(family_doctor) REFERENCES Doctors(id),
                     blood_type VARCHAR(10) NOT NULL,
-                    patient_discharged BOOLEAN NOT NULL
+                    patient_discharged BOOLEAN NOT NULL,
+                    FOREIGN KEY(family_doctor) REFERENCES Doctors(id)
                 );
                 """;
 
-        try {
-            Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);  // execute the create table statement
-            System.out.println("Table created successfully.");
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+//        try {
+//            Connection conn = connect();
+//            Statement stmt = conn.createStatement();
+//            stmt.execute(sql);  // execute the create table statement
+//            System.out.println("Table created successfully.");
+//        }
+//        catch (SQLException e) {
+//            System.err.println(e.getMessage());
+//        }
+        executeSQL(sql);
     }
 
     /**
@@ -117,18 +135,25 @@ public class DBConnection {
                 );
                 """;
 
-        try {
-            Connection conn = DBConnection.connect();
-            Statement stmt = conn.createStatement();
-            stmt.execute(sql);  // execute the create table statement
-            System.out.println("Table created successfully.");
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+//        try {
+//            Connection conn = DBConnection.connect();
+//            Statement stmt = conn.createStatement();
+//            stmt.execute(sql);  // execute the create table statement
+//            System.out.println("Table created successfully.");
+//        }
+//        catch (SQLException e) {
+//            System.err.println(e.getMessage());
+//        }
+        executeSQL(sql);
     }
 
-
+    private void executeSQL(String sql) {
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            System.err.println("Error executing SQL: " + e.getMessage());
+        }
+    }
 
     //=============Find patient =============
 //    public void findPatients(String table, String id) {

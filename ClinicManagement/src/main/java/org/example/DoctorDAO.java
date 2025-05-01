@@ -22,7 +22,7 @@ public class DoctorDAO {
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, fname);
@@ -46,7 +46,7 @@ public class DoctorDAO {
         String sql = "UPDATE Doctors SET  contact = ? WHERE Id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newContact); // set doctor contact
             pstmt.setString(2, doctorId);
@@ -73,7 +73,7 @@ public class DoctorDAO {
         String sql = "DELETE FROM Doctors WHERE Id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
@@ -99,7 +99,7 @@ public class DoctorDAO {
         String sql = "SELECT * FROM Doctors";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -116,7 +116,7 @@ public class DoctorDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf(e.getMessage());
         }
 
         return doctorList;
@@ -139,7 +139,7 @@ public class DoctorDAO {
         String sql = "SELECT * FROM Doctors WHERE doctor_id = ?";
 
         try {
-            Connection conn = DBConnection.connect();
+            Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -153,6 +153,7 @@ public class DoctorDAO {
                 );
 
                 // Add the doctor to the cache
+
                 doctorCache.put(id, doctor);
             }
             else {
@@ -161,7 +162,7 @@ public class DoctorDAO {
             }
         }
         catch (SQLException e) {
-            System.err.printf(Messages.getMessage("error.sql"), e.getMessage());
+            System.err.printf(e.getMessage());
         }
 
         return doctor;
