@@ -73,6 +73,8 @@ public class SystemManager {
     public Doctor findDoctor(String id) {
         for (Doctor doctor : doctors) {
             if (doctor.getDoctorId().equals(id)) {
+              DoctorDAO doctorDAO = new DoctorDAO();
+              doctorDAO.getDoctorById(doctor.getDoctorId()); //TODO very confused here
                 return doctor;
             }
         }

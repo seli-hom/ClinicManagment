@@ -19,7 +19,66 @@ public class ClinicController {
         database.connect();
         database.createNewDoctorsTable();
         database.createNewPatientsTable();
-        database.c
+        database.createNewAppointmentsTable();
+
+        class AddDoctorListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                String firstName = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
+                String lastName = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
+                String speciality = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
+                String contact = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
+
+                Doctor doctor = new Doctor(firstName, lastName, speciality, contact);
+                model.registerDoctor(doctor);
+            }
+        }
+//        this.view.get
+
+// TODO       Need an addDoctorButton
+
+        class ModifyDoctorContactListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                String doctorID = JOptionPane.showInputDialog(Messages.getMessage("DoctorID"));
+                String newContact = JOptionPane.showInputDialog(Messages.getMessage("newContact"));
+
+                try {
+                    model.modifyDoctor(doctorID, newContact);
+                }
+                catch(Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
+            }
+        }
+
+        //TODO Need to add the button
+
+        class FindDoctorListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                String doctorID = JOptionPane.showInputDialog(Messages.getMessage("DoctorID"));
+
+                try{
+                    model.findDoctor(doctorID);
+                }
+                catch(Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
+            }
+        }
+        //TODO need a find doctor button
+
+        class FindDoctorBySpecialityListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                String speciality = JOptionPane.showInputDialog(Messages.getMessage("Speciality"));
+
+                try{
+                    model.findDoctorsBySpecialty(speciality);
+                }
+                catch(Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
+            }
+        }
+        //TODO add button for this
 
         class AddPatientListener implements ActionListener {
             @Override
@@ -71,7 +130,7 @@ public class ClinicController {
 //                updatePatientTable();
 //            }
 //        });
-    class ModifyPatientListener implements ActionListener {
+        class ModifyPatientListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String id = JOptionPane.showInputDialog(Messages.getMessage("enter id"));
@@ -103,7 +162,7 @@ public class ClinicController {
 //        }
         }
     }
-    this.view.getModifyPatientButton().addActionListener(new ModifyPatientListener());
+        this.view.getModifyPatientButton().addActionListener(new ModifyPatientListener());
 
 //        findPatientButton.addActionListener(new ActionListener() {
 //            @Override
@@ -305,7 +364,7 @@ public class ClinicController {
                 }
             }
         }
-    this.view.getFindAppointmentButton().addActionListener(new FindAppointmentListener());
+        this.view.getFindAppointmentButton().addActionListener(new FindAppointmentListener());
     }//end of constructor
 
 }
