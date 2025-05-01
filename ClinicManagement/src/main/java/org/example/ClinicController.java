@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Timer;
 
 public class ClinicController {
     private ClinicManagementGUI view;
@@ -29,12 +30,17 @@ public class ClinicController {
                 String contact = JOptionPane.showInputDialog(Messages.getMessage("FirstName"));
 
                 Doctor doctor = new Doctor(firstName, lastName, speciality, contact);
-                model.registerDoctor(doctor);
+                try {
+                    model.registerDoctor(doctor);
+                    view.updateDoctorTable();
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
             }
         }
-//        this.view.get
 
-// TODO       Need an addDoctorButton
+        this.view.getAddDoctorButton().addActionListener(new AddDoctorListener());
 
         class ModifyDoctorContactListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
@@ -43,6 +49,7 @@ public class ClinicController {
 
                 try {
                     model.modifyDoctor(doctorID, newContact);
+                    view.updateDoctorTable();
                 }
                 catch(Exception ex) {
                     JOptionPane.showMessageDialog(view, ex.getMessage());
@@ -50,7 +57,7 @@ public class ClinicController {
             }
         }
 
-        //TODO Need to add the button
+       this.view.getModifyDoctorButton().addActionListener(new ModifyDoctorContactListener());
 
         class FindDoctorListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
@@ -58,13 +65,14 @@ public class ClinicController {
 
                 try{
                     model.findDoctor(doctorID);
+                    view.updateDoctorTable();
                 }
                 catch(Exception ex) {
                     JOptionPane.showMessageDialog(view, ex.getMessage());
                 }
             }
         }
-        //TODO need a find doctor button
+        this.view.getFindDoctorButton().addActionListener(new FindDoctorListener());
 
         class FindDoctorBySpecialityListener implements ActionListener {
             public void actionPerformed(ActionEvent e) {
@@ -72,21 +80,22 @@ public class ClinicController {
 
                 try{
                     model.findDoctorsBySpecialty(speciality);
+                    view.updateDoctorTable();
                 }
                 catch(Exception ex) {
                     JOptionPane.showMessageDialog(view, ex.getMessage());
                 }
             }
         }
-        //TODO add button for this
+        this.view.getFindDoctorBySpecialtyButton().addActionListener(new FindDoctorBySpecialityListener());
 
         class AddPatientListener implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String fname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
-                String lname = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
-                String address = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
-                String contact = JOptionPane.showInputDialog(Messages.getMessage("enter first name"));
+                String lname = JOptionPane.showInputDialog(Messages.getMessage("enter last name"));
+                String address = JOptionPane.showInputDialog(Messages.getMessage("enter adress"));
+                String contact = JOptionPane.showInputDialog(Messages.getMessage("enter contact information"));
                 JSpinner dateForDob = new JSpinner(new SpinnerDateModel());
                 JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateForDob, "dd/MM/yyyy");
                 dateForDob.setEditor(dateEditor);
@@ -107,7 +116,12 @@ public class ClinicController {
 
                 Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem().toString(), bloodType.getSelectedItem().toString());
 
-                model.registerPatient(newPatient);
+                try {
+                    model.registerPatient(newPatient);
+                    view.updatePatientTable();
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
             } //action performed method
 
         } // add Patient class
@@ -137,7 +151,13 @@ public class ClinicController {
             String newAdress = JOptionPane.showInputDialog(Messages.getMessage("enter new address"));
             String newContact = JOptionPane.showInputDialog(Messages.getMessage("enter new contact"));
 
-            model.updatePatientInfo(id, newAdress, newContact);
+            try {
+                model.updatePatientInfo(id, newAdress, newContact);
+                view.updatePatientTable();
+            }
+            catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, ex.getMessage());
+            }
 //        }  @Override
 //        public void actionPerformed(ActionEvent e) {
 //            // Modify patient details
@@ -185,6 +205,7 @@ public class ClinicController {
 
                 try {
                     model.findPatient(id);
+                    view.updatePatientTable();
                 }
                 catch (Exception ex) {
                     JOptionPane.showMessageDialog(view, ex.getMessage());
@@ -224,17 +245,25 @@ public class ClinicController {
                 JSpinner datForApt = new JSpinner(new SpinnerDateModel());
                 JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(datForApt, "dd/MM/yyyy");
                 datForApt.setEditor(dateEditor);
-                Date date = (Date) datForApt.getValue();
+                java.util.Date date = (java.util.Date) datForApt.getValue();
+                Date sqlDate = (Date) date;
                 JSpinner timeSpinner = new JSpinner(new SpinnerDateModel());
                 JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
                 timeSpinner.setEditor(timeEditor);
                 timeSpinner.setValue(new Date(date.getTime()));
-                Time time = (Time)timeSpinner.getValue();
+                java.util.Date time = (java.util.Date) timeSpinner.getValue();
+                Time sqlTime = new Time(time.getTime());
 
 //                Appointment apt = new Appointment(patientid,doctorid,date,time);
-                model.bookAppointment(patientid,doctorid,date,time);
+                try {
+                    model.bookAppointment(patientid, doctorid, sqlDate, sqlTime);
+                    view.updateAppointmentTable();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(view, ex.getMessage());
+                }
             }
         }
+
         this.view.getBookAppointmentButton().addActionListener(new BookAppointmentListener());
 
 //        rescheduleAppointmentButton.addActionListener(new ActionListener() {
@@ -289,6 +318,7 @@ public class ClinicController {
 
                     try{
                         model.rescheduleAppointment(aptId,newDate,newTime);
+                        view.updateAppointmentTable();
                     }
                     catch (Exception ex){
                         JOptionPane.showMessageDialog(view, ex.getMessage());
@@ -320,6 +350,7 @@ public class ClinicController {
                 if (id != null) {
                     try{
                         model.cancelAppointment(id);
+                        view.updateAppointmentTable();
                         JOptionPane.showMessageDialog(view, "Appointment canceled.");
 
                     }catch (Exception ex){
@@ -354,13 +385,13 @@ public class ClinicController {
                 if (patientid != null && doctorID != null) {
                     try{
                         model.findAppointment(patientid,doctorID);
-                        JOptionPane.showMessageDialog(view, "Appointment canceled.");
+                        view.updateAppointmentTable();
 
                     }catch (Exception ex){
                         JOptionPane.showMessageDialog(view, ex.getMessage());
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Please fill out id field");
+                    JOptionPane.showMessageDialog(view, "Please fill out id field");
                 }
             }
         }

@@ -25,6 +25,10 @@ public class ClinicManagementGUI extends JFrame {
     private JButton cancelAppointmentButton;
     private JButton findAppointmentButton;
     private JButton findPatientRecordButton;
+    private JButton addDoctorButton;
+    private JButton modifyDoctorButton;
+    private JButton findDoctorButton;
+    private JButton findDoctorBySpecialtyButton;
     private JTable recordTable;
     private JPanel patientTab;
     private JPanel doctorTab;
@@ -58,7 +62,7 @@ public class ClinicManagementGUI extends JFrame {
         updatePatientTable();
     }
 
-    private void updatePatientTable() {
+    public void updatePatientTable() {
         List<Patient> patients = patientDAO.getAllPatients();
         DefaultTableModel model = (DefaultTableModel) patientTable.getModel();
         model.setRowCount(0);
@@ -82,7 +86,7 @@ public class ClinicManagementGUI extends JFrame {
         updateDoctorTable();
     }
 
-    private void updateDoctorTable() {
+    public void updateDoctorTable() {
         List<Doctor> doctors = doctorDAO.getAllDoctors();
         DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
         model.setRowCount(0);
@@ -98,7 +102,7 @@ public class ClinicManagementGUI extends JFrame {
         updateAppointmentTable();
     }
 
-    private void updateAppointmentTable() {
+    public void updateAppointmentTable() {
         List<Appointment> appointments = appointmentDAO.getAllAppointments();
         DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
         model.setRowCount(0);
@@ -149,5 +153,21 @@ public class ClinicManagementGUI extends JFrame {
 
     public JButton getFindPatientRecordButton() {
         return findPatientRecordButton;
+    }
+
+    public JButton getAddDoctorButton() {
+        return addDoctorButton;
+    }
+
+    public JButton getModifyDoctorButton() {
+        return modifyDoctorButton;
+    }
+
+    public JButton getFindDoctorButton() {
+        return findDoctorButton;
+    }
+
+    public JButton getFindDoctorBySpecialtyButton() {
+        return findDoctorBySpecialtyButton;
     }
 }
