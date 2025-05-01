@@ -79,6 +79,35 @@ public class PatientDAO {
     }
 
     /**
+     *
+     * @param patientId
+     * @param columnName
+     * @param newData
+     */
+    public  void updatePatient1(String patientId, String columnName, String newData) {
+        String sql = "UPDATE Patients SET ? = ? WHERE id = ?";
+
+        try {
+            Connection conn = DBConnection.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, columnName); // set student name
+            pstmt.setString(2, newData);
+            pstmt.setString(3, patientId);
+            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
+
+            if (rowsUpdated > 0) {
+                System.out.println("Patient was updated successfully.");
+            }
+            else {
+                System.out.println("No patient with the provided ID exists");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    /**
      * Change a patient's status to discharged = true
      * @param id the input patient id
      */

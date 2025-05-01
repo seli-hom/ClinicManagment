@@ -25,16 +25,15 @@ public class SystemManager {
         Doctor doctor = findDoctor(doctorId);
         Patient patient = findPatient(patientId);
 
-        if (doctor != null || patient != null) {
-            if (patient.getFamilyDoctor() == null) { //make sure that the patient doesn't already have a family doctor
-                patient.setFamilyDoctor(doctor);
-                doctor.getPatients().add(patient);
-            }
+        if (doctor == null || patient == null) {
+            throw new NoSuchElementException("Invalid doctor or patient id");
         }
-        else{
-          throw new IllegalArgumentException("Doctor already assigned!");
+
+        if (patient.getFamilyDoctor() != null) { //make sure that the patient doesn't already have a family doctor
+            throw new IllegalArgumentException("Patient already as a family doctor assigned.");
         }
-        //i dont think we have to do anything in database because we did not create the foreign keys but do let me know
+        patient.setFamilyDoctor(doctorId);
+        patientDAO.updatePatient(patient);
     }
 
     /**

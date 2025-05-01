@@ -1,6 +1,5 @@
 package org.example;
 
-import org.jdesktop.swingx.JXDatePicker;
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -40,7 +39,7 @@ public class ClinicController {
                 bloodType.addItem("B-");
                 bloodType.addItem("AB-");
 
-                Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem(), Doctor, bloodType.getSelectedItem());
+                Patient newPatient = new Patient(fname, lname, address, contact, dob, sex.getSelectedItem().toString(), bloodType.getSelectedItem().toString());
 
                 model.registerPatient(newPatient);
             }
