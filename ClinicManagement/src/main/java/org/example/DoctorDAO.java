@@ -42,7 +42,7 @@ public class DoctorDAO {
      * @param doctorId the input doctor id
      * @param newContact the new input contact information
      */
-    public  void updateDoctorContact(String doctorId, String newContact) {
+    public  void updateDoctor(String doctorId, String newContact) {
         String sql = "UPDATE Doctors SET  contact = ? WHERE Id = ?";
 
         try {

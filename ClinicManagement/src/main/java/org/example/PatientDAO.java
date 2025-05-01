@@ -42,7 +42,7 @@ public class PatientDAO {
             pstmt.setString(9, bloodType);
             pstmt.setBoolean(10, discharged);
 
-            pstmt.execute();//insert data into tble
+            pstmt.execute(); //insert data into table
             System.out.println("Data inserted successfully");
         }
         catch (SQLException e){
@@ -55,45 +55,19 @@ public class PatientDAO {
      * @param patientId the input patient id
      * @param newAdress the new input address
      */
-    public  void updatePatientAddress(String patientId, String newAdress) {
-        String sql = "UPDATE Patients SET address = ? WHERE Id = ?";
+    public  void updatePatient(String patientId, String newAdress, String newContact) {
+        String sql = "UPDATE Patients SET address = ?, contact = ? WHERE id = ?";
 
         try {
             Connection conn = DBConnection.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newAdress); // set student name
-            pstmt.setString(2, patientId);
+            pstmt.setString(2, newContact);
+            pstmt.setString(3, patientId);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
-                System.out.println("Patient's address was updated successfully.");
-            }
-            else {
-                System.out.println("No patient with the provided ID exists");
-            }
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    /**
-     * Update a patient's contact information
-     * @param patientId the input patient id
-     * @param newContact the new input contact information
-     */
-    public  void updatePatientContact(String patientId, String newContact) {
-        String sql = "UPDATE Patients SET contact = ? WHERE Id = ?";
-
-        try {
-            Connection conn = DBConnection.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newContact); // set student age
-            pstmt.setString(2, patientId);
-            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
-
-            if (rowsUpdated > 0) {
-                System.out.println("Patient's contact was updated successfully.");
+                System.out.println("Patients was updated successfully.");
             }
             else {
                 System.out.println("No patient with the provided ID exists");

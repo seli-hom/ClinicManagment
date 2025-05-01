@@ -12,7 +12,9 @@ public class SystemManager {
     private List<Patient> patients;
     private List<Appointment> appointments;
 
-    // Doctor management methods
+    private DoctorDAO doctorDAO = new DoctorDAO();
+    private PatientDAO patientDAO = new PatientDAO();
+    private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     /**
      * Assigns a family doctor to a registered patient
@@ -20,8 +22,8 @@ public class SystemManager {
      * @param doctorId doctor to be assigned to th epatient
      */
     public void assignDoctor(String patientId, String doctorId) {
-      Doctor doctor = findDoctor(doctorId);
-      Patient patient = findPatient(patientId);
+        Doctor doctor = findDoctor(doctorId);
+        Patient patient = findPatient(patientId);
 
         if (doctor != null || patient != null) {
             if (patient.getFamilyDoctor() == null) { //make sure that the patient doesn't already have a family doctor
@@ -29,10 +31,10 @@ public class SystemManager {
                 doctor.getPatients().add(patient);
             }
         }
-      else{
+        else{
           throw new IllegalArgumentException("Doctor already assigned!");
-      }
-      //i dont think we have to do anything in database because we did not create the foreign keys but do let me know
+        }
+        //i dont think we have to do anything in database because we did not create the foreign keys but do let me know
     }
 
     /**
@@ -42,9 +44,7 @@ public class SystemManager {
      */
     public void registerDoctor(Doctor doctor){
         doctors.add(doctor);
-        DBConnection database = DBConnection.getInstance();
-        database.connect();
-        database.insertDoctorRecord(doctor.getDoctorId(), doctor.getFirstName(), doctor.getLastName(), doctor.getSpeciality(), doctor.getContact());
+        doctorDAO.insertDoctorRecord(doctor.getDoctorId(), doctor.getFirstName(), doctor.getLastName(), doctor.getSpeciality(), doctor.getContact());
         System.out.println("Doctor inserted successfully!");
     }
 
@@ -54,7 +54,6 @@ public class SystemManager {
      * @return List with doctors that have specialized in said specialty field
      */
     public List<Doctor> findDoctorsBySpecialty(String specialty){
-
         List<Doctor> specialtyDoctors = new ArrayList<Doctor>();
         for (Doctor doc : doctors){
             if (doc.getSpeciality().equalsIgnoreCase(specialty)){
@@ -82,26 +81,25 @@ public class SystemManager {
         return null;
     }
 
-    /**
-     * Removes doctor with the found id from the list of doctors in the clinics management system
-     *  then updates the information on tables through the DB connection class
-     * @param id
-     */
-    public void removeDoctor(String id) {
-
-        Doctor doctor = findDoctor(id);
-        if (doctor == null) {
-            System.out.println("Doctor with id: " + id + " does not exist.");
-        }
-        for (Patient pat : doctor.getPatients()) {
-           pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
-        };
-        doctors.remove(doctor);
-//        DBConnection databse = DBConnection.getInstance();
-//        databse.connect();
-//        databse.deleteDoctor(id);
-//        System.out.println("Doctor with id: " + id + " has been successfully removed.");
-    }
+//    /**
+//     * Removes doctor with the found id from the list of doctors in the clinics management system
+//     *  then updates the information on tables through the DB connection class
+//     * @param id
+//     */
+//    public void removeDoctor(String id) {
+//        Doctor doctor = findDoctor(id);
+//        if (doctor == null) {
+//            System.out.println("Doctor with id: " + id + " does not exist.");
+//        }
+//        for (Patient pat : doctor.getPatients()) {
+//           pat.setFamilyDoctor(null); // make sure to update the patients family doctor so that it can be reassigned
+//        };
+//        doctors.remove(doctor);
+////        DBConnection databse = DBConnection.getInstance();
+////        databse.connect();
+////        databse.deleteDoctor(id);
+////        System.out.println("Doctor with id: " + id + " has been successfully removed.");
+//    }
 
     /**
      * Modifies the contact information of the doctor with the given id
@@ -114,10 +112,12 @@ public class SystemManager {
         if (modifiedDoctor == null) {
             throw new NoSuchElementException("Doctor with id: " + id + " was not found.");
         }
+
         modifiedDoctor.setContact(modifiedContact);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        database.updateDoctor(id, modifiedContact);
+
+        doctorDAO.updateDoctor(id, modifiedContact);
         System.out.println("Doctor info has been successfully updated.");
     }
 
@@ -132,8 +132,8 @@ public class SystemManager {
         patients.add(p);
         DBConnection database = DBConnection.getInstance();
         database.connect();
-        database.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
-                p.getSex().toString(),p.getFamilyDoctor().getDoctorId(),p.getType().toString(), p.isDischarged());
+        patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getBirthDate(),
+                p.getSex().toString(),p.getFamilyDoctor().getDoctorId(),p.getBloodType(), p.isDischarged());
         System.out.println("Patient registered successfully");
     }
 
@@ -192,9 +192,7 @@ public class SystemManager {
         modifiedPatient.setAddress(newAdress);
         System.out.println("Patient's contact info has been successfully updated.");
 
-        DBConnection database = DBConnection.getInstance();
-        database.connect();
-        database.updatePatient(id, newAdress, newContact);
+        patientDAO.updatePatient(id, newAdress, newContact);
     }
 
     //================================================== Appointment management methods =========================================
@@ -212,13 +210,11 @@ public class SystemManager {
         Patient patient = findPatient(patientID);
         Doctor doctor = findDoctor(doctorID);
         if (patient != null && doctor != null) {
-            Appointment apt = new Appointment(patient, doctor, date, time);
+            Appointment apt = new Appointment(patient.getPatientId(), doctor.getDoctorId(), date, time);
             // Add the new appointment to appointments list
             appointments.add(apt);
 
-            DBConnection database = DBConnection.getInstance();
-            database.connect();
-            database.insertAppointmentRecord(apt.getAppointmentId(), apt.getPatient().getPatientId(),apt.getDoctor().getDoctorId(),apt.getDate(),apt.getTime());
+            appointmentDAO.insertAppointmentRecord(apt.getAppointmentId(), apt.getPatientId(), apt.getDoctorId(), apt.getDate(), apt.getTime());
         }
         else{
             throw new NoSuchElementException("Please make sure that you have input the correct IDs for both the patient and the doctor");
@@ -235,8 +231,8 @@ public class SystemManager {
      */
     public Appointment findAppointment(String patientID, String doctorID) {
         for (Appointment appointment : appointments) {
-            if (appointment.getPatient().equals(findPatient(patientID)) &&
-                    appointment.getDoctor().equals(findDoctor(doctorID))){
+            if (appointment.getPatientId().equals(findPatient(patientID)) &&
+                    appointment.getDoctorId().equals(findDoctor(doctorID))){
                 return appointment;
             }
         }
@@ -271,9 +267,8 @@ public class SystemManager {
        else {
            throw new NoSuchElementException("Appointment with id: " + " does not exist.");
        }
-       DBConnection database = DBConnection.getInstance();
-       database.connect();
-       database.cancelAppointment(appointment.getAppointmentId());
+
+       appointmentDAO.cancelAppointment(appointment.getAppointmentId());
     }
 
 
@@ -293,12 +288,7 @@ public class SystemManager {
 
         appointment.setDate(newDate);
         appointment.setTime(newTime);
-        DBConnection database = DBConnection.getInstance();
-        database.connect();
 
-        database.updateSchedule(aptID,newDate,newTime);
-
+        appointmentDAO.updateSchedule(aptID,newDate,newTime);
     }
-
 }
-

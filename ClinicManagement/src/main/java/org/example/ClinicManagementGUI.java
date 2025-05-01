@@ -66,7 +66,7 @@ public class ClinicManagementGUI {
                 int selectedRow = patientTable.getSelectedRow();
                 if (selectedRow >= 0) {
                     int patientId = (int) patientTable.getValueAt(selectedRow, 0);
-                    Patient patient = DBConnection.getPatientById(patientId);
+                    Patient patient = PatientDAO.getPatientById(patientId);
 
                     String newName = JOptionPane.showInputDialog("Enter new name:", patient.getName());
                     int newAge = Integer.parseInt(JOptionPane.showInputDialog("Enter new age:", patient.getAge()));
