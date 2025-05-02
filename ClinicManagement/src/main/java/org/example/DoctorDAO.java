@@ -136,7 +136,7 @@ public class DoctorDAO {
         }
 
         // If doctor is not in the cache, get it from the database
-        String sql = "SELECT * FROM Doctors WHERE doctor_id = ?";
+        String sql = "SELECT * FROM Doctors WHERE id = ?";
 
         try {
             Connection conn = DBConnection.getInstance().getConnection();

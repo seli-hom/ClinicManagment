@@ -211,31 +211,27 @@ public class SystemManager {
     /**
      * Create an appointment and add it to the appointment list,
      * then updates the information on tables through the DB connection class.
-     * @param patientID
-     * @param doctorID
-     * @param date Date that the user wishes to book the appointment on
-     * @param time Time that the user wishes to book the appointment on
+     * @param appointment the input appointment object
      */
-    public void bookAppointment(String patientID, String doctorID, java.sql.Date date, Time time) {
-        // Create new Appointment object
-        Patient patient = findPatient(patientID);
-        Doctor doctor = findDoctor(doctorID);
-        if (patient != null && doctor != null) {
-            Appointment apt = new Appointment(patient.getPatientId(), doctor.getDoctorId(), date, time);
-            // Add the new appointment to appointments list
-            appointments.add(apt);
-
-            appointmentDAO.insertAppointmentRecord(apt.getAppointmentId(), apt.getPatientId(), apt.getDoctorId(), apt.getDate(), apt.getTime());
+    public void bookAppointment(Appointment appointment) {
+        if (findPatient(appointment.getPatientId()) != null && findDoctor(appointment.getDoctorId()) != null) {
+            appointments.add(appointment);
+            appointmentDAO.insertAppointmentRecord(
+                    appointment.getAppointmentId(),
+                    appointment.getPatientId(),
+                    appointment.getDoctorId(),
+                    appointment.getDate(),
+                    appointment.getTime()
+            );
         }
         else{
-            throw new NoSuchElementException("Please make sure that you have input the correct IDs for both the patient and the doctor");
+            throw new NoSuchElementException("Invalid patient or doctor id.");
         }
-
     }
 
     /**
      * Finds the appointment based on th id of the doctor and the patien making sure that the patient and doctor
-     * match that of the appointment through the findDoctor and findPate=ient methods
+     * match that of the appointment through the findDoctor and findPatient methods
      * @param patientID
      * @param doctorID
      * @return

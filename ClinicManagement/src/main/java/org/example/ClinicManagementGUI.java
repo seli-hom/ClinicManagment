@@ -1,121 +1,140 @@
 package org.example;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class ClinicManagementGUI extends JFrame {
-    private JTabbedPane tabbedPane;
     private JPanel clinicManagementPanel;
+    private JTabbedPane tabbedPane;
+    private JPanel patientTab;
+    private JPanel doctorTab;
+    private JPanel appointmentTab;
+    private JPanel recordTab;
+
     private JButton addPatientButton;
     private JButton modifyPatientButton;
     private JButton findPatientButton;
     private JButton viewPatientsButton;
+    private JButton findPatientRecordButton;
+
     private JButton bookAppointmentButton;
     private JButton rescheduleAppointmentButton;
     private JButton cancelAppointmentButton;
     private JButton findAppointmentButton;
     private JButton viewAppointmentsButton;
-    private JButton findPatientRecordButton;
+
     private JButton addDoctorButton;
     private JButton modifyDoctorButton;
     private JButton findDoctorButton;
     private JButton findDoctorBySpecialtyButton;
     private JButton viewDoctorsButton;
+
     private JTable patientTable;
     private JTable doctorTable;
     private JTable appointmentTable;
     private JTable recordTable;
-    private JPanel patientTab;
-    private JPanel doctorTab;
-    private JPanel appointmentTab;
-    private JPanel recordTab;
 
     private DoctorDAO doctorDAO = new DoctorDAO();
     private PatientDAO patientDAO = new PatientDAO();
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public ClinicManagementGUI() {
-        initComponents();
-        setUpPatientTable();
-        setUpDoctorTable();
-        setUpAppointmentTable();
-        setUpRecordTable();
+        setTitle("Clinic Management System");
+        setSize(900,600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        SystemManager model = new SystemManager();
-        new ClinicController(this, model);
+        // Main panel
+        clinicManagementPanel = new JPanel(new BorderLayout());
+        setContentPane(clinicManagementPanel);
+
+        // Tabs
+        tabbedPane = new JTabbedPane();
+
+        setUpPatientTab();
+        setUpDoctorTab();
+        setUpAppointmentTab();
+        setUpRecordTab();
+
+        clinicManagementPanel.add(tabbedPane, BorderLayout.CENTER);
     }
 
-    private void initComponents() {
-        tabbedPane = new JTabbedPane();
-        clinicManagementPanel = new JPanel();
-        patientTab = new JPanel();
-        doctorTab = new JPanel();
-        appointmentTab = new JPanel();
-        recordTab = new JPanel();
+    public void setUpPatientTab() {
+        patientTab = new JPanel(new BorderLayout());
 
+        JPanel buttonPanel = new JPanel();
         addPatientButton = new JButton("Add Patient");
         modifyPatientButton = new JButton("Modify Patient");
         findPatientButton = new JButton("Find Patient");
-        viewPatientsButton = new JButton("View All Patients");
+        buttonPanel.add(addPatientButton);
+        buttonPanel.add(modifyPatientButton);
+        buttonPanel.add(findPatientButton);
+
+        patientTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane(patientTable);
+
+        patientTab.add(buttonPanel, BorderLayout.NORTH);
+        patientTab.add(scrollPane, BorderLayout.CENTER);
+        tabbedPane.addTab("Patients", patientTab);
+    }
+
+    public void setUpDoctorTab() {
+        doctorTab = new JPanel(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel();
+        addDoctorButton = new JButton("Add Doctor");
+        modifyDoctorButton = new JButton("Modify Doctor");
+        findDoctorButton = new JButton("Find Doctor By ID");
+        findDoctorBySpecialtyButton = new JButton("Find Doctor By Specialty");
+        buttonPanel.add(addDoctorButton);
+        buttonPanel.add(modifyDoctorButton);
+        buttonPanel.add(findDoctorButton);
+        buttonPanel.add(findDoctorBySpecialtyButton);
+
+        doctorTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane(doctorTable);
+
+        doctorTab.add(buttonPanel, BorderLayout.NORTH);
+        doctorTab.add(scrollPane, BorderLayout.CENTER);
+        tabbedPane.addTab("Doctors", doctorTab);
+    }
+
+    public void setUpAppointmentTab() {
+        appointmentTab = new JPanel(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel();
         bookAppointmentButton = new JButton("Book Appointment");
         rescheduleAppointmentButton = new JButton("Reschedule Appointment");
         cancelAppointmentButton = new JButton("Cancel Appointment");
         findAppointmentButton = new JButton("Find Appointment");
-        viewAppointmentsButton = new JButton("View All Appointments");
-        findPatientRecordButton = new JButton("Find Record");
-        addDoctorButton = new JButton("Add Doctor");
-        modifyDoctorButton = new JButton("Modify Doctor");
-        findDoctorButton = new JButton("Find Doctor");
-        findDoctorBySpecialtyButton = new JButton("Find by Specialty");
-        viewDoctorsButton = new JButton("View All Doctors");
+        buttonPanel.add(bookAppointmentButton);
+        buttonPanel.add(rescheduleAppointmentButton);
+        buttonPanel.add(cancelAppointmentButton);
+        buttonPanel.add(findAppointmentButton);
 
-        patientTable = new JTable();
-        doctorTable = new JTable();
         appointmentTable = new JTable();
-        recordTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane(appointmentTable);
 
-        // Set layout and add components to patientTab
-        patientTab.setLayout(new BoxLayout(patientTab, BoxLayout.Y_AXIS));
-        patientTab.add(addPatientButton);
-        patientTab.add(modifyPatientButton);
-        patientTab.add(findPatientButton);
-        patientTab.add(viewPatientsButton);
-        patientTab.add(new JScrollPane(patientTable));
-
-        // Set layout and add components to doctorTab
-        doctorTab.setLayout(new BoxLayout(doctorTab, BoxLayout.Y_AXIS));
-        doctorTab.add(addDoctorButton);
-        doctorTab.add(modifyDoctorButton);
-        doctorTab.add(findDoctorButton);
-        doctorTab.add(findDoctorBySpecialtyButton);
-        doctorTab.add(viewDoctorsButton);
-        doctorTab.add(new JScrollPane(doctorTable));
-
-        // Set layout and add components to appointmentTab
-        appointmentTab.setLayout(new BoxLayout(appointmentTab, BoxLayout.Y_AXIS));
-        appointmentTab.add(bookAppointmentButton);
-        appointmentTab.add(rescheduleAppointmentButton);
-        appointmentTab.add(cancelAppointmentButton);
-        appointmentTab.add(findAppointmentButton);
-        appointmentTab.add(viewAppointmentsButton);
-        appointmentTab.add(new JScrollPane(appointmentTable));
-
-        // Set layout and add components to recordTab
-        recordTab.setLayout(new BoxLayout(recordTab, BoxLayout.Y_AXIS));
-        recordTab.add(findPatientRecordButton);
-        recordTab.add(new JScrollPane(recordTable));
-
-        // Add tabs
-        tabbedPane.addTab("Patients", patientTab);
-        tabbedPane.addTab("Doctors", doctorTab);
+        appointmentTab.add(buttonPanel, BorderLayout.NORTH);
+        appointmentTab.add(scrollPane, BorderLayout.CENTER);
         tabbedPane.addTab("Appointments", appointmentTab);
-        tabbedPane.addTab("Records", recordTab);
+    }
 
-        clinicManagementPanel.setLayout(new BoxLayout(clinicManagementPanel, BoxLayout.Y_AXIS));
-        clinicManagementPanel.add(tabbedPane);
-        setContentPane(clinicManagementPanel);
+    public void setUpRecordTab() {
+        recordTab = new JPanel(new BorderLayout());
+
+        JPanel buttonPanel = new JPanel();
+        findPatientRecordButton = new JButton("Find Record");
+        buttonPanel.add(findPatientRecordButton);
+
+        recordTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane(patientTable);
+
+        recordTab.add(buttonPanel, BorderLayout.NORTH);
+        patientTab.add(scrollPane, BorderLayout.CENTER);
+        tabbedPane.addTab("Records", recordTab);
     }
 
     private void setUpPatientTable() {
@@ -193,7 +212,7 @@ public class ClinicManagementGUI extends JFrame {
         recordTable.setModel(model);
     }
 
-    // --- Getters for Controller ---
+    // Getters for all GUI elements
     public JButton getAddPatientButton() { return addPatientButton; }
     public JButton getModifyPatientButton() { return modifyPatientButton; }
     public JButton getFindPatientButton() { return findPatientButton; }

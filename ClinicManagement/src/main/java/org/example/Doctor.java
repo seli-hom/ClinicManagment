@@ -1,24 +1,45 @@
 package org.example;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor {
-    private static int count = 1;
+    private static int count = getStartingCountFromDB();
     private String doctorId;
     private String firstName;
     private String lastName;
     private String speciality;
     private String contact;
-//    private List<Patient> patients;
 
     public Doctor(String firstName, String lastName, String speciality, String contact) {
-        this.doctorId = String.format("D%03d" + count++);
+        this.doctorId = String.format("D%03d", count++);
         this.firstName = firstName;
         this.lastName = lastName;
         this.speciality = speciality;
         this.contact = contact;
-//        this.patients = new ArrayList<>(); // at creation doctor does not have any patients
+    }
+
+    public static int getStartingCountFromDB() {
+        String sql = "SELECT id FROM Doctors ORDER BY id DESC LIMIT 1";
+        try {
+            Connection conn = DBConnection.getInstance().getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                String lastId = rs.getString("id");
+                int num = Integer.parseInt(lastId.substring(3)); // Get rid of the D00
+                return num + 1; // start at the next available number
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1; // the default if there are no doctors yet
     }
 
     public String getDoctorId() {

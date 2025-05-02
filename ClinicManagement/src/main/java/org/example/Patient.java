@@ -4,7 +4,7 @@ import java.util.List;
 import java.sql.*;
 
 public class Patient {
-    private static int count = 1;
+    private static int count = getStartingCountFromDB();
     private String patientId;
     private String firstName;
     private String lastName;
@@ -19,7 +19,7 @@ public class Patient {
     private List<String> prescriptions;
 
     public Patient(String firstName, String lastName, String address, String contact, java.sql.Date dob, String sex, String bloodType) {
-        this.patientId = String.format("P%03F" + count++);
+        this.patientId = String.format("P%03d", count++);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -29,6 +29,25 @@ public class Patient {
         this.familyDoctor = null; //at creation patient does not have a doctor in the clinic
         this.bloodType = bloodType;
         this.discharged = false;
+    }
+
+    public static int getStartingCountFromDB() {
+        String sql = "SELECT id FROM Patients ORDER BY id DESC LIMIT 1";
+        try {
+            Connection conn = DBConnection.getInstance().getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                String lastId = rs.getString("id");
+                int num = Integer.parseInt(lastId.substring(3)); // Get rid of the P00
+                return num + 1; // start at the next available number
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1; // the default if there are no patients yet
     }
 
     public String getPatientId() {
