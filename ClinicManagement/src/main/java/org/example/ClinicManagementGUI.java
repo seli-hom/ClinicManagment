@@ -18,7 +18,6 @@ public class ClinicManagementGUI extends JFrame {
     private JButton modifyPatientButton;
     private JButton findPatientButton;
     private JButton viewPatientsButton;
-    private JButton findPatientRecordButton;
 
     private JButton bookAppointmentButton;
     private JButton rescheduleAppointmentButton;
@@ -31,6 +30,9 @@ public class ClinicManagementGUI extends JFrame {
     private JButton findDoctorButton;
     private JButton findDoctorBySpecialtyButton;
     private JButton viewDoctorsButton;
+
+    private JButton findPatientRecordButton;
+    private JButton viewRecordsButton;
 
     private JTable patientTable;
     private JTable doctorTable;
@@ -68,9 +70,11 @@ public class ClinicManagementGUI extends JFrame {
         addPatientButton = new JButton("Add Patient");
         modifyPatientButton = new JButton("Modify Patient");
         findPatientButton = new JButton("Find Patient");
+        viewPatientsButton = new JButton("View All Patients");
         buttonPanel.add(addPatientButton);
         buttonPanel.add(modifyPatientButton);
         buttonPanel.add(findPatientButton);
+        buttonPanel.add(viewPatientsButton);
 
         patientTable = new JTable();
         JScrollPane scrollPane = new JScrollPane(patientTable);
@@ -88,10 +92,13 @@ public class ClinicManagementGUI extends JFrame {
         modifyDoctorButton = new JButton("Modify Doctor");
         findDoctorButton = new JButton("Find Doctor By ID");
         findDoctorBySpecialtyButton = new JButton("Find Doctor By Specialty");
+        viewDoctorsButton = new JButton("View All Doctors");
+
         buttonPanel.add(addDoctorButton);
         buttonPanel.add(modifyDoctorButton);
         buttonPanel.add(findDoctorButton);
         buttonPanel.add(findDoctorBySpecialtyButton);
+        buttonPanel.add(viewDoctorsButton);
 
         doctorTable = new JTable();
         JScrollPane scrollPane = new JScrollPane(doctorTable);
@@ -109,10 +116,12 @@ public class ClinicManagementGUI extends JFrame {
         rescheduleAppointmentButton = new JButton("Reschedule Appointment");
         cancelAppointmentButton = new JButton("Cancel Appointment");
         findAppointmentButton = new JButton("Find Appointment");
+        viewAppointmentsButton = new JButton("View All Appointments");
         buttonPanel.add(bookAppointmentButton);
         buttonPanel.add(rescheduleAppointmentButton);
         buttonPanel.add(cancelAppointmentButton);
         buttonPanel.add(findAppointmentButton);
+        buttonPanel.add(viewAppointmentsButton);
 
         appointmentTable = new JTable();
         JScrollPane scrollPane = new JScrollPane(appointmentTable);
@@ -127,21 +136,38 @@ public class ClinicManagementGUI extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         findPatientRecordButton = new JButton("Find Record");
+        viewRecordsButton = new JButton("View All Records");
         buttonPanel.add(findPatientRecordButton);
+        buttonPanel.add(viewRecordsButton);
 
         recordTable = new JTable();
-        JScrollPane scrollPane = new JScrollPane(patientTable);
+        JScrollPane scrollPane = new JScrollPane(recordTable);
 
         recordTab.add(buttonPanel, BorderLayout.NORTH);
-        patientTab.add(scrollPane, BorderLayout.CENTER);
+        recordTab.add(scrollPane, BorderLayout.CENTER);
         tabbedPane.addTab("Records", recordTab);
     }
 
     public void setUpPatientTable() {
-        String[] columnNames = {"ID", "First Name", "Last Name", "Address", "Contact", "DOB", "Sex", "Blood Type"};
+        String[] columnNames = {"ID", "First Name", "Last Name", "Address", "Contact"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         patientTable.setModel(model);
         updatePatientTable();
+    }
+
+    public void updatePatientTable() {
+        DefaultTableModel model = (DefaultTableModel) patientTable.getModel();
+        model.setRowCount(0);
+
+        for (Patient patient : patientDAO.getAllPatients()) {
+            model.addRow(new Object[]{
+                    patient.getPatientId(),
+                    patient.getFirstName(),
+                    patient.getLastName(),
+                    patient.getAddress(),
+                    patient.getContact()
+            });
+        }
     }
 
     public void updatePatientTable(List<Patient> filteredList) {
@@ -166,11 +192,11 @@ public class ClinicManagementGUI extends JFrame {
         updateDoctorTable();
     }
 
-    public void updateDoctorTable(List<Doctor> filteredList) {
+    public void updateDoctorTable() {
         DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
         model.setRowCount(0);
 
-        for (Doctor doctor : filteredList) {
+        for (Doctor doctor : doctorDAO.getAllDoctors()) {
             model.addRow(new Object[]{
                     doctor.getDoctorId(),
                     doctor.getFirstName(),
@@ -181,11 +207,41 @@ public class ClinicManagementGUI extends JFrame {
         }
     }
 
+    public void updateDoctorTable(List<Doctor> filteredList) {
+            DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
+            model.setRowCount(0);
+
+            for (Doctor doctor : filteredList) {
+                model.addRow(new Object[]{
+                        doctor.getDoctorId(),
+                        doctor.getFirstName(),
+                        doctor.getLastName(),
+                        doctor.getContact(),
+                        doctor.getSpeciality()
+                });
+            }
+        }
+
     public void setUpAppointmentTable() {
         String[] columnNames = {"ID", "Patient ID", "Doctor ID", "Date", "Time"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         appointmentTable.setModel(model);
         updateAppointmentTable();
+    }
+
+    public void updateAppointmentTable() {
+        DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
+        model.setRowCount(0);
+
+        for (Appointment appointment : appointmentDAO.getAllAppointments()) {
+            model.addRow(new Object[]{
+                    appointment.getAppointmentId(),
+                    appointment.getPatientId(),
+                    appointment.getDoctorId(),
+                    appointment.getDate(),
+                    appointment.getTime()
+            });
+        }
     }
 
     public void updateAppointmentTable(List<Appointment> filteredList) {
@@ -204,9 +260,26 @@ public class ClinicManagementGUI extends JFrame {
     }
 
     public void setUpRecordTable() {
-        String[] columnNames = {"Record ID", "Patient ID", "Doctor ID", "Diagnosis"};
+        String[] columnNames = {"Patient ID", "First Name", "Last Name", "DOB", "Sex", "Family Doctor", "Blood Type", "Discharged"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         recordTable.setModel(model);
+    }
+
+    public void updateRecordTable() {
+        DefaultTableModel model = (DefaultTableModel) recordTable.getModel();
+        model.setRowCount(0);
+        for (Patient patient : patientDAO.getAllPatients()) {
+            model.addRow(new Object[]{
+                    patient.getPatientId(),
+                    patient.getFirstName(),
+                    patient.getLastName(),
+                    patient.getDob(),
+                    patient.getSex(),
+                    patient.getFamilyDoctor(),
+                    patient.getBloodType(),
+                    patient.getDischarged()
+            });
+        }
     }
 
     public void updateRecordTable(List<Patient> filteredList) {
@@ -225,27 +298,119 @@ public class ClinicManagementGUI extends JFrame {
     }
 
     // Getters for all GUI elements
-    public JButton getAddPatientButton() { return addPatientButton; }
-    public JButton getModifyPatientButton() { return modifyPatientButton; }
-    public JButton getFindPatientButton() { return findPatientButton; }
-    public JButton getViewPatientsButton() { return viewPatientsButton; }
-    public JButton getBookAppointmentButton() { return bookAppointmentButton; }
-    public JButton getRescheduleAppointmentButton() { return rescheduleAppointmentButton; }
-    public JButton getCancelAppointmentButton() { return cancelAppointmentButton; }
-    public JButton getFindAppointmentButton() { return findAppointmentButton; }
-    public JButton getViewAppointmentsButton() { return viewAppointmentsButton; }
-    public JButton getFindPatientRecordButton() { return findPatientRecordButton; }
-    public JButton getAddDoctorButton() { return addDoctorButton; }
-    public JButton getModifyDoctorButton() { return modifyDoctorButton; }
-    public JButton getFindDoctorButton() { return findDoctorButton; }
-    public JButton getFindDoctorBySpecialtyButton() { return findDoctorBySpecialtyButton; }
-    public JButton getViewDoctorsButton() { return viewDoctorsButton; }
-    public JTable getPatientTable() { return patientTable; }
-    public JTable getDoctorTable() { return doctorTable; }
-    public JTable getAppointmentTable() { return appointmentTable; }
-    public JTable getRecordTable() { return recordTable; }
-    public JPanel getClinicManagementPanel() { return clinicManagementPanel; }
-    public DoctorDAO getDoctorDAO() { return doctorDAO; }
-    public PatientDAO getPatientDAO() { return patientDAO; }
-    public AppointmentDAO getAppointmentDAO() { return appointmentDAO; }
+    public JButton getAddPatientButton() {
+        return addPatientButton;
+    }
+
+    public JButton getModifyPatientButton() {
+        return modifyPatientButton;
+    }
+
+    public JButton getFindPatientButton() {
+        return findPatientButton;
+    }
+
+    public JButton getViewPatientsButton() {
+        return viewPatientsButton;
+    }
+
+    public JButton getBookAppointmentButton() {
+        return bookAppointmentButton;
+    }
+
+    public JButton getRescheduleAppointmentButton() {
+        return rescheduleAppointmentButton;
+    }
+
+    public JButton getCancelAppointmentButton() {
+        return cancelAppointmentButton;
+    }
+
+    public JButton getFindAppointmentButton() {
+        return findAppointmentButton;
+    }
+
+    public JButton getViewAppointmentsButton() {
+        return viewAppointmentsButton;
+    }
+
+    public JButton getFindPatientRecordButton() {
+        return findPatientRecordButton;
+    }
+
+    public JButton getAddDoctorButton() {
+        return addDoctorButton;
+    }
+
+    public JButton getModifyDoctorButton() {
+        return modifyDoctorButton;
+    }
+
+    public JButton getFindDoctorButton() {
+        return findDoctorButton;
+    }
+
+    public JButton getFindDoctorBySpecialtyButton() {
+        return findDoctorBySpecialtyButton;
+    }
+
+    public JButton getViewDoctorsButton() {
+        return viewDoctorsButton;
+    }
+
+    public JTable getPatientTable() {
+        return patientTable;
+    }
+
+    public JTable getDoctorTable() {
+        return doctorTable;
+    }
+
+    public JTable getAppointmentTable() {
+        return appointmentTable;
+    }
+
+    public JTable getRecordTable() {
+        return recordTable;
+    }
+
+    public JPanel getClinicManagementPanel() {
+        return clinicManagementPanel;
+    }
+
+    public DoctorDAO getDoctorDAO() {
+        return doctorDAO;
+    }
+
+    public PatientDAO getPatientDAO() {
+        return patientDAO;
+    }
+
+    public AppointmentDAO getAppointmentDAO() {
+        return appointmentDAO;
+    }
+
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
+    }
+
+    public JPanel getPatientTab() {
+        return patientTab;
+    }
+
+    public JPanel getDoctorTab() {
+        return doctorTab;
+    }
+
+    public JPanel getAppointmentTab() {
+        return appointmentTab;
+    }
+
+    public JPanel getRecordTab() {
+        return recordTab;
+    }
+
+    public JButton getViewRecordsButton() {
+        return viewRecordsButton;
+    }
 }

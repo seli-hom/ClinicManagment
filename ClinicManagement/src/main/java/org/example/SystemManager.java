@@ -24,7 +24,6 @@ public class SystemManager {
         this.doctors = doctorDAO.getAllDoctors();
         this.patients = patientDAO.getAllPatients();
         this.appointments = appointmentDAO.getAllAppointments();
-
     }
     /**
      * Assigns a family doctor to a registered patient

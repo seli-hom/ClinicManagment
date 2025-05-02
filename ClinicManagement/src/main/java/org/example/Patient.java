@@ -86,6 +86,10 @@ public class Patient {
         return bloodType;
     }
 
+    public boolean getDischarged() {
+        return discharged;
+    }
+
     public boolean isDischarged() { return discharged; }
 
     public void setAddress(String address) {

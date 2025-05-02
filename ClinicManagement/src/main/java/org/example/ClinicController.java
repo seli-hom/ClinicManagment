@@ -20,6 +20,7 @@ public class ClinicController {
         setUpDoctorActions();
         setUpPatientActions();
         setUpAppointmentActions();
+        setUpRecordActions();
     }
 
     public void setUpDoctorActions() {
@@ -90,7 +91,7 @@ public class ClinicController {
             String bloodType = JOptionPane.showInputDialog("Blood Type:");
 
             if (firstName == null || lastName == null || address == null || contact == null || dobStr == null || sex == null || bloodType == null) {
-                JOptionPane.showConfirmDialog(view, "Make sure all fields are filled out.");
+                JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
             }
 
             Date dob = Date.valueOf(dobStr);
@@ -207,6 +208,34 @@ public class ClinicController {
 
         view.getViewAppointmentsButton().addActionListener(e -> {
             view.updateAppointmentTable(view.getAppointmentDAO().getAllAppointments());
+        });
+    }
+
+    public void setUpRecordActions() {
+        view.getFindPatientRecordButton().addActionListener(e -> {
+            String id = JOptionPane.showInputDialog("Enter Patient ID:");
+            Patient patient = model.findPatient(id);
+
+            try {
+                if (id != null) {
+                    if (model.findPatient(id) != null) {
+                        view.updateRecordTable(List.of(patient));
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(view, "No records with the given patient ID exists.");
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                }
+            }
+            catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+            }
+        });
+
+        view.getViewRecordsButton().addActionListener(e -> {
+            view.updateRecordTable(view.getPatientDAO().getAllPatients());
         });
     }
 }
