@@ -137,7 +137,7 @@ public class ClinicManagementGUI extends JFrame {
         tabbedPane.addTab("Records", recordTab);
     }
 
-    private void setUpPatientTable() {
+    public void setUpPatientTable() {
         String[] columnNames = {"ID", "First Name", "Last Name", "Address", "Contact", "DOB", "Sex", "Blood Type"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         patientTable.setModel(model);
@@ -162,7 +162,7 @@ public class ClinicManagementGUI extends JFrame {
         }
     }
 
-    private void setUpDoctorTable() {
+    public void setUpDoctorTable() {
         String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Specialty"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         doctorTable.setModel(model);
@@ -184,7 +184,7 @@ public class ClinicManagementGUI extends JFrame {
         }
     }
 
-    private void setUpAppointmentTable() {
+    public void setUpAppointmentTable() {
         String[] columnNames = {"ID", "Patient ID", "Doctor ID", "Date", "Time"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         appointmentTable.setModel(model);
@@ -206,10 +206,25 @@ public class ClinicManagementGUI extends JFrame {
         }
     }
 
-    private void setUpRecordTable() {
+    public void setUpRecordTable() {
         String[] columnNames = {"Record ID", "Patient ID", "Doctor ID", "Diagnosis"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         recordTable.setModel(model);
+    }
+
+    public void updateRecordTable() {
+        List<Appointment> appointments = appointmentDAO.getAllAppointments();
+        DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
+        model.setRowCount(0);
+        for (Appointment appointment : appointments) {
+            model.addRow(new Object[]{
+                    appointment.getAppointmentId(),
+                    appointment.getPatientId(),
+                    appointment.getDoctorId(),
+                    appointment.getDate(),
+                    appointment.getTime()
+            });
+        }
     }
 
     // Getters for all GUI elements
