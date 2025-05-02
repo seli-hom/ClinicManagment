@@ -144,20 +144,17 @@ public class ClinicManagementGUI extends JFrame {
         updatePatientTable();
     }
 
-    public void updatePatientTable() {
-        List<Patient> patients = patientDAO.getAllPatients();
+    public void updatePatientTable(List<Patient> filteredList) {
         DefaultTableModel model = (DefaultTableModel) patientTable.getModel();
         model.setRowCount(0);
-        for (Patient patient : patients) {
+
+        for (Patient patient : filteredList) {
             model.addRow(new Object[]{
                     patient.getPatientId(),
                     patient.getFirstName(),
                     patient.getLastName(),
                     patient.getAddress(),
-                    patient.getContact(),
-                    patient.getDob(),
-                    patient.getSex(),
-                    patient.getBloodType()
+                    patient.getContact()
             });
         }
     }
@@ -169,11 +166,11 @@ public class ClinicManagementGUI extends JFrame {
         updateDoctorTable();
     }
 
-    public void updateDoctorTable() {
-        List<Doctor> doctors = doctorDAO.getAllDoctors();
+    public void updateDoctorTable(List<Doctor> filteredList) {
         DefaultTableModel model = (DefaultTableModel) doctorTable.getModel();
         model.setRowCount(0);
-        for (Doctor doctor : doctors) {
+
+        for (Doctor doctor : filteredList) {
             model.addRow(new Object[]{
                     doctor.getDoctorId(),
                     doctor.getFirstName(),
@@ -191,11 +188,11 @@ public class ClinicManagementGUI extends JFrame {
         updateAppointmentTable();
     }
 
-    public void updateAppointmentTable() {
-        List<Appointment> appointments = appointmentDAO.getAllAppointments();
+    public void updateAppointmentTable(List<Appointment> filteredList) {
         DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
         model.setRowCount(0);
-        for (Appointment appointment : appointments) {
+
+        for (Appointment appointment : filteredList) {
             model.addRow(new Object[]{
                     appointment.getAppointmentId(),
                     appointment.getPatientId(),
@@ -212,17 +209,17 @@ public class ClinicManagementGUI extends JFrame {
         recordTable.setModel(model);
     }
 
-    public void updateRecordTable() {
-        List<Appointment> appointments = appointmentDAO.getAllAppointments();
-        DefaultTableModel model = (DefaultTableModel) appointmentTable.getModel();
+    public void updateRecordTable(List<Patient> filteredList) {
+        DefaultTableModel model = (DefaultTableModel) recordTable.getModel();
         model.setRowCount(0);
-        for (Appointment appointment : appointments) {
+        for (Patient patient : filteredList) {
             model.addRow(new Object[]{
-                    appointment.getAppointmentId(),
-                    appointment.getPatientId(),
-                    appointment.getDoctorId(),
-                    appointment.getDate(),
-                    appointment.getTime()
+                    patient.getPatientId(),
+                    patient.getFirstName(),
+                    patient.getLastName(),
+                    patient.getDob(),
+                    patient.getSex(),
+                    patient.getBloodType()
             });
         }
     }
