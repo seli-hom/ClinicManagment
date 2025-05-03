@@ -67,8 +67,8 @@ public class DBConnection {
                     contact TEXT NOT NULL,
                     dob DATE NOT NULL,
                     sex VARCHAR(10) NOT NULL,
-                    family_doctor VARCHAR(50),
                     blood_type VARCHAR(10) NOT NULL,
+                    family_doctor VARCHAR(50),
                     FOREIGN KEY(family_doctor) REFERENCES Doctors(id)
                 );
                 """;
