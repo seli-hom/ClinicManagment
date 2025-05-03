@@ -1,5 +1,7 @@
 package org.example;
 
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.*;
 import java.sql.Date;
 import java.sql.Time;
@@ -101,24 +103,37 @@ public class ClinicController {
 
     public void setUpPatientActions() {
         view.getAddPatientButton().addActionListener(e -> {
-            String firstName = JOptionPane.showInputDialog(Messages.getMessage("dialog.firstName"));
-            String lastName = JOptionPane.showInputDialog(Messages.getMessage("dialog.lastName"));
-            String address = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterAddress"));
-            String contact = JOptionPane.showInputDialog(Messages.getMessage("dialog.contact"));
-            String dobStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDateOfBirth"));
-            String sex = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterSex"));
-            String bloodType = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterBloodType"));
+            String fname = JOptionPane.showInputDialog("Enter first name:");
+            String lname = JOptionPane.showInputDialog("Enter last name:");
+            String address = JOptionPane.showInputDialog("Enter address:");
+            String contact = JOptionPane.showInputDialog("Enter contact:");
 
-            if (firstName == null || lastName == null || address == null || contact == null || dobStr == null || sex == null || bloodType == null) {
-                JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
+            JDateChooser dobChooser = new JDateChooser();
+            int result = JOptionPane.showConfirmDialog(view, dobChooser, "Select DOB", JOptionPane.OK_CANCEL_OPTION);
+            if (result != JOptionPane.OK_OPTION) return;
+            java.util.Date utilDate = dobChooser.getDate();
+            if (utilDate == null) {
+                JOptionPane.showMessageDialog(view, "Invalid date of birth.");
+                return;
             }
+            Date dob = new Date(utilDate.getTime());
 
-            Date dob = Date.valueOf(dobStr);
-            Patient patient = new Patient(firstName, lastName, address, contact, dob, sex, bloodType);
-            model.registerPatient(patient);
-            view.updatePatientTable();
+            String[] sexes = {"Male", "Female", "Other"};
+            String sex = (String) JOptionPane.showInputDialog(view, "Select sex:", "Sex",
+                    JOptionPane.QUESTION_MESSAGE, null, sexes, sexes[0]);
 
-            System.out.println(patient.getPatientId());
+            String[] bloodTypes = {"O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"};
+            String bloodType = (String) JOptionPane.showInputDialog(view, "Select blood type:", "Blood Type",
+                    JOptionPane.QUESTION_MESSAGE, null, bloodTypes, bloodTypes[0]);
+
+            Patient patient = new Patient(fname, lname, address, contact, dob, sex, bloodType);
+
+            try {
+                model.registerPatient(patient);
+                view.updatePatientTable();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(view, ex.getMessage());
+            }
         });
 
         view.getModifyPatientButton().addActionListener(e -> {
