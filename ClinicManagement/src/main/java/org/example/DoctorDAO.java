@@ -148,6 +148,7 @@ public class DoctorDAO {
 
             if (rs.next()) {
                 new Doctor(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("specialty"),
@@ -189,6 +190,7 @@ public class DoctorDAO {
 
             if (rs.next()) {
                 new Doctor(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("specialty"),

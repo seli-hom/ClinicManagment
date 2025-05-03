@@ -105,7 +105,7 @@ public class ClinicManagementGUI extends JFrame {
         JPanel buttonPanel = new JPanel();
         addDoctorButton = new JButton(Messages.getMessage("button.addDoctor"));
         modifyDoctorButton = new JButton(Messages.getMessage("button.modifyDoctor"));
-        findDoctorButton = new JButton(Messages.getMessage("button.button.findDoctor"));
+        findDoctorButton = new JButton(Messages.getMessage("button.findDoctor"));
         findDoctorBySpecialtyButton = new JButton(Messages.getMessage("button.findDoctorBySpecialty"));
         viewDoctorsButton = new JButton(Messages.getMessage("button.viewDoctors"));
 

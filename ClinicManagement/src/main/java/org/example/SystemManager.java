@@ -32,8 +32,8 @@ public class SystemManager {
      * @param doctorId doctor to be assigned to th epatient
      */
     public void assignDoctor(String patientId, String doctorId) {
-        Doctor doctor = findDoctor(doctorId);
         Patient patient = findPatient(patientId);
+        Doctor doctor = findDoctor(doctorId);
 
         if (doctor == null || patient == null) {
             throw new NoSuchElementException("Invalid doctor or patient id");
@@ -43,7 +43,7 @@ public class SystemManager {
             throw new IllegalArgumentException("Patient already as a family doctor assigned.");
         }
         patient.setFamilyDoctor(doctorId);
-        patientDAO.assignDoctor(patientId, doctorId);
+        patientDAO.updateFamilyDoctor(patientId, doctorId);
     }
 
     /**
@@ -275,5 +275,29 @@ public class SystemManager {
         appointment.setTime(newTime);
 
         appointmentDAO.updateSchedule(aptID,newDate,newTime);
+    }
+
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public DoctorDAO getDoctorDAO() {
+        return doctorDAO;
+    }
+
+    public PatientDAO getPatientDAO() {
+        return patientDAO;
+    }
+
+    public AppointmentDAO getAppointmentDAO() {
+        return appointmentDAO;
     }
 }

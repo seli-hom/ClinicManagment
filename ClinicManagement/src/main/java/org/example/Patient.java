@@ -31,7 +31,7 @@ public class Patient {
     }
 
     // Constructor for loading existing patients from the database
-    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date dob, String sex, String bloodType, String familyDoctor) {
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date dob, String sex, String bloodType) {
         this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,7 +39,7 @@ public class Patient {
         this.contact = contact;
         this.dob = dob;
         this.sex = sex;
-        this.familyDoctor = familyDoctor;
+        this.familyDoctor = null;
         this.bloodType = bloodType;
     }
 
