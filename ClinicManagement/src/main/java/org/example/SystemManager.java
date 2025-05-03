@@ -155,9 +155,7 @@ public class SystemManager {
      */
     public Patient findPatient(String id) {
         for (Patient patient : patients) {
-            if (patient.getPatientId().equals(id)) {
-                return patient;
-            }
+                return patientDAO.getPatientById(id);
 
         }
         System.out.println("Patient with id: " + id + " was not found.");
