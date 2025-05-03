@@ -22,7 +22,7 @@ public final class Messages {
         }
     }
 
-    private Messages() { /* no instances */ }
+    private Messages() {}
 
     public static void init(Locale locale) {
         bundle = ResourceBundle.getBundle(
@@ -38,6 +38,7 @@ public final class Messages {
                 return bundle.getString(key);
             } catch (Exception ignored) {}
         }
+
         // ultimate fallback: load raw .properties
         try (InputStream in = Messages.class.getClassLoader()
                 .getResourceAsStream("org/example/MessagesBundle.properties")) {

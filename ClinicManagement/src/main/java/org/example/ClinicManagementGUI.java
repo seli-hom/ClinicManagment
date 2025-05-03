@@ -40,6 +40,11 @@ public class ClinicManagementGUI extends JFrame {
     private JTable appointmentTable;
     private JTable recordTable;
 
+    private JMenuBar menuBar;
+    private JMenu languageMenu;
+    private JMenuItem englishMenuItem;
+    private JMenuItem frenchMenuItem;
+
     private final DoctorDAO doctorDAO = new DoctorDAO();
     private final PatientDAO patientDAO = new PatientDAO();
     private final AppointmentDAO appointmentDAO = new AppointmentDAO();
@@ -51,6 +56,15 @@ public class ClinicManagementGUI extends JFrame {
 
         // Main panel
         clinicManagementPanel = new JPanel(new BorderLayout());
+        languageMenu = new JMenu(Messages.getMessage("menu.language"));
+        englishMenuItem = new JMenuItem(Messages.getMessage("menu.language.english"));
+        frenchMenuItem = new JMenuItem(Messages.getMessage("menu.language.french"));
+        languageMenu.add(englishMenuItem);
+        languageMenu.add(frenchMenuItem);
+
+        menuBar = new JMenuBar();
+        menuBar.add(languageMenu);
+        setJMenuBar(menuBar);
         setContentPane(clinicManagementPanel);
 
         // Tabs
@@ -325,6 +339,39 @@ public class ClinicManagementGUI extends JFrame {
         }
     }
 
+    public void refreshTexts() {
+        // tabs
+        tabbedPane.setTitleAt(0, Messages.getMessage("tab.patients"));
+        tabbedPane.setTitleAt(1, Messages.getMessage("tab.doctors"));
+        tabbedPane.setTitleAt(2, Messages.getMessage("tab.appointments"));
+        tabbedPane.setTitleAt(3, Messages.getMessage("tab.records"));
+        // patient buttons
+        addPatientButton.setText(Messages.getMessage("button.addPatient"));
+        modifyPatientButton.setText(Messages.getMessage("button.modifyPatient"));
+        findPatientButton.setText(Messages.getMessage("button.findPatient"));
+        viewPatientsButton.setText(Messages.getMessage("button.viewPatients"));
+        // doctor buttons
+        addDoctorButton.setText(Messages.getMessage("button.addDoctor"));
+        modifyDoctorButton.setText(Messages.getMessage("button.modifyDoctor"));
+        findDoctorButton.setText(Messages.getMessage("button.findDoctor"));
+        findDoctorBySpecialtyButton.setText(Messages.getMessage("button.findDoctorBySpecialty"));
+        viewDoctorsButton.setText(Messages.getMessage("button.viewDoctors"));
+        // appointment buttons
+        bookAppointmentButton.setText(Messages.getMessage("button.bookAppointment"));
+        rescheduleAppointmentButton.setText(Messages.getMessage("button.rescheduleAppointment"));
+        cancelAppointmentButton.setText(Messages.getMessage("button.cancelAppointment"));
+        findAppointmentButton.setText(Messages.getMessage("button.findAppointment"));
+        viewAppointmentsButton.setText(Messages.getMessage("button.viewAppointments"));
+        // record buttons
+        findPatientRecordButton.setText(Messages.getMessage("button.findRecord"));
+        viewRecordsButton.setText(Messages.getMessage("button.viewRecords"));
+        assignDoctorButton.setText(Messages.getMessage("button.assignDoctor"));
+        // menu
+        languageMenu.setText(Messages.getMessage("menu.language"));
+        englishMenuItem.setText(Messages.getMessage("menu.language.english"));
+        frenchMenuItem.setText(Messages.getMessage("menu.language.french"));
+    }
+
     // Getters for all GUI elements
     public JButton getAddPatientButton() {
         return addPatientButton;
@@ -444,5 +491,21 @@ public class ClinicManagementGUI extends JFrame {
 
     public JButton getAssignDoctorButton() {
         return assignDoctorButton;
+    }
+
+    public JMenu getLanguageMenu() {
+        return languageMenu;
+    }
+
+    public JMenuItem getEnglishMenuItem() {
+        return englishMenuItem;
+    }
+
+    public JMenuItem getFrenchMenuItem() {
+        return frenchMenuItem;
+    }
+
+    public JMenuBar getAppMenuBar() {
+        return menuBar;
     }
 }

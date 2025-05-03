@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 
 public class ClinicController {
@@ -21,6 +22,25 @@ public class ClinicController {
         setUpPatientActions();
         setUpAppointmentActions();
         setUpRecordActions();
+
+        // language switch listeners
+        view.getEnglishMenuItem().addActionListener(e -> {
+            Messages.init(Locale.ENGLISH);
+            view.refreshTexts();
+            // re-draw tables if any column-headers came from resource bundle keys
+            view.updatePatientTable();
+            view.updateDoctorTable();
+            view.updateAppointmentTable();
+            view.updateRecordTable();
+        });
+        view.getFrenchMenuItem().addActionListener(e -> {
+            Messages.init(Locale.FRENCH);
+            view.refreshTexts();
+            view.updatePatientTable();
+            view.updateDoctorTable();
+            view.updateAppointmentTable();
+            view.updateRecordTable();
+        });
     }
 
     public void setUpDoctorActions() {
