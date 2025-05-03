@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Timer;
 
 public class ClinicController {
-    private ClinicManagementGUI view;
-    private SystemManager model;
+    private final ClinicManagementGUI view;
+    private final SystemManager model;
 
     public ClinicController(ClinicManagementGUI view, SystemManager model) {
         this.view = view;

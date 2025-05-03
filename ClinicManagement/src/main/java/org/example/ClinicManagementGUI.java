@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 public class ClinicManagementGUI extends JFrame {
-    private JPanel clinicManagementPanel;
-    private JTabbedPane tabbedPane;
+    private final JPanel clinicManagementPanel;
+    private final JTabbedPane tabbedPane;
     private JPanel patientTab;
     private JPanel doctorTab;
     private JPanel appointmentTab;
@@ -40,9 +40,9 @@ public class ClinicManagementGUI extends JFrame {
     private JTable appointmentTable;
     private JTable recordTable;
 
-    private DoctorDAO doctorDAO = new DoctorDAO();
-    private PatientDAO patientDAO = new PatientDAO();
-    private AppointmentDAO appointmentDAO = new AppointmentDAO();
+    private final DoctorDAO doctorDAO = new DoctorDAO();
+    private final PatientDAO patientDAO = new PatientDAO();
+    private final AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public ClinicManagementGUI() {
         setTitle(Messages.getMessage("title.app"));

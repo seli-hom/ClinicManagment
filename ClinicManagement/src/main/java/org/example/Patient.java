@@ -5,13 +5,13 @@ import java.sql.*;
 
 public class Patient {
     private static int count = getStartingCountFromDB();
-    private String patientId;
-    private String firstName;
-    private String lastName;
+    private final String patientId;
+    private final String firstName;
+    private final String lastName;
     private String address;
     private String contact;
-    private java.sql.Date dob;
-    private String sex;
+    private final java.sql.Date dob;
+    private final String sex;
     private String familyDoctor;
     private String bloodType;
 

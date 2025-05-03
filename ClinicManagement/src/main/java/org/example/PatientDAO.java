@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PatientDAO {
-    private Map<String, Patient> patientCache = new HashMap<>();
+    private final Map<String, Patient> patientCache = new HashMap<>();
 
     /**
      * Insert the following fields into the Patients table

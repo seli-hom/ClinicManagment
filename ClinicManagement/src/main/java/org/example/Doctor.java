@@ -9,10 +9,10 @@ import java.util.List;
 
 public class Doctor {
     private static int count = getStartingCountFromDB();
-    private String doctorId;
-    private String firstName;
-    private String lastName;
-    private String speciality;
+    private final String doctorId;
+    private final String firstName;
+    private final String lastName;
+    private final String speciality;
     private String contact;
 
     // Constructor for creating new doctors

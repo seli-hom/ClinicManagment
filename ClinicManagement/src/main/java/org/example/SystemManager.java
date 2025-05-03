@@ -13,9 +13,9 @@ public class SystemManager {
     private List<Patient> patients;
     private List<Appointment> appointments;
 
-    private DoctorDAO doctorDAO = new DoctorDAO();
-    private PatientDAO patientDAO = new PatientDAO();
-    private AppointmentDAO appointmentDAO = new AppointmentDAO();
+    private final DoctorDAO doctorDAO = new DoctorDAO();
+    private final PatientDAO patientDAO = new PatientDAO();
+    private final AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public SystemManager() {
         this.doctors = new ArrayList<>();
@@ -126,7 +126,7 @@ public class SystemManager {
 
         modifiedDoctor.setContact(modifiedContact);
         DBConnection database = DBConnection.getInstance();
-        database.getInstance().getConnection();
+        DBConnection.getInstance().getConnection();
 
         doctorDAO.updateDoctor(id, modifiedContact);
         System.out.println("Doctor info has been successfully updated.");
@@ -142,9 +142,9 @@ public class SystemManager {
     public void registerPatient(Patient p) {
         patients.add(p);
         DBConnection database = DBConnection.getInstance();
-        database.getInstance().getConnection();
+        DBConnection.getInstance().getConnection();
         patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getDob(),
-                p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType());
+                p.getSex(),p.getFamilyDoctor(),p.getBloodType());
         System.out.println("Patient registered successfully");
     }
 

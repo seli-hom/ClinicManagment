@@ -7,9 +7,9 @@ import java.time.LocalTime;
 
 public class Appointment {
     private static int count = getStartingCountFromDB();
-    private String appointmentId;
-    private String patientId;
-    private String doctorId;
+    private final String appointmentId;
+    private final String patientId;
+    private final String doctorId;
     private Date date;
     private Time time;
 

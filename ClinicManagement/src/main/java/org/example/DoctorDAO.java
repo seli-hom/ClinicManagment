@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DoctorDAO {
-    private Map<String, Doctor> doctorCache = new HashMap<>();
+    private final Map<String, Doctor> doctorCache = new HashMap<>();
 
     /**
      * Insert the following fields into the Doctors table
@@ -29,7 +29,7 @@ public class DoctorDAO {
             pstmt.setString(2, fname);
             pstmt.setString(3, lname);
             pstmt.setString(4, specialty);
-            pstmt.setString(5, contact);;
+            pstmt.setString(5, contact);
             pstmt.execute();//insert data into tble
             System.out.println("Data inserted successfully");
         }

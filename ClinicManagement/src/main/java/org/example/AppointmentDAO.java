@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AppointmentDAO {
-    private Map<String, Appointment> appointmentCache = new HashMap<>();
+    private final Map<String, Appointment> appointmentCache = new HashMap<>();
 
 
 
