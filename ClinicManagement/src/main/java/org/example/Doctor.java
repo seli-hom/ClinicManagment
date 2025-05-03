@@ -42,7 +42,7 @@ public class Doctor {
 
             if (rs.next()) {
                 String lastId = rs.getString("id");
-                int num = Integer.parseInt(lastId.substring(1)); // Get rid of the D00
+                int num = Integer.parseInt(lastId.substring(1)); // Get rid of the D
                 return num + 1; // start at the next available number
             }
         }

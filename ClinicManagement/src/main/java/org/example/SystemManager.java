@@ -276,4 +276,28 @@ public class SystemManager {
 
         appointmentDAO.updateSchedule(aptID,newDate,newTime);
     }
+
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public DoctorDAO getDoctorDAO() {
+        return doctorDAO;
+    }
+
+    public PatientDAO getPatientDAO() {
+        return patientDAO;
+    }
+
+    public AppointmentDAO getAppointmentDAO() {
+        return appointmentDAO;
+    }
 }

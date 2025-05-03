@@ -5,6 +5,7 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,9 +13,13 @@ public class ClinicController {
     private final ClinicManagementGUI view;
     private final SystemManager model;
 
+    private final List<Patient> recordList = new ArrayList<>();
+
     public ClinicController(ClinicManagementGUI view, SystemManager model) {
         this.view = view;
         this.model = model;
+
+        recordList.addAll(model.getPatientDAO().getAllPatients());
 
         setUpDoctorActions();
         setUpPatientActions();
@@ -291,7 +296,8 @@ public class ClinicController {
         });
 
         view.getViewRecordsButton().addActionListener(e -> {
-            view.updateRecordTable(view.getPatientDAO().getAllPatients());
+            // Refresh the table
+            view.updateRecordTable(recordList);
         });
     }
 }

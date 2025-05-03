@@ -79,8 +79,8 @@ public class PatientDAO {
 
     public void updateFamilyDoctor(String patientId, String doctorId) {
         String sql = "UPDATE Patients SET family_doctor = ? WHERE id = ?";
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = DBConnection.getInstance().getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, doctorId);
             pstmt.setString(2, patientId);
             int rows = pstmt.executeUpdate();

@@ -52,7 +52,7 @@ public class Patient {
 
             if (rs.next()) {
                 String lastId = rs.getString("id");
-                int num = Integer.parseInt(lastId.substring(3)); // Get rid of the P00
+                int num = Integer.parseInt(lastId.substring(1)); // Get rid of the P
                 return num + 1; // start at the next available number
             }
         }
