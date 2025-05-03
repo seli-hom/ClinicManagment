@@ -109,6 +109,7 @@ public class AppointmentDAO {
 
             while (rs.next()) {
                 Appointment appointment = new Appointment(
+                        rs.getString("id"),
                         rs.getString("patient_id"),
                         rs.getString("doctor_id"),
                         rs.getDate("date"),

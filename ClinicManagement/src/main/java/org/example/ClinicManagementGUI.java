@@ -33,6 +33,7 @@ public class ClinicManagementGUI extends JFrame {
 
     private JButton findPatientRecordButton;
     private JButton viewRecordsButton;
+    private JButton assignDoctorButton;
 
     private JTable patientTable;
     private JTable doctorTable;
@@ -137,7 +138,9 @@ public class ClinicManagementGUI extends JFrame {
         JPanel buttonPanel = new JPanel();
         findPatientRecordButton = new JButton("Find Record");
         viewRecordsButton = new JButton("View All Records");
+        assignDoctorButton = new JButton("Assign Family Doctor");
         buttonPanel.add(findPatientRecordButton);
+        buttonPanel.add(assignDoctorButton);
         buttonPanel.add(viewRecordsButton);
 
         recordTable = new JTable();
@@ -260,7 +263,7 @@ public class ClinicManagementGUI extends JFrame {
     }
 
     public void setUpRecordTable() {
-        String[] columnNames = {"Patient ID", "First Name", "Last Name", "DOB", "Sex", "Family Doctor", "Blood Type", "Discharged"};
+        String[] columnNames = {"Patient ID", "First Name", "Last Name", "DOB", "Sex", "Family Doctor", "Blood Type"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         recordTable.setModel(model);
     }
@@ -276,8 +279,7 @@ public class ClinicManagementGUI extends JFrame {
                     patient.getDob(),
                     patient.getSex(),
                     patient.getFamilyDoctor(),
-                    patient.getBloodType(),
-                    patient.getDischarged()
+                    patient.getBloodType()
             });
         }
     }
@@ -412,5 +414,9 @@ public class ClinicManagementGUI extends JFrame {
 
     public JButton getViewRecordsButton() {
         return viewRecordsButton;
+    }
+
+    public JButton getAssignDoctorButton() {
+        return assignDoctorButton;
     }
 }

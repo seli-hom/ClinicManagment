@@ -55,7 +55,7 @@ public class ClinicController {
 
         view.getFindDoctorButton().addActionListener(e -> {
             String id = JOptionPane.showInputDialog("Enter the ID of the doctor to find:");
-            Doctor doctor = model.findDoctor(id);
+            Doctor doctor = view.getDoctorDAO().getDoctorById(id);
 
             if (doctor != null) {
                 view.updateDoctorTable(List.of(doctor));
@@ -67,9 +67,12 @@ public class ClinicController {
 
         view.getFindDoctorBySpecialtyButton().addActionListener(e -> {
             String specialty = JOptionPane.showInputDialog("Specialty:");
+            List<Doctor> doctors;
+
             if (specialty != null) {
-                List<Doctor> docs = model.findDoctorsBySpecialty(specialty);
-                JOptionPane.showMessageDialog(view, "Found " + docs.size() + " doctors(s).");
+                doctors = model.findDoctorsBySpecialty(specialty);
+                view.updateDoctorTable(doctors);
+                JOptionPane.showMessageDialog(view, "Found " + doctors.size() + " doctors(s).");
             } else {
                 JOptionPane.showMessageDialog(view, "No doctor with the given ID exists.");
             }
@@ -108,7 +111,7 @@ public class ClinicController {
             String newContact = JOptionPane.showInputDialog("New Contact:");
 
             if (id != null) {
-                if (newAddress != null || newContact != null) {
+                if (newAddress != null && newContact != null) {
                     model.updatePatientInfo(id, newAddress, newContact);
                     view.updatePatientTable();
                 } else {
@@ -121,7 +124,7 @@ public class ClinicController {
 
         view.getFindPatientButton().addActionListener(e -> {
             String id = JOptionPane.showInputDialog("Patient ID:");
-            Patient patient = model.findPatient(id);
+            Patient patient = view.getPatientDAO().getPatientById(id);
             if (patient != null) {
                 view.updatePatientTable(List.of(patient));
                 JOptionPane.showMessageDialog(view, "Patient found: " + patient.getFirstName() + " " + patient.getLastName());
@@ -192,7 +195,7 @@ public class ClinicController {
             try {
                 if (id != null) {
                     if (model.findAppointmentByID(id) != null) {
-                        Appointment appointment = model.findAppointmentByID(id);
+                        Appointment appointment = view.getAppointmentDAO().getAppointmentById(id);
                         view.updateAppointmentTable(List.of(appointment));
                         JOptionPane.showMessageDialog(view, "Appointment " + appointment.getAppointmentId() + " found");
                     } else {
@@ -231,6 +234,28 @@ public class ClinicController {
             }
             catch (Exception ex) {
                 JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+            }
+        });
+
+        view.getAssignDoctorButton().addActionListener(e -> {
+            String patientId = JOptionPane.showInputDialog("Enter the ID of the patient:");
+            String doctorId = JOptionPane.showInputDialog("Enter the ID of the doctor:");
+            Patient patient = model.findPatient(patientId);
+            Doctor doctor = model.findDoctor(doctorId);
+
+            if (patientId != null && doctorId != null) {
+                if (patient != null && doctor != null) {
+                    model.assignDoctor(patientId, doctorId);
+                    view.updateRecordTable(List.of(patient));
+                    JOptionPane.showMessageDialog(view, "Patient with ID " + " " + patientId + " has been assigned a family doctor with ID " + doctorId);
+                    view.updateRecordTable(List.of(patient));
+                }
+                else {
+                    JOptionPane.showMessageDialog(view, "No patient or doctor with the given IDs exists.");
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
             }
         });
 

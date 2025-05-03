@@ -1,18 +1,6 @@
 package org.example;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-//import javax.swing.*;
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 public class DBConnection {
     private static DBConnection dObject;
@@ -43,17 +31,6 @@ public class DBConnection {
     }
 
     public  Connection getConnection() {
-//        String DB_Path = "jdbc:sqlite:src/main/resources/databasedata.db";
-////        String DB_Path = Base_Path + "data.db";
-//
-//
-//        Connection connection;
-//        try {
-//            connection = DriverManager.getConnection(DB_Path);
-//        }
-//        catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
         return connection;
     }
     public void initializeDatabase() {
@@ -74,16 +51,6 @@ public class DBConnection {
                     contact TEXT NOT NULL
                 );
                 """;
-
-//        try {
-//            Connection conn = connect();
-//            Statement stmt = conn.createStatement();
-//            stmt.execute(sql);  // execute the create table statement
-//            System.out.println("Table created successfully.");
-//        }
-//        catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
         executeSQL(sql);
     }
 
@@ -102,27 +69,16 @@ public class DBConnection {
                     sex VARCHAR(10) NOT NULL,
                     family_doctor VARCHAR(50),
                     blood_type VARCHAR(10) NOT NULL,
-                    patient_discharged BOOLEAN NOT NULL,
                     FOREIGN KEY(family_doctor) REFERENCES Doctors(id)
                 );
                 """;
-
-//        try {
-//            Connection conn = connect();
-//            Statement stmt = conn.createStatement();
-//            stmt.execute(sql);  // execute the create table statement
-//            System.out.println("Table created successfully.");
-//        }
-//        catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
         executeSQL(sql);
     }
 
     /**
      * Create an Appointments table if one does not already exist
      */
-    public  void createNewAppointmentsTable() {
+    public void createNewAppointmentsTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS Appointments (
                     id VARCHAR(5) PRIMARY KEY,
@@ -134,17 +90,22 @@ public class DBConnection {
                     FOREIGN KEY(doctor_id) REFERENCES Doctors(id)
                 );
                 """;
-
-//        try {
-//            Connection conn = DBConnection.connect();
-//            Statement stmt = conn.createStatement();
-//            stmt.execute(sql);  // execute the create table statement
-//            System.out.println("Table created successfully.");
-//        }
-//        catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
         executeSQL(sql);
+    }
+
+    public void dropAllTables() {
+        String sql1 = "DROP TABLE IF EXISTS Appointments;";
+        String sql2 = "DROP TABLE IF EXISTS Patients;";
+        String sql3 = "DROP TABLE IF EXISTS Doctors;";
+
+        try (Statement stmt = connection.createStatement()) {
+            stmt.execute(sql1);
+            stmt.execute(sql2);
+            stmt.execute(sql3);
+            System.out.println("All tables dropped.");
+        } catch (SQLException e) {
+            System.err.println("Error dropping tables: " + e.getMessage());
+        }
     }
 
     private void executeSQL(String sql) {
@@ -154,29 +115,5 @@ public class DBConnection {
             System.err.println("Error executing SQL: " + e.getMessage());
         }
     }
-
-    //=============Find patient =============
-//    public void findPatients(String table, String id) {
-//        String tableName = patients;
-//        String sql = "SELECT * FROM " + tableName +" WHERE id = ?";
-//
-//        try{
-//            Connection conn = connect();
-//            PreparedStatement pstmt = conn.prepareStatement(sql);
-//            pstmt.setString(1,id);
-//            int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
-//
-//            if (rowsDeleted > 0) {
-//                System.out.println("Appointment with id: " + id + " was cancelled succesfully");
-//            }
-//            else {
-//                System.out.println("No patient with the provided ID exists");
-//            }
-//        }
-//        catch (SQLException e) {
-//            System.err.println(e.getMessage());
-//        }
-//    }
-
 
 }

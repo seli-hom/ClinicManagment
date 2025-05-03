@@ -10,15 +10,23 @@ public class Appointment {
     private String appointmentId;
     private String patientId;
     private String doctorId;
-    private LocalDateTime dateTime;
     private Date date;
     private Time time;
 
+    // Constructor for creating new appointments
     public Appointment(String patientId, String doctorId, Date date, Time time) {
         this.appointmentId = String.format("A%03d", count++);
         this.patientId = patientId;
         this.doctorId = doctorId;
+        this.date = date;
+        this.time = time;
+    }
 
+    // Constructor for loading existing appointments from the database
+    public Appointment(String appointmentId, String patientId, String doctorId, Date date, Time time) {
+        this.appointmentId = appointmentId;
+        this.patientId = patientId;
+        this.doctorId = doctorId;
         this.date = date;
         this.time = time;
     }

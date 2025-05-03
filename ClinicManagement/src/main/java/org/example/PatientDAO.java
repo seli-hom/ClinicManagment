@@ -22,10 +22,9 @@ public class PatientDAO {
      * @param sex the input sex
      * @param doctorId the input family doctor's id
      * @param bloodType the input blood type
-     * @param discharged true if patient has been discharged, false otherwise
      */
-    public  void insertPatientRecord(String id, String fName, String lName, String address, String contact, Date dob, String sex, String doctorId, String bloodType, boolean discharged){
-        String sql = "INSERT INTO Patients VALUES(?,?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
+    public  void insertPatientRecord(String id, String fName, String lName, String address, String contact, Date dob, String sex, String doctorId, String bloodType){
+        String sql = "INSERT INTO Patients VALUES(?,?,?,?,?,?,?,?,?)"; //this is sql query with placeholders(?) instead of inserting raw values directly
         // ? are parameter ,markers they will be safely filled later
         //this helps prevent SQL injection attacks and make code cleaner
         try{
@@ -40,7 +39,6 @@ public class PatientDAO {
             pstmt.setString(7, sex);
             pstmt.setString(8, doctorId);
             pstmt.setString(9, bloodType);
-            pstmt.setBoolean(10, discharged);
 
             pstmt.execute(); //insert data into table
             System.out.println("Data inserted successfully");
@@ -108,32 +106,6 @@ public class PatientDAO {
     }
 
     /**
-     * Change a patient's status to discharged = true
-     * @param id the input patient id
-     */
-    public  void dischargePatient(String id) {
-        String sql = "UPDATE Patients SET patient_discharged = ? WHERE Id = ?";
-
-        try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setBoolean(1, true);
-            pstmt.setString(2, id);
-            int rowsDeleted = pstmt.executeUpdate(); // returns number of rows affected
-
-            if (rowsDeleted > 0) {
-                System.out.println("Patient was discharged succesfully");
-            }
-            else {
-                System.out.println("No patient with the provided ID exists");
-            }
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    /**
      * View all patients in the database
      * @return an array list of all the patients
      */
@@ -148,6 +120,7 @@ public class PatientDAO {
 
             while (rs.next()) {
                 Patient patient = new Patient(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("address"),

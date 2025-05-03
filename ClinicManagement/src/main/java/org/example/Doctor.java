@@ -15,8 +15,18 @@ public class Doctor {
     private String speciality;
     private String contact;
 
+    // Constructor for creating new doctors
     public Doctor(String firstName, String lastName, String speciality, String contact) {
         this.doctorId = String.format("D%03d", count++);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.speciality = speciality;
+        this.contact = contact;
+    }
+
+    // Constructor for loading existing doctors from the database
+    public Doctor(String doctorId, String firstName, String lastName, String speciality, String contact) {
+        this.doctorId = doctorId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.speciality = speciality;

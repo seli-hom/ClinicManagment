@@ -14,10 +14,10 @@ public class Patient {
     private String sex;
     private String familyDoctor;
     private String bloodType;
-    private boolean discharged;
 
     private List<String> prescriptions;
 
+    // Constructor for creating new patients
     public Patient(String firstName, String lastName, String address, String contact, java.sql.Date dob, String sex, String bloodType) {
         this.patientId = String.format("P%03d", count++);
         this.firstName = firstName;
@@ -28,7 +28,19 @@ public class Patient {
         this.sex = sex;
         this.familyDoctor = null; //at creation patient does not have a doctor in the clinic
         this.bloodType = bloodType;
-        this.discharged = false;
+    }
+
+    // Constructor for loading existing patients from the database
+    public Patient(String patientId, String firstName, String lastName, String address, String contact, Date dob, String sex, String bloodType) {
+        this.patientId = patientId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.contact = contact;
+        this.dob = dob;
+        this.sex = sex;
+        this.familyDoctor = null;
+        this.bloodType = bloodType;
     }
 
     public static int getStartingCountFromDB() {
@@ -86,12 +98,6 @@ public class Patient {
         return bloodType;
     }
 
-    public boolean getDischarged() {
-        return discharged;
-    }
-
-    public boolean isDischarged() { return discharged; }
-
     public void setAddress(String address) {
         this.address = address;
     }
@@ -107,6 +113,4 @@ public class Patient {
     public void BloodType(String bloodType) {
         this.bloodType = bloodType;
     }
-
-    public void setDischarged(boolean discharged) {this.discharged = discharged;}
 }

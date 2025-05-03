@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 public class SystemManager {
     private List<Doctor> doctors;
@@ -143,7 +144,7 @@ public class SystemManager {
         DBConnection database = DBConnection.getInstance();
         database.getInstance().getConnection();
         patientDAO.insertPatientRecord(p.getPatientId(), p.getFirstName(), p.getLastName(), p.getAddress(), p.getContact(),p.getDob(),
-                p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType(), p.isDischarged());
+                p.getSex().toString(),p.getFamilyDoctor(),p.getBloodType());
         System.out.println("Patient registered successfully");
     }
 
@@ -164,45 +165,23 @@ public class SystemManager {
     }
 
     /**
-     * Removes patient from list of patients in the management system
-     * then updates the information on tables through the DB connection class,
-     * if no patient matches the id given an exception will be thrown
-     * @param id
-     */
-    public void dischargePatient(String id) {
-        Patient patient = findPatient(id);
-        if (patient != null) {
-            patient.setDischarged(true);
-//            patients.remove(patient);
-            System.out.println("Patient with id: " + id + " has been successfully discharged.");
-
-//            DBConnection database = DBConnection.getInstance();
-//            database.connect();
-//            database.update(id);
-        }
-        else {
-            throw new NoSuchElementException("Patient with id: " + id + " does not exist.");
-        }
-    }
-
-    /**
      * Modifies the contact information of the patient
      * then updates the information on tables through the DB connection class,
      * if no patient with matching id is found an exception will be thrown
-     * @param id id of patient one wishes to mdify the information of
-     * @param newAdress new patients address
+     * @param id id of patient one wishes to modify the information of
+     * @param newAddress new patients address
      * @param newContact new contact information of patient
      */
-    public void updatePatientInfo(String id, String newAdress, String newContact) {
+    public void updatePatientInfo(String id, String newAddress, String newContact) {
         Patient modifiedPatient = findPatient(id);
         if (modifiedPatient == null) {
             throw new NoSuchElementException("Patient with id: " + id + " was not found.");
         }
         modifiedPatient.setContact(newContact);
-        modifiedPatient.setAddress(newAdress);
+        modifiedPatient.setAddress(newAddress);
         System.out.println("Patient's contact info has been successfully updated.");
 
-        patientDAO.updatePatient(id, newAdress, newContact);
+        patientDAO.updatePatient(id, newAddress, newContact);
     }
 
     //================================================== Appointment management methods =========================================

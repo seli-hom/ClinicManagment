@@ -1,6 +1,8 @@
 package org.example;
 
 
+import org.sqlite.core.DB;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
@@ -15,6 +17,8 @@ import javax.swing.table.DefaultTableModel;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+//            DBConnection datab = DBConnection.getInstance();
+//            datab.dropAllTables();
             //initialize database
             DBConnection.getInstance().initializeDatabase();
 

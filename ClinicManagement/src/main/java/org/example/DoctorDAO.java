@@ -1,5 +1,6 @@
 package org.example;
 
+import javax.print.Doc;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,6 +106,7 @@ public class DoctorDAO {
 
             while (rs.next()) {
                 Doctor doctor = new Doctor(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("specialty"),
@@ -155,6 +157,46 @@ public class DoctorDAO {
                 // Add the doctor to the cache
 
                 doctorCache.put(id, doctor);
+            }
+            else {
+                // If doctor is not found
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            System.err.printf(e.getMessage());
+        }
+
+        return doctor;
+    }
+
+    public Doctor getDoctorBySpecialty(String specialty) {
+        // Check if doctor is already in the cache
+        Doctor doctor = doctorCache.get(specialty);
+
+        if (doctor != null) {
+            return doctor; // Return the doctor from cache if it is already there
+        }
+
+        // If doctor is not in the cache, get it from the database
+        String sql = "SELECT * FROM Doctors WHERE specialty = ?";
+
+        try {
+            Connection conn = DBConnection.getInstance().getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, specialty);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                new Doctor(
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("specialty"),
+                        rs.getString("contact")
+                );
+
+                // Add the doctor to the cache
+                doctorCache.put(specialty, doctor);
             }
             else {
                 // If doctor is not found
