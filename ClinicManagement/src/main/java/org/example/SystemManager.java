@@ -43,7 +43,7 @@ public class SystemManager {
             throw new IllegalArgumentException("Patient already as a family doctor assigned.");
         }
         patient.setFamilyDoctor(doctorId);
-        patientDAO.updatePatient(patientId, "family_doctor", doctorId);
+        patientDAO.assignDoctor(patientId, doctorId);
     }
 
     /**

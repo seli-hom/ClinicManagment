@@ -82,15 +82,14 @@ public class PatientDAO {
      * @param columnName
      * @param newData
      */
-    public  void updatePatient1(String patientId, String columnName, String newData) {
-        String sql = "UPDATE Patients SET ? = ? WHERE id = ?";
+    public  void assignDoctor(String patientId, String newData) {
+        String sql = "UPDATE Patients SET family_doctor = ? WHERE id = ?";
 
         try {
             Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, columnName); // set student name
-            pstmt.setString(2, newData);
-            pstmt.setString(3, patientId);
+            pstmt.setString(1, newData); // set student name
+            pstmt.setString(2, patientId);
             int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
 
             if (rowsUpdated > 0) {
@@ -127,7 +126,8 @@ public class PatientDAO {
                         rs.getString("contact"),
                         rs.getDate("dob"),
                         rs.getString("sex"),
-                        rs.getString("blood_type")
+                        rs.getString("blood_type"),
+                        rs.getString("family_doctor")
                 );
 
                 patientList.add(patient);
@@ -167,13 +167,15 @@ public class PatientDAO {
 
             if (rs.next()) {
                 new Patient(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("address"),
                         rs.getString("contact"),
                         rs.getDate("dob"),
                         rs.getString("sex"),
-                        rs.getString("blood_type")
+                        rs.getString("blood_type"),
+                        rs.getString("family_doctor")
                 );
 
                 // Add the patient to the cache
