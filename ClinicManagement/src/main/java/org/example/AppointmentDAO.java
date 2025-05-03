@@ -142,7 +142,7 @@ public class AppointmentDAO {
         }
 
         // If appointment is not in the cache, get it from the database
-        String sql = "SELECT * FROM Appointments WHERE appointment_id = ?";
+        String sql = "SELECT * FROM Appointments WHERE id = ?";
 
         try {
             Connection conn = DBConnection.getInstance().getConnection();
@@ -152,6 +152,7 @@ public class AppointmentDAO {
 
             if (rs.next()) {
                 new Appointment(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getDate("date"),

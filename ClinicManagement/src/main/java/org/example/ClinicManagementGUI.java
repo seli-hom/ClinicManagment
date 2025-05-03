@@ -334,6 +334,7 @@ public class ClinicManagementGUI extends JFrame {
                     patient.getLastName(),
                     patient.getDob(),
                     patient.getSex(),
+                    patient.getFamilyDoctor(),
                     patient.getBloodType()
             });
         }

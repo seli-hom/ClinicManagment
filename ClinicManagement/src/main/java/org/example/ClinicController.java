@@ -262,9 +262,9 @@ public class ClinicController {
             if (patientId != null && doctorId != null) {
                 if (patient != null && doctor != null) {
                     model.assignDoctor(patientId, doctorId);
-                    view.updateRecordTable(List.of(patient));
+                    Patient updated = model.findPatient(patientId);
+                    view.updateRecordTable(List.of(updated));
                     JOptionPane.showMessageDialog(view, Messages.getMessage("message.assignDoctorSuccess"));
-                    view.updateRecordTable(List.of(patient));
                 }
                 else {
                     JOptionPane.showMessageDialog(view, Messages.getMessage("message.noPatientOrDoctor"));

@@ -52,6 +52,7 @@ public class PatientDAO {
      * Update a patient's address
      * @param patientId the input patient id
      * @param newAdress the new input address
+     * @param newContact the new input address
      */
     public  void updatePatient(String patientId, String newAdress, String newContact) {
         String sql = "UPDATE Patients SET address = ?, contact = ? WHERE id = ?";
@@ -76,32 +77,18 @@ public class PatientDAO {
         }
     }
 
-    /**
-     *
-     * @param patientId
-     * @param columnName
-     * @param newData
-     */
-    public  void updatePatient1(String patientId, String columnName, String newData) {
-        String sql = "UPDATE Patients SET ? = ? WHERE id = ?";
-
-        try {
-            Connection conn = DBConnection.getInstance().getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, columnName); // set student name
-            pstmt.setString(2, newData);
-            pstmt.setString(3, patientId);
-            int rowsUpdated = pstmt.executeUpdate(); // returns number of rows affected
-
-            if (rowsUpdated > 0) {
-                System.out.println("Patient was updated successfully.");
+    public void updateFamilyDoctor(String patientId, String doctorId) {
+        String sql = "UPDATE Patients SET family_doctor = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, doctorId);
+            pstmt.setString(2, patientId);
+            int rows = pstmt.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("No patient with ID " + patientId);
             }
-            else {
-                System.out.println("No patient with the provided ID exists");
-            }
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to assign family doctor", e);
         }
     }
 
@@ -167,6 +154,7 @@ public class PatientDAO {
 
             if (rs.next()) {
                 new Patient(
+                        rs.getString("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("address"),

@@ -32,8 +32,8 @@ public class SystemManager {
      * @param doctorId doctor to be assigned to th epatient
      */
     public void assignDoctor(String patientId, String doctorId) {
-        Doctor doctor = findDoctor(doctorId);
         Patient patient = findPatient(patientId);
+        Doctor doctor = findDoctor(doctorId);
 
         if (doctor == null || patient == null) {
             throw new NoSuchElementException("Invalid doctor or patient id");
@@ -43,7 +43,7 @@ public class SystemManager {
             throw new IllegalArgumentException("Patient already as a family doctor assigned.");
         }
         patient.setFamilyDoctor(doctorId);
-        patientDAO.updatePatient(patientId, "family_doctor", doctorId);
+        patientDAO.updateFamilyDoctor(patientId, doctorId);
     }
 
     /**
