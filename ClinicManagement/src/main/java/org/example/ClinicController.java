@@ -1,14 +1,10 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.event.*;
-
 import java.sql.Date;
 import java.sql.Time;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
 
 public class ClinicController {
     private final ClinicManagementGUI view;
