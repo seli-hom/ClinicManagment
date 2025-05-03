@@ -25,13 +25,13 @@ public class ClinicController {
 
     public void setUpDoctorActions() {
         view.getAddDoctorButton().addActionListener(e -> {
-            String firstName = JOptionPane.showInputDialog(("First Name:"));
-            String lastName = JOptionPane.showInputDialog(("Last Name:"));
-            String specialty = JOptionPane.showInputDialog(("Specialty:"));
-            String contact = JOptionPane.showInputDialog(("Contact:"));
+            String firstName = JOptionPane.showInputDialog(Messages.getMessage("dialog.firstName"));
+            String lastName = JOptionPane.showInputDialog(Messages.getMessage("dialog.lastName"));
+            String specialty = JOptionPane.showInputDialog(Messages.getMessage("dialog.specialty"));
+            String contact = JOptionPane.showInputDialog(Messages.getMessage("dialog.contact"));
 
             if (firstName == null || lastName == null || contact == null || specialty == null) {
-                JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
             }
 
             Doctor doctor = new Doctor(firstName, lastName, specialty, contact);
@@ -42,39 +42,39 @@ public class ClinicController {
         });
 
         view.getModifyDoctorButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Enter the ID of the doctor to modify:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             if (id != null) {
-                String newContact = JOptionPane.showInputDialog("Enter new contact:");
+                String newContact = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewContact"));
                 model.modifyDoctor(id, newContact);
                 view.updateDoctorTable();
             } else {
-                JOptionPane.showMessageDialog(view, "No doctor with the given ID exists.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.noDoctorId"));
             }
 
         });
 
         view.getFindDoctorButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Enter the ID of the doctor to find:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             Doctor doctor = view.getDoctorDAO().getDoctorById(id);
 
             if (doctor != null) {
                 view.updateDoctorTable(List.of(doctor));
-                JOptionPane.showMessageDialog(view, "Doctor found: " + doctor.getFirstName() + " " + doctor.getLastName());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.doctorFound"));
             } else {
-                JOptionPane.showMessageDialog(view, "No doctor with the given ID exists.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.noDoctorId"));
             }
         });
 
         view.getFindDoctorBySpecialtyButton().addActionListener(e -> {
-            String specialty = JOptionPane.showInputDialog("Specialty:");
+            String specialty = JOptionPane.showInputDialog(Messages.getMessage("dialog.specialty"));
             List<Doctor> doctors;
 
             if (specialty != null) {
                 doctors = model.findDoctorsBySpecialty(specialty);
                 view.updateDoctorTable(doctors);
-                JOptionPane.showMessageDialog(view, "Found " + doctors.size() + " doctors(s).");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.foundDoctors"));
             } else {
-                JOptionPane.showMessageDialog(view, "No doctor with the given ID exists.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.noDoctorId"));
             }
         });
 
@@ -85,16 +85,16 @@ public class ClinicController {
 
     public void setUpPatientActions() {
         view.getAddPatientButton().addActionListener(e -> {
-            String firstName = JOptionPane.showInputDialog("First Name:");
-            String lastName = JOptionPane.showInputDialog("Last Name:");
-            String address = JOptionPane.showInputDialog("Address:");
-            String contact = JOptionPane.showInputDialog("Contact:");
-            String dobStr = JOptionPane.showInputDialog("Date of Birth (yyyy-mm-dd):");
-            String sex = JOptionPane.showInputDialog("Sex (M/F/O):");
-            String bloodType = JOptionPane.showInputDialog("Blood Type:");
+            String firstName = JOptionPane.showInputDialog(Messages.getMessage("dialog.firstName"));
+            String lastName = JOptionPane.showInputDialog(Messages.getMessage("dialog.lastName"));
+            String address = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterAddress"));
+            String contact = JOptionPane.showInputDialog(Messages.getMessage("dialog.contact"));
+            String dobStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDateOfBirth"));
+            String sex = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterSex"));
+            String bloodType = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterBloodType"));
 
             if (firstName == null || lastName == null || address == null || contact == null || dobStr == null || sex == null || bloodType == null) {
-                JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
             }
 
             Date dob = Date.valueOf(dobStr);
@@ -106,16 +106,16 @@ public class ClinicController {
         });
 
         view.getModifyPatientButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Enter the ID of the patient to modify:");
-            String newAddress = JOptionPane.showInputDialog("New Address:");
-            String newContact = JOptionPane.showInputDialog("New Contact:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
+            String newAddress = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewAddress"));
+            String newContact = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewContact"));
 
             if (id != null) {
                 if (newAddress != null && newContact != null) {
                     model.updatePatientInfo(id, newAddress, newContact);
                     view.updatePatientTable();
                 } else {
-                    JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
                 }
             } else {
                 JOptionPane.showMessageDialog(view, "No patient with the given ID exists.");
@@ -123,13 +123,13 @@ public class ClinicController {
         });
 
         view.getFindPatientButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Patient ID:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             Patient patient = view.getPatientDAO().getPatientById(id);
             if (patient != null) {
                 view.updatePatientTable(List.of(patient));
-                JOptionPane.showMessageDialog(view, "Patient found: " + patient.getFirstName() + " " + patient.getLastName());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.patientFound"));
             } else {
-                JOptionPane.showMessageDialog(view, "No patient with the given ID exists.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.noPatientId"));
             }
         });
 
@@ -140,10 +140,10 @@ public class ClinicController {
 
     public void setUpAppointmentActions() {
         view.getBookAppointmentButton().addActionListener(e -> {
-            String patientId = JOptionPane.showInputDialog("Patient ID:");
-            String doctorId = JOptionPane.showInputDialog("Doctor ID:");
-            String dateStr = JOptionPane.showInputDialog("Date (yyyy-mm-dd):");
-            String timeStr = JOptionPane.showInputDialog("Time (HH:mm):");
+            String patientId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterPatientId"));
+            String doctorId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDoctorId"));
+            String dateStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDate"));
+            String timeStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterTime"));
 
             try {
                 Date date = Date.valueOf(dateStr);
@@ -152,14 +152,14 @@ public class ClinicController {
                 model.bookAppointment(appointment);
                 System.out.println(appointment.getAppointmentId());
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.error") + ex.getMessage());
             }
         });
 
         view.getRescheduleAppointmentButton().addActionListener(e -> {
-            String aptId = JOptionPane.showInputDialog("Appointment ID:");
-            String newDateStr = JOptionPane.showInputDialog("New Date (yyyy-mm-dd):");
-            String newTimeStr = JOptionPane.showInputDialog("New Time (HH:mm):");
+            String aptId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
+            String newDateStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewDate"));
+            String newTimeStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewTime"));
 
             try {
                 Date newDate = Date.valueOf(newDateStr);
@@ -167,45 +167,45 @@ public class ClinicController {
                 model.rescheduleAppointment(aptId, newDate, newTime);
                 view.updateAppointmentTable();
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.error") + ex.getMessage());
             }
         });
 
         view.getCancelAppointmentButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Appointment ID:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             try {
                 if (id != null) {
                     if (model.findAppointmentByID(id) != null) {
                         model.cancelAppointment(id);
                         view.updateAppointmentTable();
-                        JOptionPane.showMessageDialog(view, "Appointment with ID " + id + " successfully cancelled");
+                        JOptionPane.showMessageDialog(view, Messages.getMessage("message.appointmentCancelled"));
                     } else {
-                        JOptionPane.showMessageDialog(view, "No appointment with the given ID exists.");
+                        JOptionPane.showMessageDialog(view, Messages.getMessage("message.noAppointmentId"));
                     }
                 } else {
-                    JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.error") + ex.getMessage());
             }
         });
 
         view.getFindAppointmentButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Enter Appointment ID:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             try {
                 if (id != null) {
                     if (model.findAppointmentByID(id) != null) {
                         Appointment appointment = view.getAppointmentDAO().getAppointmentById(id);
                         view.updateAppointmentTable(List.of(appointment));
-                        JOptionPane.showMessageDialog(view, "Appointment " + appointment.getAppointmentId() + " found");
+                        JOptionPane.showMessageDialog(view, Messages.getMessage("message.appointmentFound"));
                     } else {
-                        JOptionPane.showMessageDialog(view, "No appointment with the given ID exists.");
+                        JOptionPane.showMessageDialog(view, Messages.getMessage("message.noAppointmentId"));
                     }
                 } else {
-                    JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.error") + ex.getMessage());
             }
         });
 
@@ -216,7 +216,7 @@ public class ClinicController {
 
     public void setUpRecordActions() {
         view.getFindPatientRecordButton().addActionListener(e -> {
-            String id = JOptionPane.showInputDialog("Enter Patient ID:");
+            String id = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
             Patient patient = model.findPatient(id);
 
             try {
@@ -225,21 +225,21 @@ public class ClinicController {
                         view.updateRecordTable(List.of(patient));
                     }
                     else {
-                        JOptionPane.showMessageDialog(view, "No records with the given patient ID exists.");
+                        JOptionPane.showMessageDialog(view, Messages.getMessage("message.noPatientId"));
                     }
                 }
                 else {
-                    JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
                 }
             }
             catch (Exception ex) {
-                JOptionPane.showMessageDialog(view, "Error: " + ex.getMessage());
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.error") + ex.getMessage());
             }
         });
 
         view.getAssignDoctorButton().addActionListener(e -> {
-            String patientId = JOptionPane.showInputDialog("Enter the ID of the patient:");
-            String doctorId = JOptionPane.showInputDialog("Enter the ID of the doctor:");
+            String patientId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterPatientId"));
+            String doctorId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDoctorId"));
             Patient patient = model.findPatient(patientId);
             Doctor doctor = model.findDoctor(doctorId);
 
@@ -247,15 +247,15 @@ public class ClinicController {
                 if (patient != null && doctor != null) {
                     model.assignDoctor(patientId, doctorId);
                     view.updateRecordTable(List.of(patient));
-                    JOptionPane.showMessageDialog(view, "Patient with ID " + " " + patientId + " has been assigned a family doctor with ID " + doctorId);
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.assignDoctorSuccess"));
                     view.updateRecordTable(List.of(patient));
                 }
                 else {
-                    JOptionPane.showMessageDialog(view, "No patient or doctor with the given IDs exists.");
+                    JOptionPane.showMessageDialog(view, Messages.getMessage("message.noPatientOrDoctor"));
                 }
             }
             else {
-                JOptionPane.showMessageDialog(view, "Make sure all fields are filled out.");
+                JOptionPane.showMessageDialog(view, Messages.getMessage("message.fieldsNotFilled"));
             }
         });
 

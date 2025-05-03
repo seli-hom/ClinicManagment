@@ -45,7 +45,7 @@ public class ClinicManagementGUI extends JFrame {
     private AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public ClinicManagementGUI() {
-        setTitle("Clinic Management System");
+        setTitle(Messages.getMessage("title.app"));
         setSize(900,600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -68,10 +68,10 @@ public class ClinicManagementGUI extends JFrame {
         patientTab = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
-        addPatientButton = new JButton("Add Patient");
-        modifyPatientButton = new JButton("Modify Patient");
-        findPatientButton = new JButton("Find Patient");
-        viewPatientsButton = new JButton("View All Patients");
+        addPatientButton = new JButton(Messages.getMessage("button.addPatient"));
+        modifyPatientButton = new JButton(Messages.getMessage("button.modifyPatient"));
+        findPatientButton = new JButton(Messages.getMessage("button.findPatient"));
+        viewPatientsButton = new JButton(Messages.getMessage("button.viewPatients"));
         buttonPanel.add(addPatientButton);
         buttonPanel.add(modifyPatientButton);
         buttonPanel.add(findPatientButton);
@@ -82,18 +82,18 @@ public class ClinicManagementGUI extends JFrame {
 
         patientTab.add(buttonPanel, BorderLayout.NORTH);
         patientTab.add(scrollPane, BorderLayout.CENTER);
-        tabbedPane.addTab("Patients", patientTab);
+        tabbedPane.addTab(Messages.getMessage("tab.patients"), patientTab);
     }
 
     public void setUpDoctorTab() {
         doctorTab = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
-        addDoctorButton = new JButton("Add Doctor");
-        modifyDoctorButton = new JButton("Modify Doctor");
-        findDoctorButton = new JButton("Find Doctor By ID");
-        findDoctorBySpecialtyButton = new JButton("Find Doctor By Specialty");
-        viewDoctorsButton = new JButton("View All Doctors");
+        addDoctorButton = new JButton(Messages.getMessage("button.addDoctor"));
+        modifyDoctorButton = new JButton(Messages.getMessage("button.modifyDoctor"));
+        findDoctorButton = new JButton(Messages.getMessage("button.button.findDoctor"));
+        findDoctorBySpecialtyButton = new JButton(Messages.getMessage("button.findDoctorBySpecialty"));
+        viewDoctorsButton = new JButton(Messages.getMessage("button.viewDoctors"));
 
         buttonPanel.add(addDoctorButton);
         buttonPanel.add(modifyDoctorButton);
@@ -106,18 +106,18 @@ public class ClinicManagementGUI extends JFrame {
 
         doctorTab.add(buttonPanel, BorderLayout.NORTH);
         doctorTab.add(scrollPane, BorderLayout.CENTER);
-        tabbedPane.addTab("Doctors", doctorTab);
+        tabbedPane.addTab(Messages.getMessage("tab.doctors"), doctorTab);
     }
 
     public void setUpAppointmentTab() {
         appointmentTab = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
-        bookAppointmentButton = new JButton("Book Appointment");
-        rescheduleAppointmentButton = new JButton("Reschedule Appointment");
-        cancelAppointmentButton = new JButton("Cancel Appointment");
-        findAppointmentButton = new JButton("Find Appointment");
-        viewAppointmentsButton = new JButton("View All Appointments");
+        bookAppointmentButton = new JButton(Messages.getMessage("button.bookAppointment"));
+        rescheduleAppointmentButton = new JButton(Messages.getMessage("button.rescheduleAppointment"));
+        cancelAppointmentButton = new JButton(Messages.getMessage("button.cancelAppointment"));
+        findAppointmentButton = new JButton(Messages.getMessage("button.findAppointment"));
+        viewAppointmentsButton = new JButton(Messages.getMessage("button.viewAppointments"));
         buttonPanel.add(bookAppointmentButton);
         buttonPanel.add(rescheduleAppointmentButton);
         buttonPanel.add(cancelAppointmentButton);
@@ -129,16 +129,16 @@ public class ClinicManagementGUI extends JFrame {
 
         appointmentTab.add(buttonPanel, BorderLayout.NORTH);
         appointmentTab.add(scrollPane, BorderLayout.CENTER);
-        tabbedPane.addTab("Appointments", appointmentTab);
+        tabbedPane.addTab(Messages.getMessage("tab.appointments"), appointmentTab);
     }
 
     public void setUpRecordTab() {
         recordTab = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
-        findPatientRecordButton = new JButton("Find Record");
-        viewRecordsButton = new JButton("View All Records");
-        assignDoctorButton = new JButton("Assign Family Doctor");
+        findPatientRecordButton = new JButton(Messages.getMessage("button.findRecord"));
+        viewRecordsButton = new JButton(Messages.getMessage("button.viewRecords"));
+        assignDoctorButton = new JButton(Messages.getMessage("button.assignDoctor"));
         buttonPanel.add(findPatientRecordButton);
         buttonPanel.add(assignDoctorButton);
         buttonPanel.add(viewRecordsButton);
@@ -148,11 +148,17 @@ public class ClinicManagementGUI extends JFrame {
 
         recordTab.add(buttonPanel, BorderLayout.NORTH);
         recordTab.add(scrollPane, BorderLayout.CENTER);
-        tabbedPane.addTab("Records", recordTab);
+        tabbedPane.addTab(Messages.getMessage("tab.records"), recordTab);
     }
 
     public void setUpPatientTable() {
-        String[] columnNames = {"ID", "First Name", "Last Name", "Address", "Contact"};
+        String[] columnNames = {
+                "ID",
+                Messages.getMessage("dialog.firstName"),
+                Messages.getMessage("dialog.lastName"),
+                Messages.getMessage("dialog.address"),
+                Messages.getMessage("dialog.contact")
+        };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         patientTable.setModel(model);
         updatePatientTable();
@@ -189,7 +195,13 @@ public class ClinicManagementGUI extends JFrame {
     }
 
     public void setUpDoctorTable() {
-        String[] columnNames = {"ID", "First Name", "Last Name", "Contact", "Specialty"};
+        String[] columnNames = {
+                "ID",
+                Messages.getMessage("dialog.firstName"),
+                Messages.getMessage("dialog.lastName"),
+                Messages.getMessage("dialog.contact"),
+                Messages.getMessage("dialog.specialty")
+        };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         doctorTable.setModel(model);
         updateDoctorTable();
@@ -226,7 +238,13 @@ public class ClinicManagementGUI extends JFrame {
         }
 
     public void setUpAppointmentTable() {
-        String[] columnNames = {"ID", "Patient ID", "Doctor ID", "Date", "Time"};
+        String[] columnNames = {
+                "ID",
+                Messages.getMessage("dialog.enterPatientFindId"),
+                Messages.getMessage("dialog.enterAppointmentDoctorId"),
+                Messages.getMessage("dialog.enterDate"),
+                Messages.getMessage("dialog.enterTime")
+        };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         appointmentTable.setModel(model);
         updateAppointmentTable();
@@ -263,7 +281,15 @@ public class ClinicManagementGUI extends JFrame {
     }
 
     public void setUpRecordTable() {
-        String[] columnNames = {"Patient ID", "First Name", "Last Name", "DOB", "Sex", "Family Doctor", "Blood Type"};
+        String[] columnNames = {
+                Messages.getMessage("dialog.enterAppointmentPatientId"),
+                Messages.getMessage("dialog.firstName"),
+                Messages.getMessage("dialog.lastName"),
+                Messages.getMessage("dialog.dateOfBirth"),
+                Messages.getMessage("dialog.sex"),
+                Messages.getMessage("dialog.familyDoctor"),
+                Messages.getMessage("dialog.enterBloodType")
+        };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         recordTable.setModel(model);
     }
