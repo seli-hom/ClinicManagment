@@ -63,8 +63,12 @@ public class SystemManager {
      * @return List with doctors that have specialized in said specialty field
      */
     public List<Doctor> findDoctorsBySpecialty(String specialty){
-        List<Doctor> specialtyDoctors = (List<Doctor>) doctorDAO.getDoctorBySpecialty(specialty);
-
+        List<Doctor> specialtyDoctors = new ArrayList<Doctor>();
+        for (Doctor doc : doctors){
+            if (doc.getSpeciality().equalsIgnoreCase(specialty)){
+                 specialtyDoctors.add(doc);
+            }
+        }
         if (specialtyDoctors.isEmpty()){
             throw new IllegalArgumentException("No Doctor found in " + specialty + " field");
         }
@@ -77,7 +81,15 @@ public class SystemManager {
      * @return Doctor object, if not found a message will display stating that the doctor is not in the system.
      */
     public Doctor findDoctor(String id) {
-        return doctorDAO.getDoctorById(id);
+        for (Doctor doctor : doctors) {
+            if (doctor.getDoctorId().equals(id)) {
+              DoctorDAO doctorDAO = new DoctorDAO();
+              doctorDAO.getDoctorById(doctor.getDoctorId()); //TODO very confused here
+                return doctor;
+            }
+        }
+        System.out.println("Doctor with id: " + id + " was not found.");
+        return null;
     }
 
 //    /**
@@ -217,7 +229,13 @@ public class SystemManager {
      * @return
      */
     public Appointment findAppointmentByID(String aptID) {
-        return appointmentDAO.getAppointmentById(aptID);
+        for (Appointment appointment : appointments) {
+            if (appointment.getAppointmentId().equals(aptID)) {
+                return appointment;
+            }
+        }
+        System.out.println("Appointment was not found.");
+        return null;
     }
 
     /**

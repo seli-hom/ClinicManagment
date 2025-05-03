@@ -109,7 +109,7 @@ public class DBConnection {
     }
 
     private void executeSQL(String sql) {
-        try (Statement stmt = connection.createStatement()) {
+        try (Statement stmt = DBConnection.getInstance().getConnection().createStatement()) {
             stmt.execute(sql);
         } catch (SQLException e) {
             System.err.println("Error executing SQL: " + e.getMessage());
