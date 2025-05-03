@@ -178,11 +178,18 @@ public class ClinicController {
         view.getBookAppointmentButton().addActionListener(e -> {
             String patientId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterPatientId"));
             String doctorId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDoctorId"));
-            String dateStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterDate"));
+            JDateChooser dateStr = new JDateChooser();
+            int result = JOptionPane.showConfirmDialog(view, dateStr, Messages.getMessage("dialog.enterDate"), JOptionPane.OK_CANCEL_OPTION);
+            if (result != JOptionPane.OK_OPTION) return;
+            java.util.Date utilDate = dateStr.getDate();
+            if (utilDate == null) {
+                JOptionPane.showMessageDialog(view, "Invalid date, cannot be null.");
+                return;
+            }
             String timeStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterTime"));
 
             try {
-                Date date = Date.valueOf(dateStr);
+                Date date = new Date(utilDate.getTime());
                 Time time = Time.valueOf(timeStr + ":00");
                 Appointment appointment = new Appointment(patientId, doctorId, date, time);
                 model.bookAppointment(appointment);
@@ -194,11 +201,19 @@ public class ClinicController {
 
         view.getRescheduleAppointmentButton().addActionListener(e -> {
             String aptId = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterId"));
-            String newDateStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewDate"));
+//            String newDateStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewDate"));
+            JDateChooser newDateStr = new JDateChooser();
+            int result = JOptionPane.showConfirmDialog(view, newDateStr, Messages.getMessage("dialog.enterNewDate"), JOptionPane.OK_CANCEL_OPTION);
+            if (result != JOptionPane.OK_OPTION) return;
+            java.util.Date utilDate = newDateStr.getDate();
+            if (utilDate == null) {
+                JOptionPane.showMessageDialog(view, "Invalid date, cannot be null.");
+                return;
+            }
             String newTimeStr = JOptionPane.showInputDialog(Messages.getMessage("dialog.enterNewTime"));
 
             try {
-                Date newDate = Date.valueOf(newDateStr);
+                Date newDate = new Date(utilDate.getTime());
                 Time newTime = Time.valueOf(newTimeStr + ":00");
                 model.rescheduleAppointment(aptId, newDate, newTime);
                 view.updateAppointmentTable();
