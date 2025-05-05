@@ -7,7 +7,7 @@ public class DBConnection {
     private Connection connection ;
     private DBConnection(){
         try {
-            String DB_Path = "jdbc:sqlite:src/main/resources/databasedate.db";
+            String DB_Path = "jdbc:sqlite:databasedate.db";
             this.connection = DriverManager.getConnection(DB_Path);
         } catch (SQLException e) {
             System.err.println("Database connection failed: " + e.getMessage());
